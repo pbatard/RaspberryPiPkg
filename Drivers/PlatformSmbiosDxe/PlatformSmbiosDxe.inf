@@ -40,7 +40,7 @@
   MdeModulePkg/MdeModulePkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
-  RaspberryPiPkg/RaspberryPiPkg.dec
+  Platform/Broadcom/Bcm283x/RaspberryPiPkg.dec
 
 [LibraryClasses]
   UefiBootServicesTableLib

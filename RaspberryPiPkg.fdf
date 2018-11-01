@@ -58,7 +58,7 @@ NumBlocks     = 0x200
 # ATF primary boot image
 #
 0x00000000|0x00008000
-FILE = $(ATF_BUILD_DIR)/bl1.bin
+FILE = Platform/Broadcom/Bcm283x/Binary/bl1.bin
 
 #
 # DTB.
@@ -70,10 +70,10 @@ DATA = { 0x00 }
 # ATF secondary boot image in FIP format (BL2 + BL31)
 #
 0x00010000|0x00020000
-FILE = $(ATF_BUILD_DIR)/fip.bin
+FILE = Platform/Broadcom/Bcm283x/Binary/fip.bin
 
 #
-# UEFI image (BL33 in ATF speak)
+# UEFI image
 #
 0x00030000|0x001b0000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
@@ -196,7 +196,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   INF MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
-  INF RaspberryPiPkg/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
@@ -213,17 +213,17 @@ READ_LOCK_STATUS   = TRUE
   #
   INF MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   INF MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
-  INF RaspberryPiPkg/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
-  INF RaspberryPiPkg/Drivers/DisplayDxe/DisplayDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/DisplayDxe/DisplayDxe.inf
 
   INF UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  INF RaspberryPiPkg/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
-  INF RaspberryPiPkg/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
-  INF RaspberryPiPkg/Drivers/RpiFdtDxe/RpiFdtDxe.inf
-  INF RaspberryPiPkg/Drivers/HypDxe/HypDxe.inf
-  INF RaspberryPiPkg/Drivers/ConfigDxe/ConfigDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/RpiFdtDxe/RpiFdtDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/HypDxe/HypDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 
@@ -246,12 +246,12 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   INF MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   INF MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
-  INF RuleOverride = ACPITABLE RaspberryPiPkg/AcpiTables/AcpiTables.inf
+  INF RuleOverride = ACPITABLE Platform/Broadcom/Bcm283x/AcpiTables/AcpiTables.inf
 
   #
   # SMBIOS Support
   #
-  INF RaspberryPiPkg/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
@@ -288,7 +288,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # USB Support
   #
-  INF RaspberryPiPkg/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
@@ -297,20 +297,20 @@ READ_LOCK_STATUS   = TRUE
   #
   # SD/MMC support
   #
-  INF RaspberryPiPkg/Drivers/SdHostDxe/SdHostDxe.inf
-  INF RaspberryPiPkg/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
-  INF RaspberryPiPkg/Drivers/PiMmcDxe/MmcDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/SdHostDxe/SdHostDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/PiMmcDxe/MmcDxe.inf
 
   #
   # Pi logo (splash screen)
   #
-  INF RaspberryPiPkg/Drivers/Logo/LogoDxe.inf
+  INF Platform/Broadcom/Bcm283x/Drivers/Logo/LogoDxe.inf
 
   #
   # FDT (GUID matches mRaspberryPiFfsFileGuid in RaspberryPiPlatformDxe)
   #
   FILE FREEFORM = DF5DA223-1D27-47C3-8D1B-9A41B55A18BC {
-    SECTION RAW = RaspberryPiPkg/Binary/leap422.dtb
+    SECTION RAW = Platform/Broadcom/Bcm283x/DeviceTree/leap422.dtb
   }
 
 [FV.FVMAIN_COMPACT]

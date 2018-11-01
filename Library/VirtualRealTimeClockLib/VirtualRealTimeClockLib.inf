@@ -30,7 +30,7 @@
   ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
-  RaspberryPiPkg/RaspberryPiPkg.dec
+  Platform/Broadcom/Bcm283x/RaspberryPiPkg.dec
 
 [LibraryClasses]
   IoLib

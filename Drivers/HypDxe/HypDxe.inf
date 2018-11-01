@@ -49,7 +49,7 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  RaspberryPiPkg/RaspberryPiPkg.dec
+  Platform/Broadcom/Bcm283x/RaspberryPiPkg.dec
 
 [LibraryClasses]
   BaseLib

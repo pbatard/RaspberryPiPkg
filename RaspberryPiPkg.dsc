@@ -1,4 +1,4 @@
-## @file
+# @file
 #
 #  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
 #  Copyright (c) 2014, Linaro Limited. All rights reserved.
@@ -24,14 +24,13 @@
 [Defines]
   PLATFORM_NAME                  = RaspberryPi
   PLATFORM_GUID                  = 5d30c4fc-93cf-40c9-8486-3badc0410816
-  PLATFORM_VERSION               = 0.1
+  PLATFORM_VERSION               = 0.2
   DSC_SPECIFICATION              = 0x00010005
-  OUTPUT_DIRECTORY               = Build/RaspberryPiPkg-$(ARCH)
+  OUTPUT_DIRECTORY               = Build/RaspberryPiPkg
   SUPPORTED_ARCHITECTURES        = AARCH64
   BUILD_TARGETS                  = DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
-  FLASH_DEFINITION               = RaspberryPiPkg/RaspberryPiPkg.fdf
-  PREBUILD                       = python BaseTools/Scripts/RunMakefile.py --makefile RaspberryPiPkg/Scripts/Prebuild.mak
+  FLASH_DEFINITION               = Platform/Broadcom/Bcm283x/RaspberryPiPkg.fdf
 
   #
   # Defines for default states.  These can be changed on the command line.
@@ -39,14 +38,6 @@
   #
   DEFINE SECURE_BOOT_ENABLE      = FALSE
   DEFINE DEBUG_PRINT_ERROR_LEVEL = 0x8000004F
-
-!ifndef ATF_BUILD_DIR
-!if $(TARGET) == RELEASE
-DEFINE ATF_BUILD_DIR = RaspberryPiPkg/Binary/atf/release
-!else
-DEFINE ATF_BUILD_DIR = RaspberryPiPkg/Binary/atf/debug
-!endif
-!endif
 
 !ifndef BUILD_DATE
 DEFINE BUILD_DATE = 05/09/2018
@@ -72,9 +63,11 @@ DEFINE HYP_LOG_MASK = 0xffffffff
 !endif
 !endif
 
-[BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
-  GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
-
+################################################################################
+#
+# Library Class section - list of all Library Classes needed by this Platform.
+#
+################################################################################
 [LibraryClasses.common]
 !if $(TARGET) == RELEASE
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
@@ -191,12 +184,12 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
 !endif
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
-  GpioLib|RaspberryPiPkg/Library/GpioLib/GpioLib.inf
+  GpioLib|Platform/Broadcom/Bcm283x/Library/GpioLib/GpioLib.inf
 
 [LibraryClasses.common.SEC]
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
-  MemoryInitPeiLib|RaspberryPiPkg/Library/MemoryInitPeiLib/MemoryInitPeiLib.inf
+  MemoryInitPeiLib|Platform/Broadcom/Bcm283x/Library/MemoryInitPeiLib/MemoryInitPeiLib.inf
   PlatformPeiLib|ArmPlatformPkg/PlatformPei/PlatformPeiLib.inf
   ExtractGuidedSectionLib|EmbeddedPkg/Library/PrePiExtractGuidedSectionLib/PrePiExtractGuidedSectionLib.inf
   LzmaDecompressLib|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
@@ -240,12 +233,21 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   ReportStatusCodeLib|IntelFrameworkModulePkg/Library/DxeReportStatusCodeLibFramework/DxeReportStatusCodeLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  EfiResetSystemLib|RaspberryPiPkg/Library/ResetLib/ResetLib.inf
+  EfiResetSystemLib|Platform/Broadcom/Bcm283x/Library/ResetLib/ResetLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
 !endif
+
+###################################################################################################
+# BuildOptions Section - Define the module specific tool chain flags that should be used as
+#                        the default flags for a module. These flags are appended to any
+#                        standard flags that are defined by the build process.
+###################################################################################################
+
+[BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
+  GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
 
 ################################################################################
 #
@@ -355,12 +357,12 @@ DEFINE HYP_LOG_MASK = 0xffffffff
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
-  ArmPlatformLib|RaspberryPiPkg/Library/RaspberryPiPlatformLib/RaspberryPiPlatformLib.inf
+  ArmPlatformLib|Platform/Broadcom/Bcm283x/Library/RaspberryPiPlatformLib/RaspberryPiPlatformLib.inf
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
-  PlatformBootManagerLib|RaspberryPiPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+  PlatformBootManagerLib|Platform/Broadcom/Bcm283x/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
   CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
   FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
 
@@ -464,7 +466,7 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   #
   # Display-related.
   #
-  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableVModes|L"DisplayEnableVModes"|gConfigDxeFormSetGuid|0x0|1
+  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableVModes|L"DisplayEnableVModes"|gConfigDxeFormSetGuid|0x0|0
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot|L"DisplayEnableSShot"|gConfigDxeFormSetGuid|0x0|1
 
   #
@@ -522,7 +524,7 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   #
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
-  RaspberryPiPkg/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
@@ -543,25 +545,25 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   EmbeddedPkg/ResetRuntimeDxe/ResetRuntimeDxe.inf
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf {
     <LibraryClasses>
-      RealTimeClockLib|RaspberryPiPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+      RealTimeClockLib|Platform/Broadcom/Bcm283x/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
   }
   EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
 
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
-  RaspberryPiPkg/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
-  RaspberryPiPkg/Drivers/DisplayDxe/DisplayDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/DisplayDxe/DisplayDxe.inf
 
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
   UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  RaspberryPiPkg/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
-  RaspberryPiPkg/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
-  RaspberryPiPkg/Drivers/RpiFdtDxe/RpiFdtDxe.inf
-  RaspberryPiPkg/Drivers/ConfigDxe/ConfigDxe.inf
-  RaspberryPiPkg/Drivers/HypDxe/HypDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/RpiFdtDxe/RpiFdtDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/ConfigDxe/ConfigDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/HypDxe/HypDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 
@@ -579,12 +581,12 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
-  RaspberryPiPkg/AcpiTables/AcpiTables.inf
+  Platform/Broadcom/Bcm283x/AcpiTables/AcpiTables.inf
 
   #
   # SMBIOS Support
   #
-  RaspberryPiPkg/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
@@ -595,7 +597,7 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   MdeModulePkg/Universal/DriverHealthManagerDxe/DriverHealthManagerDxe.inf
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
-  RaspberryPiPkg/Drivers/Logo/LogoDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/Logo/LogoDxe.inf
   MdeModulePkg/Application/UiApp/UiApp.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
@@ -612,7 +614,7 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   #
   # USB Support
   #
-  RaspberryPiPkg/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
@@ -621,9 +623,9 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   #
   # SD/MMC support
   #
-  RaspberryPiPkg/Drivers/SdHostDxe/SdHostDxe.inf
-  RaspberryPiPkg/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
-  RaspberryPiPkg/Drivers/PiMmcDxe/MmcDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/SdHostDxe/SdHostDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
+  Platform/Broadcom/Bcm283x/Drivers/PiMmcDxe/MmcDxe.inf
 
   #
   # Networking stack
