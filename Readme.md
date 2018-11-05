@@ -33,7 +33,7 @@ If there no bootable media media is found, the UEFI Shell is launched.
 # Building
 
 (These instructions were validated against the latest edk2 / edk2-platforms /
-edk2-non-osi as of 2018.11.01, on a Debian 9.1 x64 system).
+edk2-non-osi as of 2018.11.01, on a Debian 9.5 x64 system).
 
 If needed, you may need to install the relevant compilation tools. Especially
 you will need the ACPI Source Language (ASL) compiler, nasm and an AARCH64
@@ -55,7 +55,7 @@ git clone https://github.com/tianocore/edk2-platforms.git
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms/Platform/Broadcom/Bcm283x
 
 export GCC5_AARCH64_PREFIX=aarch64-linux-gnu-
-export WORKSPACE=~/workspace
+export WORKSPACE=$PWD
 export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms:$WORKSPACE/edk2-non-osi
 . edk2/edksetup.sh
 # The following is only needed once, after you cloned edk2
@@ -88,17 +88,17 @@ you may also be able to boot from a FAT32 USB driver rather than uSD.
 
 ## Custom Device Tree
 
-Most likely, if you boot an OS other than openSUSE Leap 42.3, you will need to pass your own
-distro- and kernel- specific device tree. This will need to be extracted from the
-distributed media or from a running system (e.g that was booted via U-Boot).
+The default Device Tree included in the firmware is the one for a Raspberry Pi 3 Model B (not B+).
+If you want to use a different Device Tree, to boot a Pi 3 Model B+ for instance (for which a
+DTB is also provided under `DeviceTree/`), you should copy the relevant `.dtb` into the root of
+the SD or USB, and then edit your `config.txt` so that it looks like:
 
-This involves a few changes to the above `config.txt`:
 ```
-...
+(...)
 disable_commandline_tags=2
 device_tree_address=0x8000
 device_tree_end=0x10000
-device_tree=my_fdt.dtb
+device_tree=bcm2710-rpi-3-b-plus.dtb
 ```
 
 Note: the address range **must** be [0x8000:0x10000]. `dtoverlay` and `dtparam` parameters are also supported.
@@ -112,9 +112,20 @@ Note, that the ultimate contents of `/chosen/bootargs` are a combination of seve
 - GPU-passed hardware configuration. This one is always present.
 - Additional boot options passed via `cmdline.txt`.
 
-## Windows 10 on Arm
+# Tested Platforms
 
-Builds 17125-17134, 17672 are known to work.
+## Linux
+
+Ubuntu 18.04 LTS has been tested and confirmed to work, including its installation process.
+
+openSUSE Leap 42.3 has also been reported to work. Other ARM64 Linux releases, that support
+UEFI boot are also expected to run, though their installation process might require some
+cajoling.
+
+## Windows
+
+Windows 10 (for ARM64) build 17134 has been tested and confirmed to work.
+Builds 17125-17133 and 17672 have also been reported to work.
 
 You probably want to look at https://www.worproject.ml/ as well as the
 [Windows thread in the original RaspberryPiPkg](https://github.com/andreiw/RaspberryPiPkg/issues/12)
@@ -122,7 +133,7 @@ for installation details.
 
 ## Other platforms
 
-Details you may need to run other platforms is provided in the
+Details you may need to run other platforms, including FreeBSD, is provided in the
 [Readme from the original RaspberryPiPkg](https://github.com/andreiw/RaspberryPiPkg).
 
 # Limitations
