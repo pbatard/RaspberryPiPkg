@@ -35,32 +35,41 @@ If there no bootable media media is found, the UEFI Shell is launched.
 (These instructions were validated against the latest edk2 / edk2-platforms /
 edk2-non-osi as of 2018.11.01, on a Debian 9.5 x64 system).
 
-If needed, you may need to install the relevant compilation tools. Especially
-you will need the ACPI Source Language (ASL) compiler, nasm and an AARCH64
-toolchain. On a Debian system, you should be able to get these prerequisites
-installed with:
+You may need to install the relevant compilation tools. Especially you should have the
+ACPI Source Language (ASL) compiler, `nasm` as well as a native compiler installed.
+On a Debian system, you can get these prerequisites installed with:
 ```
-sudo apt-get install build-essential acpica-tools nasm uuid-dev gcc-aarch64-linux-gnu
+sudo apt-get install build-essential acpica-tools nasm uuid-dev
 ```
 
-You can then build the firmware by cloning the relevant git repository into
-a new workspace, as follows:
+**IMPORTANT:** Do not be tempted to install Debian's ARM64 GCC cross compiler package,
+as this currently results in GCC 6.x being installed, which is known to create issues.
+Instead, you should stick with GCC 5.5, such as the one provided by Linaro, as per the
+instructions below.
+
+You can then build the firmware as follows:
 
 ```
 mkdir ~/workspace
 cd ~/workspace
 git clone https://github.com/tianocore/edk2.git
-git clone https://github.com/tianocore/edk2-non-osi.git
+# The following is only needed once, after you cloned edk2
+make -C edk2/BaseTools
 git clone https://github.com/tianocore/edk2-platforms.git
+git clone https://github.com/tianocore/edk2-non-osi.git
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms/Platform/Broadcom/Bcm283x
-
+# You *MUST* use a GCC5 toolchain (*NOT* GCC6 or later), such as the one from
+# https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/
+# GCC6 and later toolchains *WILL* result in Synchronous Exceptions. You have been warned!
+wget https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz
+tar -xJvf gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz
+# If you have multiple AARCH64 toolchains, make sure the GCC5 one comes first in your path
+export PATH=$PWD/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/bin:$PATH
 export GCC5_AARCH64_PREFIX=aarch64-linux-gnu-
 export WORKSPACE=$PWD
 export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms:$WORKSPACE/edk2-non-osi
 . edk2/edksetup.sh
-# The following is only needed once, after you cloned edk2
-make -C edk2/BaseTools
-build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Broadcom/Bcm283x/RaspberryPiPkg.dsc -b DEBUG
+build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Broadcom/Bcm283x/RaspberryPiPkg.dsc -b RELEASE
 ```
 
 # Booting the firmware
