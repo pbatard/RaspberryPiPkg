@@ -110,7 +110,9 @@ device_tree_end=0x10000
 device_tree=bcm2710-rpi-3-b-plus.dtb
 ```
 
-Note: the address range **must** be [0x8000:0x10000]. `dtoverlay` and `dtparam` parameters are also supported.
+Note: the address range **must** be [0x8000:0x10000].
+`dtoverlay` and `dtparam` parameters are also supported when providing a Device Tree`.
+However they are not applicable to the firmware's internal Device Tree (only a user-provided one).
 
 ## Custom `bootargs`
 
@@ -123,13 +125,47 @@ Note, that the ultimate contents of `/chosen/bootargs` are a combination of seve
 
 # Tested Platforms
 
-## Linux
+## Ubuntu
 
-Ubuntu 18.04 LTS has been tested and confirmed to work, including its installation process.
+[Ubuntu 18.04 LTS](http://releases.ubuntu.com/18.04/) has been tested and confirmed to work,
+including its installation process.
 
-openSUSE Leap 42.3 has also been reported to work. Other ARM64 Linux releases, that support
-UEFI boot are also expected to run, though their installation process might require some
-cajoling.
+Below are the steps you can follow to install Ubuntu LTS onto an SD card:
+* Download the latest Ubuntu LTS ARM64 [`mini.iso`](http://ports.ubuntu.com/ubuntu-ports/dists/bionic/main/installer-arm64/current/images/netboot/mini.iso).
+* Partition the uSD as MBR and create a ~200 MB FAT32 partition on it with MBR type `0x0c`.  
+  Note: Do not be tempted to use GPT partition scheme or `0xef` (EFI System Partition) for the
+  type, as none of these are supported by the Raspberry Pi's internal boot rom.
+* Extract the full content of the ISO onto the partition you created.
+* Also extract the GRUB EFI bootloader `bootaa64.efi` from `/boot/grub/efi.img` to `/boot/grub/`.  
+  Note: Do not be tempted to copy this file to another directory (such as `/efi/boot/`) as GRUB looks for its
+  modules and configuration data in the same directory as the EFI loader and also, the installation
+  process will create a `bootaa64.efi` into `/efi/boot/`.
+* If needed, copy the UEFI firmware files (`RPI_EFI.fd`, `bootcode.bin`, `fixup.dat` and `start.elf`) onto the uSD.
+* Boot the pi and let it go into the UEFI shell.
+* Navigate to `fs0:` then `/boot/grub/` and launch the GRUB efi loader.
+* Follow the Ubuntu installation process.
+
+Note: Because Ubuntu operates in quiet mode by default (no boot messages), you may think the system is frozen
+on first reboot after installation. However, if you wait long enough you **will** get to a login prompt.
+
+If desired, you can disable quiet boot, as well as force the display of the GRUB selector, by editing
+`/etc/default/grub` and changing:
+* `GRUB_TIMEOUT_STYLE=hidden` &rarr; `GRUB_TIMEOUT_STYLE=menu`
+* `GRUB_CMDLINE_LINUX_DEFAULT="splash quiet"` &rarr; `GRUB_CMDLINE_LINUX_DEFAULT=""`
+
+Then, to have your changes applied run `update-grub` and reboot.
+
+## Other Linux distributions
+
+* Debian ARM64 does not currently work, most likely due to missing required module support
+  in its kernel. However its installation process works, so it may be possible to get it
+  running with a custom kernel.
+
+* OpenSUSE Leap 42.3 has been reported to work.
+
+* Other ARM64 Linux releases, that support UEFI boot and have the required hardware support
+  for Pi hardware are expected to run, though their installation process might require some
+  cajoling.
 
 ## Windows
 
