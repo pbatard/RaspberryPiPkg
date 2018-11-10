@@ -58,6 +58,9 @@ make -C edk2/BaseTools
 git clone https://github.com/tianocore/edk2-platforms.git
 git clone https://github.com/tianocore/edk2-non-osi.git
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms/Platform/Broadcom/Bcm283x
+# The EDK2's current Ax88772b driver *MUST* be patched for the firmware to work.
+# Failure to do so *WILL* result in firmware freezouts. You have been warned!
+git -C edk2 am --ignore-whitespace ../edk2-platforms/Platform/Broadcom/Bcm283x/Patches/Ax88772b-not-a-runtime-driver.patch
 # You *MUST* use a GCC5 toolchain (*NOT* GCC6 or later), such as the one from
 # https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/
 # GCC6 and later toolchains *WILL* result in Synchronous Exceptions. You have been warned!
