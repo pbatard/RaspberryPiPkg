@@ -98,6 +98,13 @@ you may also be able to boot from a FAT32 USB driver rather than uSD.
 
 # Notes
 
+## ARM Trusted Firmware (ATF)
+
+The ATF binaries being used were compiled from the latest ATF source with pull request
+1678 applied, to prevent an infinite loop while flushing the UART buffers on reboot.
+
+For more details on the ATF compilation, see the README in the `Binaries/` directory.
+
 ## Custom Device Tree
 
 The default Device Tree included in the firmware is the one for a Raspberry Pi 3 Model B (not B+).
@@ -108,12 +115,12 @@ the SD or USB, and then edit your `config.txt` so that it looks like:
 ```
 (...)
 disable_commandline_tags=2
-device_tree_address=0x8000
-device_tree_end=0x10000
+device_tree_address=0x10000
+device_tree_end=0x20000
 device_tree=bcm2710-rpi-3-b-plus.dtb
 ```
 
-Note: the address range **must** be [0x8000:0x10000].
+Note: the address range **must** be `[0x10000:0x20000]`.
 `dtoverlay` and `dtparam` parameters are also supported when providing a Device Tree`.
 However they are not applicable to the firmware's internal Device Tree (only a user-provided one).
 
@@ -171,6 +178,9 @@ Then, to have your changes applied run `update-grub` and reboot.
   cajoling.
 
 ## Windows
+
+**IMPORTANT: Windows 10 is currently broken due to the use of latest ATF.**
+**We are working on fixing that!**
 
 Windows 10 (for ARM64) build 17134 has been tested and confirmed to work.
 Builds 17125-17133 and 17672 have also been reported to work.

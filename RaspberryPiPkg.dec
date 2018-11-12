@@ -36,7 +36,7 @@
   gConfigDxeFormSetGuid = {0xCD7CC258, 0x31DB, 0x22E6, {0x9F, 0x22, 0x63, 0xB0, 0xB8, 0xEE, 0xD6, 0xB5}}
 
 [PcdsFixedAtBuild.common]
-  gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress|0x8000|UINT32|0x00000001
+  gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress|0x10000|UINT32|0x00000001
   gRaspberryPiTokenSpaceGuid.PcdFirmwareBlockSize|0x0|UINT32|0x00000002
   gRaspberryPiTokenSpaceGuid.PcdNvStorageEventLogBase|0x0|UINT32|0x00000003
   gRaspberryPiTokenSpaceGuid.PcdNvStorageEventLogSize|0x0|UINT32|0x00000004

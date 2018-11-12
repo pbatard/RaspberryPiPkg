@@ -57,19 +57,19 @@ NumBlocks     = 0x200
 #
 # ATF primary boot image
 #
-0x00000000|0x00008000
+0x00000000|0x00010000
 FILE = Platform/Broadcom/Bcm283x/Binary/bl1.bin
 
 #
 # DTB.
 #
-0x00008000|0x00008000
+0x00010000|0x00010000
 DATA = { 0x00 }
 
 #
 # ATF secondary boot image in FIP format (BL2 + BL31)
 #
-0x00010000|0x00020000
+0x00020000|0x00010000
 FILE = Platform/Broadcom/Bcm283x/Binary/fip.bin
 
 #
