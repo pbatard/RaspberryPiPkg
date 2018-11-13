@@ -246,6 +246,10 @@ DEFINE HYP_LOG_MASK = 0xffffffff
 #                        standard flags that are defined by the build process.
 ###################################################################################################
 
+[BuildOptions]
+  GCC:RELEASE_*_*_CC_FLAGS    = -DMDEPKG_NDEBUG -DNDEBUG
+  GCC:*_*_*_CC_FLAGS          = -DBUILD_DATE=$(BUILD_DATE) -DBUILD_COMMIT=$(BUILD_COMMIT)
+
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
 
@@ -319,7 +323,7 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   # Values are in EFI Pages (4K). DXE Core will make sure that
   # at least this much of each type of memory can be allocated
   # from a single memory range. This way you only end up with
-  # maximum of two fragements for each type in the memory map
+  # maximum of two fragments for each type in the memory map
   # (the memory used, and the free memory that was prereserved
   # but not used).
   #
@@ -369,9 +373,6 @@ DEFINE HYP_LOG_MASK = 0xffffffff
 [LibraryClasses.common.UEFI_DRIVER]
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
 
-[BuildOptions]
-  GCC:RELEASE_*_*_CC_FLAGS  = -DMDEPKG_NDEBUG -DNDEBUG
-  GCC:*_*_*_CC_FLAGS = -DBUILD_DATE=$(BUILD_DATE) -DBUILD_COMMIT=$(BUILD_COMMIT)
 
 ################################################################################
 #
