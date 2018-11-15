@@ -12,13 +12,11 @@ This is meant as a generally useful 64-bit ATF + UEFI implementation for the Pi 
 which should be good enough for most kind of UEFI development, as well as for running
 real operating systems.
 
-Support for Raspberry Pi 2 B+, which is being worked on, may also be added later.
-
 # Status
 
 This firmware, that has been validated to compile against the current
 [edk2](https://github.com/tianocore/edk2)/[edk2-platforms](https://github.com/tianocore/edk2-platforms),
-should be able to boot Linux (SUSE, Ubuntu), NetBSD, FreeBSD as well as Windows 10 Arm64
+should be able to boot Linux (SUSE, Ubuntu), NetBSD, FreeBSD as well as Windows 10 ARM64
 (full GUI version).
 
 It also provides support for ATF ([Arm Trusted Platform](https://github.com/ARM-software/arm-trusted-firmware)).
@@ -33,7 +31,7 @@ If there no bootable media media is found, the UEFI Shell is launched.
 # Building
 
 (These instructions were validated against the latest edk2 / edk2-platforms /
-edk2-non-osi as of 2018.11.01, on a Debian 9.5 x64 system).
+edk2-non-osi as of 2018.11.15, on a Debian 9.6 x64 system).
 
 You may need to install the relevant compilation tools. Especially you should have the
 ACPI Source Language (ASL) compiler, `nasm` as well as a native compiler installed.
@@ -58,12 +56,9 @@ make -C edk2/BaseTools
 git clone https://github.com/tianocore/edk2-platforms.git
 git clone https://github.com/tianocore/edk2-non-osi.git
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms/Platform/Broadcom/Bcm283x
-# The EDK2's current Ax88772b driver *MUST* be patched for the firmware to work.
-# Failure to do so *WILL* result in firmware freezouts. You have been warned!
-git -C edk2 am --ignore-whitespace ../edk2-platforms/Platform/Broadcom/Bcm283x/Patches/Ax88772b-not-a-runtime-driver.patch
 # You *MUST* use a GCC5 toolchain (*NOT* GCC6 or later), such as the one from
 # https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/
-# GCC6 and later toolchains *WILL* result in Synchronous Exceptions. You have been warned!
+# GCC6 and later toolchains may result in Synchronous Exceptions. You have been warned!
 wget https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz
 tar -xJvf gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz
 # If you have multiple AARCH64 toolchains, make sure the GCC5 one comes first in your path
@@ -100,10 +95,10 @@ you may also be able to boot from a FAT32 USB driver rather than uSD.
 
 ## ARM Trusted Firmware (ATF)
 
-The ATF binaries being used were compiled from the latest ATF source with pull request
-1678 applied, to prevent an infinite loop while flushing the UART buffers on reboot.
+The ATF binaries being used were compiled from the latest ATF source (with one extra pull
+request applied).
 
-For more details on the ATF compilation, see the README in the `Binaries/` directory.
+For more details on the ATF compilation, see the [README](./Binary/README.md) in the `Binary/` directory.
 
 ## Custom Device Tree
 
@@ -121,8 +116,7 @@ device_tree=bcm2710-rpi-3-b-plus.dtb
 ```
 
 Note: the address range **must** be `[0x10000:0x20000]`.
-`dtoverlay` and `dtparam` parameters are also supported when providing a Device Tree`.
-However they are not applicable to the firmware's internal Device Tree (only a user-provided one).
+`dtoverlay` and `dtparam` parameters are also supported **when** providing a Device Tree`.
 
 ## Custom `bootargs`
 
@@ -138,11 +132,13 @@ Note, that the ultimate contents of `/chosen/bootargs` are a combination of seve
 ## Ubuntu
 
 [Ubuntu 18.04 LTS](http://releases.ubuntu.com/18.04/) has been tested and confirmed to work,
-including its installation process.
+on a Raspberry 3 Model B, including the installation process. Note however that network
+installation and networking may not work on the Model B+, due to the `lan78xx` Linux driver
+still requiring some support.
 
-Below are the steps you can follow to install Ubuntu LTS onto an SD card:
+Below are the steps you can follow to install Ubuntu LTS onto SD/USB:
 * Download the latest Ubuntu LTS ARM64 [`mini.iso`](http://ports.ubuntu.com/ubuntu-ports/dists/bionic/main/installer-arm64/current/images/netboot/mini.iso).
-* Partition the uSD as MBR and create a ~200 MB FAT32 partition on it with MBR type `0x0c`.  
+* Partition the media as MBR and create a ~200 MB FAT32 partition on it with MBR type `0x0c`.  
   Note: Do not be tempted to use GPT partition scheme or `0xef` (EFI System Partition) for the
   type, as none of these are supported by the Raspberry Pi's internal boot rom.
 * Extract the full content of the ISO onto the partition you created.
@@ -150,7 +146,8 @@ Below are the steps you can follow to install Ubuntu LTS onto an SD card:
   Note: Do not be tempted to copy this file to another directory (such as `/efi/boot/`) as GRUB looks for its
   modules and configuration data in the same directory as the EFI loader and also, the installation
   process will create a `bootaa64.efi` into `/efi/boot/`.
-* If needed, copy the UEFI firmware files (`RPI_EFI.fd`, `bootcode.bin`, `fixup.dat` and `start.elf`) onto the uSD.
+* If needed, copy the UEFI firmware files (`RPI_EFI.fd`, `bootcode.bin`, `fixup.dat` and `start.elf`)  
+  onto the FAT partition.
 * Boot the pi and let it go into the UEFI shell.
 * Navigate to `fs0:` then `/boot/grub/` and launch the GRUB efi loader.
 * Follow the Ubuntu installation process.
@@ -158,8 +155,8 @@ Below are the steps you can follow to install Ubuntu LTS onto an SD card:
 Note: Because Ubuntu operates in quiet mode by default (no boot messages), you may think the system is frozen
 on first reboot after installation. However, if you wait long enough you **will** get to a login prompt.
 
-If desired, you can disable quiet boot, as well as force the display of the GRUB selector, by editing
-`/etc/default/grub` and changing:
+Once Linux is running, if desired, you can disable quiet boot, as well as force the display
+of the GRUB selector, by editing `/etc/default/grub` and changing:
 * `GRUB_TIMEOUT_STYLE=hidden` &rarr; `GRUB_TIMEOUT_STYLE=menu`
 * `GRUB_CMDLINE_LINUX_DEFAULT="splash quiet"` &rarr; `GRUB_CMDLINE_LINUX_DEFAULT=""`
 
@@ -171,16 +168,13 @@ Then, to have your changes applied run `update-grub` and reboot.
   in its kernel. However its installation process works, so it may be possible to get it
   running with a custom kernel.
 
-* OpenSUSE Leap 42.3 has been reported to work.
+* OpenSUSE Leap 42.3 has been reported to work on Raspberry 3 Model B.
 
 * Other ARM64 Linux releases, that support UEFI boot and have the required hardware support
   for Pi hardware are expected to run, though their installation process might require some
   cajoling.
 
 ## Windows
-
-**IMPORTANT: Windows 10 is currently broken due to the use of latest ATF.**
-**We are working on fixing that!**
 
 Windows 10 (for ARM64) build 17134 has been tested and confirmed to work.
 Builds 17125-17133 and 17672 have also been reported to work.
@@ -255,8 +249,7 @@ Known issues:
 
 ## ACPI
 
-Should match the MS-IoT one. Good enough to boot WinPE, but unclear how functional all of it is,
-given current state of WoA on RPi3. Both Arasan and SDHost SD controllers are exposed.
+ACPI should match the MS-IoT one. Both Arasan and SDHost SD controllers are exposed.
 
 ## Missing Functionality
 
