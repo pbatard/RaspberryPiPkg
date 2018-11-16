@@ -226,6 +226,7 @@ READ_LOCK_STATUS   = TRUE
   INF Platform/Broadcom/Bcm283x/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+  INF MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning

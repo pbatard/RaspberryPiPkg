@@ -567,6 +567,7 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   Platform/Broadcom/Bcm283x/Drivers/HypDxe/HypDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning
