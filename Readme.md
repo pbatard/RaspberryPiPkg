@@ -53,6 +53,7 @@ cd ~/workspace
 git clone https://github.com/tianocore/edk2.git
 # The following is only needed once, after you cloned edk2
 make -C edk2/BaseTools
+# You may also have to issue git submodule init/update in edk2 if you want to enable Secure Boot
 git clone https://github.com/tianocore/edk2-platforms.git
 git clone https://github.com/tianocore/edk2-non-osi.git
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms/Platform/Broadcom/Bcm283x

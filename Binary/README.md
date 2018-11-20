@@ -1,13 +1,12 @@
 ARM Trusted Firmware for Raspberry Pi 3
 =======================================
 
-The `bl1` and `fip` ATF binaries found in this directory were built from 
-a the [latest ATF](https://github.com/ARM-software/arm-trusted-firmware)
-with the [following pull request](https://github.com/ARM-software/arm-trusted-firmware/pull/1685)
-applied, using Linaro's GCC 5.5 compiler with:
+The `bl1` and `fip` ATF binaries, found in this directory, were built from 
+the [latest ATF](https://github.com/ARM-software/arm-trusted-firmware)
+(commit c3859557) using Linaro's GCC 5.5 compiler with:
 
 ```
-make PLAT=rpi3 PRELOADED_BL33_BASE=0x30000 SUPPORT_VFP=1 RPI3_USE_UEFI_MAP=1 RPI3_PRELOADED_DTB_BASE=0x10000 fip all
+make PLAT=rpi3 PRELOADED_BL33_BASE=0x30000 RPI3_PRELOADED_DTB_BASE=0x10000 SUPPORT_VFP=1 RPI3_USE_UEFI_MAP=1 fip all
 ```
 
 This results in the following memory mapping being used:
