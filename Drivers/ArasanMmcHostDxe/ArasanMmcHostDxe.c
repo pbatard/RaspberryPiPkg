@@ -1,19 +1,17 @@
 /** @file
-*
-*  Copyright (c), 2017, Andrei Warkentin <andrey.warkentin@gmail.com>
-*  Copyright (c), Microsoft Corporation. All rights reserved.
-*
-*  This program and the accompanying materials
-*  are licensed and made available under the terms and conditions of the BSD License
-*  which accompanies this distribution.  The full text of the license may be found at
-*  http://opensource.org/licenses/bsd-license.php
-*
-*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-*
-*  Edited by Jason Lin (Jason.Lin@microsoft.com), 7/18/2014
-*
-**/
+ *
+ *  Copyright (c) 2017, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 #include "ArasanMmcHostDxe.h"
 
@@ -710,7 +708,7 @@ MMCInitialize(
   DEBUG((DEBUG_MMCHOST_SD, "ArasanMMCHost: MMCInitialize()\n"));
 
   if (!PcdGet32 (PcdSdIsArasan)) {
-    DEBUG((EFI_D_INFO, "SD is not routed to Arasan\n"));
+    DEBUG((DEBUG_INFO, "SD is not routed to Arasan\n"));
     return EFI_REQUEST_UNLOAD_IMAGE;
   }
 

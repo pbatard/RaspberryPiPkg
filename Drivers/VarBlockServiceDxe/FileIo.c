@@ -1,7 +1,7 @@
 /** @file
  *
- *  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2007 - 2009, Intel Corporation. All rights reserved.
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2007-2009, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -135,12 +135,12 @@ CheckStore (
     goto ErrHandle;
   }
   if (!BlkIo->Media->MediaPresent) {
-    DEBUG ((EFI_D_ERROR, "FwhMappedFile: Media not present!\n"));
+    DEBUG ((DEBUG_ERROR, "FwhMappedFile: Media not present!\n"));
     Status = EFI_NO_MEDIA;
     goto ErrHandle;
   }
   if (BlkIo->Media->ReadOnly) {
-    DEBUG ((EFI_D_ERROR, "FwhMappedFile: Media is read-only!\n"));
+    DEBUG ((DEBUG_ERROR, "FwhMappedFile: Media is read-only!\n"));
     Status = EFI_ACCESS_DENIED;
     goto ErrHandle;
   }

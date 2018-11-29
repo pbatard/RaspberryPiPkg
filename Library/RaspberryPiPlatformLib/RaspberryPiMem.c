@@ -1,17 +1,17 @@
 /** @file
-*
-*  Copyright (c) 2014, Linaro Limited. All rights reserved.
-*  Copyright (c), 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
-*
-*  This program and the accompanying materials
-*  are licensed and made available under the terms and conditions of the BSD License
-*  which accompanies this distribution.  The full text of the license may be found at
-*  http://opensource.org/licenses/bsd-license.php
-*
-*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-*
-**/
+ *
+ *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2014, Linaro Limited. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 #include <Library/ArmPlatformLib.h>
 #include <Library/DebugLib.h>
@@ -107,7 +107,7 @@ ArmPlatformGetVirtualMemoryMap (
     RaspberryPiMemoryRegionDescriptor[5].PhysicalBase -
     RaspberryPiMemoryRegionDescriptor[4].PhysicalBase;
 
-  DEBUG ((EFI_D_INFO, "FD:\n"
+  DEBUG ((DEBUG_INFO, "FD:\n"
           "\tPhysicalBase: 0x%lX\n"
           "\tVirtualBase: 0x%lX\n"
           "\tLength: 0x%lX\n",
@@ -116,7 +116,7 @@ ArmPlatformGetVirtualMemoryMap (
           RaspberryPiMemoryRegionDescriptor[0].Length +
           RaspberryPiMemoryRegionDescriptor[1].Length));
 
-  DEBUG ((EFI_D_INFO, "Variables (part of FD):\n"
+  DEBUG ((DEBUG_INFO, "Variables (part of FD):\n"
           "\tPhysicalBase: 0x%lX\n"
           "\tVirtualBase: 0x%lX\n"
           "\tLength: 0x%lX\n",
@@ -124,7 +124,7 @@ ArmPlatformGetVirtualMemoryMap (
           RaspberryPiMemoryRegionDescriptor[1].VirtualBase,
           RaspberryPiMemoryRegionDescriptor[1].Length));
 
-  DEBUG ((EFI_D_INFO, "ATF RAM:\n"
+  DEBUG ((DEBUG_INFO, "ATF RAM:\n"
           "\tPhysicalBase: 0x%lX\n"
           "\tVirtualBase: 0x%lX\n"
           "\tLength: 0x%lX\n",
@@ -132,7 +132,7 @@ ArmPlatformGetVirtualMemoryMap (
           RaspberryPiMemoryRegionDescriptor[2].VirtualBase,
           RaspberryPiMemoryRegionDescriptor[2].Length));
 
-  DEBUG ((EFI_D_INFO, "System RAM:\n"
+  DEBUG ((DEBUG_INFO, "System RAM:\n"
           "\tPhysicalBase: 0x%lX\n"
           "\tVirtualBase: 0x%lX\n"
           "\tLength: 0x%lX\n",
@@ -140,7 +140,7 @@ ArmPlatformGetVirtualMemoryMap (
           RaspberryPiMemoryRegionDescriptor[3].VirtualBase,
           RaspberryPiMemoryRegionDescriptor[3].Length));
 
-  DEBUG ((EFI_D_INFO, "GPU Reserved:\n"
+  DEBUG ((DEBUG_INFO, "GPU Reserved:\n"
           "\tPhysicalBase: 0x%lX\n"
           "\tVirtualBase: 0x%lX\n"
           "\tLength: 0x%lX\n",
@@ -148,7 +148,7 @@ ArmPlatformGetVirtualMemoryMap (
           RaspberryPiMemoryRegionDescriptor[4].VirtualBase,
           RaspberryPiMemoryRegionDescriptor[4].Length));
 
-  DEBUG ((EFI_D_INFO, "SoC reserved:\n"
+  DEBUG ((DEBUG_INFO, "SoC reserved:\n"
           "\tPhysicalBase: 0x%lX\n"
           "\tVirtualBase: 0x%lX\n"
           "\tLength: 0x%lX\n",

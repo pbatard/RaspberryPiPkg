@@ -1,7 +1,7 @@
 /** @file
  *
- *  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c), Microsoft Corporation. All rights reserved.
+ *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -225,21 +225,21 @@ DisplaySetMode(
     return EFI_UNSUPPORTED;
   }
 
-  DEBUG((EFI_D_INFO, "Setting mode %u from %u: %u x %u\n",
+  DEBUG((DEBUG_INFO, "Setting mode %u from %u: %u x %u\n",
          ModeNumber, This->Mode->Mode, Mode->Width, Mode->Height));
   Status = mFwProtocol->GetFB(Mode->Width, Mode->Height,
                               PI2_BITS_PER_PIXEL, &FbBase,
                               &FbSize, &FbPitch);
   if (EFI_ERROR(Status)) {
-    DEBUG((EFI_D_ERROR, "Could not set mode %u\n", ModeNumber));
+    DEBUG((DEBUG_ERROR, "Could not set mode %u\n", ModeNumber));
     return EFI_DEVICE_ERROR;
   }
 
-  DEBUG((EFI_D_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
+  DEBUG((DEBUG_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
          ModeNumber, Mode->Width, Mode->Height, FbSize, FbBase));
 
   if (FbPitch / PI2_BYTES_PER_PIXEL != Mode->Width) {
-    DEBUG((EFI_D_ERROR, "Error: Expected width %u, got width %u\n",
+    DEBUG((DEBUG_ERROR, "Error: Expected width %u, got width %u\n",
            Mode->Width, FbPitch / PI2_BYTES_PER_PIXEL));
     return EFI_DEVICE_ERROR;
   }
@@ -253,7 +253,7 @@ DisplaySetMode(
                                      ALIGN_VALUE(FbSize, EFI_PAGE_SIZE),
                                      EFI_MEMORY_WT);
   if (Status != EFI_SUCCESS) {
-    DEBUG((EFI_D_ERROR, "Couldn't set framebuffer attributes: %r\n", Status));
+    DEBUG((DEBUG_ERROR, "Couldn't set framebuffer attributes: %r\n", Status));
     return Status;
   }
 
@@ -390,7 +390,7 @@ DisplayDxeInitialize (
     return Status;
   }
 
-  DEBUG((EFI_D_INFO, "Display boot mode is %u x %u\n",
+  DEBUG((DEBUG_INFO, "Display boot mode is %u x %u\n",
          mBootWidth, mBootHeight));
 
   Status = gBS->InstallMultipleProtocolInterfaces (
@@ -521,7 +521,7 @@ DriverStart (
     //
     Mode->Width = FbPitch / PI2_BYTES_PER_PIXEL;
 
-    DEBUG((EFI_D_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
+    DEBUG((DEBUG_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
            Index, Mode->Width, Mode->Height, FbSize, FbBase));
 
     ASSERT (FbPitch != 0);
@@ -543,12 +543,12 @@ DriverStart (
   if (PcdGet32(PcdDisplayEnableSShot)) {
     RegisterScreenshotHandlers();
   } else {
-    DEBUG((EFI_D_INFO, "Screenshot capture disabled\n"));
+    DEBUG((DEBUG_INFO, "Screenshot capture disabled\n"));
   }
 
 done:
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "Could not start DisplayDxe: %r\n", Status));
+    DEBUG((DEBUG_ERROR, "Could not start DisplayDxe: %r\n", Status));
     if (gDisplayProto.Mode->Info != NULL) {
       FreePool(gDisplayProto.Mode->Info);
       gDisplayProto.Mode->Info = NULL;

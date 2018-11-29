@@ -1,9 +1,9 @@
 /** @file
  *
- *  Copyright (c) 2017 - 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2015 - 2016, Linaro Limited. All rights reserved.
- *  Copyright (C) 2012 Oleksandr Tymoshenko <gonzo@freebsd.org>
- *  Copyright (C) 2014 Marek Vasut <marex@denx.de>
+ *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2015-2016, Linaro Limited. All rights reserved.
+ *  Copyright (c) 2014 Marek Vasut <marex@denx.de>
+ *  Copyright (c) 2012 Oleksandr Tymoshenko <gonzo@freebsd.org>
  *
  *  SPDX-License-Identifier: GPL-2.0+
  *

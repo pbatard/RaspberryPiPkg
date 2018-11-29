@@ -91,7 +91,7 @@ DriverSupported (
   if (EFI_ERROR (Status)) {
     return EFI_NOT_READY;
   }
-  
+
   if (gBS->HandleProtocol(Controller, &gEfiUsb2HcProtocolGuid,
                           (VOID **) &Temp) == EFI_SUCCESS) {
     return EFI_ALREADY_STARTED;
@@ -151,10 +151,10 @@ DriverStart (
 
 out:
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "Could not start DwUsbHostDxe: %r\n", Status));
+    DEBUG((DEBUG_ERROR, "Could not start DwUsbHostDxe: %r\n", Status));
 
     DestroyDwUsbHc(DwHc);
-    
+
     mFwProtocol->SetPowerState(RPI_FW_POWER_STATE_USB_HCD, FALSE, FALSE);
 
     gBS->CloseProtocol (
@@ -187,7 +187,7 @@ DriverStop (
     (VOID **) &HcProtocol
   );
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "DriverStop: HandleProtocol: %r\n", Status));
+    DEBUG((DEBUG_ERROR, "DriverStop: HandleProtocol: %r\n", Status));
     return Status;
   }
 
@@ -198,7 +198,7 @@ DriverStop (
     &gEfiUsb2HcProtocolGuid, &DwHc->DwUsbOtgHc,
     NULL);
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "DriverStop: UninstallMultipleProtocolInterfaces: %r\n",
+    DEBUG((DEBUG_ERROR, "DriverStop: UninstallMultipleProtocolInterfaces: %r\n",
            Status));
     return Status;
   }
@@ -241,7 +241,7 @@ DwUsbHostEntryPoint (
     &gEfiCallerIdGuid, NULL,
     NULL);
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "InstallMultipleProtocolInterfaces: %r\n",
+    DEBUG((DEBUG_ERROR, "InstallMultipleProtocolInterfaces: %r\n",
            Status));
     return Status;
   }
@@ -256,7 +256,7 @@ DwUsbHostEntryPoint (
              );
 
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "EfiLibInstallDriverBindingComponentName2: %r\n",
+    DEBUG((DEBUG_ERROR, "EfiLibInstallDriverBindingComponentName2: %r\n",
            Status));
     gBS->UninstallMultipleProtocolInterfaces (
        mDevice,

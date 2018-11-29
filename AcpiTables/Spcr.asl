@@ -1,16 +1,18 @@
-/*
- * [SPCR] ACPI Table.
+/** @file
  *
- * Copyright (c), 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
+ *  Serial Port Console Redirection Table (SPCR)
  *
- * This program and the accompanying materials
- * are licensed and made available under the terms and conditions of the BSD License
- * which accompanies this distribution.  The full text of the license may be found at
- * http://opensource.org/licenses/bsd-license.php
+ *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *
- * THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
- * WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
- */
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 [000h 0000   4]                    Signature : "SPCR"    [Serial Port Console Redirection table]
 [004h 0004   4]                 Table Length : 00000050

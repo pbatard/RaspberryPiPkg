@@ -1,17 +1,19 @@
-/*
- * [DSDT] UARTs.
+/** @file
  *
- * Copyright (c), 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
- * Copyright (c), Microsoft Corporation. All rights reserved.
+ *  [DSDT] Serial devices (UART).
  *
- * This program and the accompanying materials
- * are licensed and made available under the terms and conditions of the BSD License
- * which accompanies this distribution.  The full text of the license may be found at
- * http://opensource.org/licenses/bsd-license.php
+ *  Copyright (c) 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
- * THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
- * WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
- */
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 //
 // Description: This is the PL011 based UART.
@@ -82,7 +84,7 @@ Device (URTM)
             //    /* 0000 */  0x00, 0x60, 0x44, 0xD5, 0xF3, 0x1F, 0x11, 0x60,  // .`D....`
             //    /* 0008 */  0x4A, 0xB8, 0xB0, 0x9C, 0x2D, 0x23, 0x30, 0xDD,  // J...-#0.
             //    /* 0010 */  0x2F, 0x8D, 0x1D, 0x00, 0x01, 0x10, 0x00, 0x02,  // /.......
-            //    /* 0018 */  0x02, 0x00, 0x12, 0x00, 0x00, 0x16, 0x00, 0x20,  // ....... 
+            //    /* 0018 */  0x02, 0x00, 0x12, 0x00, 0x00, 0x16, 0x00, 0x20,  // .......
             //    /* 0020 */  0x00, 0x00, 0x00, 0x0E, 0x00, 0x0F, 0x00, 0x5C,  // .......\
             //    /* 0028 */  0x5F, 0x53, 0x42, 0x2E, 0x47, 0x50, 0x49, 0x30,  // _SB.GPI0
             //    /* 0030 */  0x00                                             // .

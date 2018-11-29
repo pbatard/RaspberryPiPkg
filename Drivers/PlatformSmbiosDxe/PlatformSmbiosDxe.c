@@ -1,44 +1,35 @@
 /** @file
-    Static SMBIOS Table for ARM platform
-    Derived from EmulatorPkg package
-
-    Note SMBIOS 2.7.1 Required structures:
-    BIOS Information (Type 0)
-    System Information (Type 1)
-    Board Information (Type 2)
-    System Enclosure (Type 3)
-    Processor Information (Type 4) - CPU Driver
-    Cache Information (Type 7) - For cache that is external to processor
-    System Slots (Type 9) - If system has slots
-    Physical Memory Array (Type 16)
-    Memory Device (Type 17) - For each socketed system-memory Device
-    Memory Array Mapped Address (Type 19) - One per contiguous block per Physical Memroy Array
-    System Boot Information (Type 32)
-
-
-    Copyright (c), 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
-    Copyright (c), Microsoft Corporation. All rights reserved.
-
-    This program and the accompanying materials
-    are licensed and made available under the terms and conditions of the BSD License
-    which accompanies this distribution.  The full text of the license may be found at
-    http://opensource.org/licenses/bsd-license.php
-
-    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-
-
-    Copyright (c) 2012, Apple Inc. All rights reserved.<BR>
-    Copyright (c) 2013 Linaro.org
-    This program and the accompanying materials
-    are licensed and made available under the terms and conditions of the BSD License
-    which accompanies this distribution.  The full text of the license may be found at
-    http://opensource.org/licenses/bsd-license.php
-
-    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-
-**/
+ *
+ *  Static SMBIOS Table for ARM platform
+ *  Derived from EmulatorPkg package
+ *
+ *  Note SMBIOS 2.7.1 Required structures:
+ *  BIOS Information (Type 0)
+ *  System Information (Type 1)
+ *  Board Information (Type 2)
+ *  System Enclosure (Type 3)
+ *  Processor Information (Type 4) - CPU Driver
+ *  Cache Information (Type 7) - For cache that is external to processor
+ *  System Slots (Type 9) - If system has slots
+ *  Physical Memory Array (Type 16)
+ *  Memory Device (Type 17) - For each socketed system-memory Device
+ *  Memory Array Mapped Address (Type 19) - One per contiguous block per Physical Memroy Array
+ *  System Boot Information (Type 32)
+ *
+ *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2013, Linaro.org
+ *  Copyright (c) 2012, Apple Inc. All rights reserved.<BR>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 #include <Base.h>
 #include <Protocol/Smbios.h>
@@ -685,7 +676,7 @@ SysInfoUpdateSmbiosType1 (
 
   Status = mFwProtocol->GetModelRevision(&BoardRevision);
   if (EFI_ERROR(Status)) {
-    DEBUG ((EFI_D_ERROR,
+    DEBUG ((DEBUG_ERROR,
             "Failed to get board model: %r\n",
             Status));
   } else {
@@ -717,7 +708,7 @@ SysInfoUpdateSmbiosType1 (
 
   Status = mFwProtocol->GetSerial(&BoardSerial);
   if (EFI_ERROR(Status)) {
-    DEBUG ((EFI_D_ERROR,
+    DEBUG ((DEBUG_ERROR,
             "Failed to get board serial: %r\n",
             Status));
   }
@@ -726,7 +717,7 @@ SysInfoUpdateSmbiosType1 (
                  sizeof(mSysInfoSerial),
                  BoardSerial);
 
-  DEBUG ((EFI_D_ERROR, "Board Serial Number: %a\n", mSysInfoSerial));
+  DEBUG ((DEBUG_ERROR, "Board Serial Number: %a\n", mSysInfoSerial));
 
   mSysInfoType1.Uuid.Data1= *(UINT32 *)"RPi3";
   mSysInfoType1.Uuid.Data2=0x0;

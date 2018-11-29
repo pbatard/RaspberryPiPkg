@@ -1,17 +1,18 @@
 /** @file
-  Diagnostics Protocol implementation for the MMC DXE driver
-
-  Copyright (c) 2011-2014, ARM Limited. All rights reserved.
-
-  This program and the accompanying materials
-  are licensed and made available under the terms and conditions of the BSD License
-  which accompanies this distribution.  The full text of the license may be found at
-  http://opensource.org/licenses/bsd-license.php
-
-  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-
-**/
+ *
+ *  Diagnostics Protocol implementation for the MMC DXE driver
+ *
+ *  Copyright (c) 2011-2014, ARM Limited. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 #include <Uefi.h>
 #include <Library/DebugLib.h>
@@ -80,8 +81,8 @@ CompareBuffer (
 
   for (i = 0; i < (BufferSize >> 3); i++) {
     if (*BufferA64 != *BufferB64) {
-      DEBUG ((EFI_D_ERROR, "CompareBuffer: Error at %i", i));
-      DEBUG ((EFI_D_ERROR, "(0x%lX) != (0x%lX)\n", *BufferA64, *BufferB64));
+      DEBUG ((DEBUG_ERROR, "CompareBuffer: Error at %i", i));
+      DEBUG ((DEBUG_ERROR, "(0x%lX) != (0x%lX)\n", *BufferA64, *BufferB64));
       return FALSE;
     }
     BufferA64++;

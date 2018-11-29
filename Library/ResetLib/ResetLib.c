@@ -1,12 +1,12 @@
 /** @file
  *
- * Support ResetSystem Runtime call using PSCI calls.
- * Signals the gRaspberryPiEventResetGuid event group on reset.
+ *  Support ResetSystem Runtime call using PSCI calls.
+ *  Signals the gRaspberryPiEventResetGuid event group on reset.
  *
- * Copyright (c) 2008 - 2009, Apple Inc. All rights reserved.
- * Copyright (c) 2013-2015, ARM Ltd. All rights reserved.
- * Copyright (c) 2014, Linaro Ltd. All rights reserved.
- * Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2014, Linaro Ltd. All rights reserved.
+ *  Copyright (c) 2013-2015, ARM Ltd. All rights reserved.
+ *  Copyright (c) 2008-2009, Apple Inc. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -79,7 +79,7 @@ LibResetSystem (
   ArmCallSmc (&ArmSmcArgs);
 
   // We should never be here
-  DEBUG ((EFI_D_ERROR, "%a: PSCI Reset failed\n", __FUNCTION__));
+  DEBUG ((DEBUG_ERROR, "%a: PSCI Reset failed\n", __FUNCTION__));
   CpuDeadLoop ();
   return EFI_UNSUPPORTED;
 }

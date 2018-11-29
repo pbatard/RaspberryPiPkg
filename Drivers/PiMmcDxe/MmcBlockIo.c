@@ -1,16 +1,16 @@
 /** @file
-*
-*  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
-*
-*  This program and the accompanying materials
-*  are licensed and made available under the terms and conditions of the BSD License
-*  which accompanies this distribution.  The full text of the license may be found at
-*  http://opensource.org/licenses/bsd-license.php
-*
-*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-*
-**/
+ *
+ *  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 #include <Library/BaseMemoryLib.h>
 
@@ -123,7 +123,7 @@ WaitUntilTran(
     Status = MmcHost->SendCommand (MmcHost, MMC_CMD13,
        MmcHostInstance->CardInfo.RCA << 16);
     if (EFI_ERROR(Status) && Status != EFI_TIMEOUT) {
-      DEBUG ((EFI_D_ERROR, "%a(%u) CMD13 failed: %r\n",
+      DEBUG ((DEBUG_ERROR, "%a(%u) CMD13 failed: %r\n",
               __FUNCTION__, __LINE__, Status));
       break;
     }
@@ -140,7 +140,7 @@ WaitUntilTran(
   }
 
   if (0 == Timeout) {
-    DEBUG ((EFI_D_ERROR, "%a(%u) card is busy\n", __FUNCTION__, __LINE__));
+    DEBUG ((DEBUG_ERROR, "%a(%u) card is busy\n", __FUNCTION__, __LINE__));
     return EFI_NOT_READY;
   }
 
@@ -250,7 +250,7 @@ MmcTransferBlock (
 
   Status = MmcHost->SendCommand (MmcHost, Cmd, CmdArg);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "%a(MMC_CMD%d): Error %r\n", __func__,
+    DEBUG ((DEBUG_ERROR, "%a(MMC_CMD%d): Error %r\n", __func__,
             MMC_INDX(Cmd), Status));
     return Status;
   }
@@ -262,7 +262,7 @@ MmcTransferBlock (
     if (!EFI_ERROR (Status)) {
       Status = MmcNotifyState (MmcHostInstance, MmcProgrammingState);
       if (EFI_ERROR (Status)) {
-        DEBUG ((EFI_D_ERROR, "%a() : Error MmcProgrammingState\n", __func__));
+        DEBUG ((DEBUG_ERROR, "%a() : Error MmcProgrammingState\n", __func__));
         return Status;
       }
     }
@@ -276,13 +276,13 @@ MmcTransferBlock (
      */
     EFI_STATUS Status2 = MmcStopTransmission (MmcHost);
     if (EFI_ERROR (Status2)) {
-      DEBUG ((EFI_D_ERROR, "MmcIoBlocks() : CMD12 error on Status %r: %r\n",
+      DEBUG ((DEBUG_ERROR, "MmcIoBlocks() : CMD12 error on Status %r: %r\n",
               Status, Status2));
       return Status2;
     }
 
     if (EFI_ERROR (Status)) {
-      DEBUG ((EFI_D_BLKIO, "%a(): Error %a Block Data and Status = %r\n",
+      DEBUG ((DEBUG_BLKIO, "%a(): Error %a Block Data and Status = %r\n",
               __func__, Transfer == MMC_IOBLOCKS_READ ? "Read" : "Write",
               Status));
       return Status;
@@ -297,13 +297,13 @@ MmcTransferBlock (
   //
   Status = WaitUntilTran(MmcHostInstance);
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "WaitUntilTran after write failed\n"));
+    DEBUG((DEBUG_ERROR, "WaitUntilTran after write failed\n"));
     return Status;
   }
 
   Status = MmcNotifyState (MmcHostInstance, MmcTransferState);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "MmcIoBlocks() : Error MmcTransferState\n"));
+    DEBUG ((DEBUG_ERROR, "MmcIoBlocks() : Error MmcTransferState\n"));
     return Status;
   }
 
@@ -394,7 +394,7 @@ MmcIoBlocks (
   while (BytesRemainingToBeTransfered > 0) {
     Status = WaitUntilTran(MmcHostInstance);
     if (EFI_ERROR (Status)) {
-      DEBUG((EFI_D_ERROR, "WaitUntilTran before IO failed"));
+      DEBUG((DEBUG_ERROR, "WaitUntilTran before IO failed"));
       return Status;
     }
 
@@ -423,7 +423,7 @@ MmcIoBlocks (
 
     Status = MmcTransferBlock (This, Cmd, Transfer, MediaId, Lba, ConsumeSize, Buffer, &ConsumeSize);
     if (EFI_ERROR (Status)) {
-      DEBUG ((EFI_D_ERROR, "%a(): Failed to transfer block and Status:%r\n", __func__, Status));
+      DEBUG ((DEBUG_ERROR, "%a(): Failed to transfer block and Status:%r\n", __func__, Status));
       return Status;
     }
 

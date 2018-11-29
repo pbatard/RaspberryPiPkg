@@ -1,8 +1,8 @@
 /** @file
  *
- *  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (C) 2015, Red Hat, Inc.
- *  Copyright (c) 2006 - 2014, Intel Corporation. All rights reserved.
+ *  Copyright (c) 2006-2014, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -173,7 +173,7 @@ DumpVars(
 
   Status = DoDump (mFvInstance->Device);
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "Couldn't dump '%s'\n",
+    DEBUG((DEBUG_ERROR, "Couldn't dump '%s'\n",
            mFvInstance->MappedFile));
     ASSERT_EFI_ERROR(Status);
     return;
@@ -291,7 +291,7 @@ OnSimpleFileSystemInstall (
 
     Status = DoDump (Device);
     if (EFI_ERROR (Status)) {
-      DEBUG((EFI_D_ERROR, "Couldn't update '%s'\n",
+      DEBUG((DEBUG_ERROR, "Couldn't update '%s'\n",
              mFvInstance->MappedFile));
       ASSERT_EFI_ERROR(Status);
       continue;
@@ -301,7 +301,7 @@ OnSimpleFileSystemInstall (
       gBS->FreePool (mFvInstance->Device);
     }
 
-    DEBUG((EFI_D_INFO, "Found variable store!\n"));
+    DEBUG((DEBUG_INFO, "Found variable store!\n"));
     mFvInstance->Device = Device;
     break;
   }

@@ -1,10 +1,10 @@
 /** @file
  *
- *  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2011 - 2014 ARM LTD. All rights reserved.
- *  Portion of Copyright (c) 2014 NVIDIA Corporation. All rights reserved.
- *  Copyright (c) 2016 HP Development Company, L.P.
- *       
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2016, HP Development Company, L.P.
+ *  Copyright (c) 2014, NVIDIA Corporation. All rights reserved.
+ *  Copyright (c) 2011-2014, ARM Ltd. All rights reserved.
+ *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
  *  which accompanies this distribution.  The full text of the license may be found at

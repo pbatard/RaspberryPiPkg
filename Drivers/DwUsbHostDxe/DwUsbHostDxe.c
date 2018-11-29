@@ -1,9 +1,9 @@
 /** @file
  *
- *  Copyright (c) 2017 - 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2015 - 2016, Linaro Limited. All rights reserved.
- *  Copyright (C) 2012 Oleksandr Tymoshenko <gonzo@freebsd.org>
- *  Copyright (C) 2014 Marek Vasut <marex@denx.de>
+ *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2015-2016, Linaro Limited. All rights reserved.
+ *  Copyright (c) 2014 Marek Vasut <marex@denx.de>
+ *  Copyright (c) 2012 Oleksandr Tymoshenko <gonzo@freebsd.org>
  *
  *  SPDX-License-Identifier: GPL-2.0+
  *
@@ -24,8 +24,6 @@
 #define TimerForTransfer TimerRelative
 
 /*
- * Look, ma, some documentation:
- *
  * https://www.quicklogic.com/assets/pdf/data-sheets/QL-Hi-Speed-USB-2.0-OTG-Controller-Data-Sheet.pdf
  */
 
@@ -71,7 +69,7 @@ Wait4Bit (
     }
   } while (EFI_ERROR (gBS->CheckEvent (Timeout)));
 
-  DEBUG ((EFI_D_ERROR, "Wait4Bit: %a timeout (reg:0x%x, value:0x%x, mask:0x%x)\n",
+  DEBUG ((DEBUG_ERROR, "Wait4Bit: %a timeout (reg:0x%x, value:0x%x, mask:0x%x)\n",
           Set ? "set" : "clear", Reg, Set ? Value  : ~Value, Mask));
 
   return 1;
@@ -141,7 +139,7 @@ Wait4Chhltd (
   }
 
   if (Hcint != HcintCompHltAck) {
-    DEBUG ((EFI_D_ERROR, "Wait4Chhltd: Channel %u HCINT 0x%x %a%a\n",
+    DEBUG ((DEBUG_ERROR, "Wait4Chhltd: Channel %u HCINT 0x%x %a%a\n",
             Channel, Hcint,
             IgnoreAck ? "IgnoreAck " : "",
             Split->SplitStart ? "split start" :
@@ -205,7 +203,7 @@ DwCoreReset (
 
   Status = Wait4Bit (Timeout, DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_AHBIDLE, 1);
   if (Status) {
-    DEBUG ((EFI_D_ERROR, "DwCoreReset: AHBIDLE Timeout!\n"));
+    DEBUG ((DEBUG_ERROR, "DwCoreReset: AHBIDLE Timeout!\n"));
     return Status;
   }
 
@@ -213,7 +211,7 @@ DwCoreReset (
 
   Status = Wait4Bit (Timeout, DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_CSFTRST, 0);
   if (Status) {
-    DEBUG ((EFI_D_ERROR, "DwCoreReset: CSFTRST Timeout!\n"));
+    DEBUG ((DEBUG_ERROR, "DwCoreReset: CSFTRST Timeout!\n"));
     return Status;
   }
 
@@ -858,7 +856,7 @@ DwHcControlTransfer (
                          TransferResult, 1);
 
   if (EFI_ERROR(Status)) {
-    DEBUG ((EFI_D_ERROR, "Setup Stage Error for device 0x%x: 0x%x\n",
+    DEBUG ((DEBUG_ERROR, "Setup Stage Error for device 0x%x: 0x%x\n",
             DeviceAddress, *TransferResult));
     goto out;
   }
@@ -880,7 +878,7 @@ DwHcControlTransfer (
                            TransferResult, 0);
 
     if (EFI_ERROR(Status)) {
-      DEBUG ((EFI_D_ERROR, "Data Stage Error for device 0x%x: 0x%x\n",
+      DEBUG ((DEBUG_ERROR, "Data Stage Error for device 0x%x: 0x%x\n",
               DeviceAddress, *TransferResult));
       goto out;
     }
@@ -902,7 +900,7 @@ DwHcControlTransfer (
                          DWC2_HCCHAR_EPTYPE_CONTROL, TransferResult, 1);
 
   if (EFI_ERROR(Status)) {
-    DEBUG ((EFI_D_ERROR, "Status Stage Error for 0x%x: 0x%x\n",
+    DEBUG ((DEBUG_ERROR, "Status Stage Error for 0x%x: 0x%x\n",
             DeviceAddress, *TransferResult));
     goto out;
   }
@@ -1086,14 +1084,14 @@ DwHcAsyncInterruptTransfer (
 
   NewReq = AllocateZeroPool (sizeof *NewReq);
   if (NewReq == NULL) {
-    DEBUG ((EFI_D_ERROR, "DwHcAsyncInterruptTransfer: failed to allocate req"));
+    DEBUG ((DEBUG_ERROR, "DwHcAsyncInterruptTransfer: failed to allocate req"));
     Status = EFI_OUT_OF_RESOURCES;
     goto done;
   }
 
   Data = AllocateZeroPool (DataLength);
   if (Data == NULL) {
-    DEBUG ((EFI_D_ERROR, "DwHcAsyncInterruptTransfer: failed to allocate buffer\n"));
+    DEBUG ((DEBUG_ERROR, "DwHcAsyncInterruptTransfer: failed to allocate buffer\n"));
     Status = EFI_OUT_OF_RESOURCES;
     goto done;
   }
@@ -1228,7 +1226,7 @@ DwHcIsochronousTransfer (
   OUT UINT32                             *TransferResult
   )
 {
-  DEBUG((EFI_D_ERROR, "Iso\n"));
+  DEBUG((DEBUG_ERROR, "Iso\n"));
   return EFI_UNSUPPORTED;
 }
 
@@ -1248,7 +1246,7 @@ DwHcAsyncIsochronousTransfer (
   IN  VOID                               *Context
   )
 {
-  DEBUG((EFI_D_ERROR, "AsyncIso\n"));
+  DEBUG((DEBUG_ERROR, "AsyncIso\n"));
   return EFI_UNSUPPORTED;
 }
 
@@ -1284,7 +1282,7 @@ DwFlushTxFifo (
 
   Status = Wait4Bit (Timeout, DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_TXFFLSH, 0);
   if (Status)
-    DEBUG ((EFI_D_ERROR, "DwFlushTxFifo: Timeout!\n"));
+    DEBUG ((DEBUG_ERROR, "DwFlushTxFifo: Timeout!\n"));
 
   MicroSecondDelay (1);
 }
@@ -1301,7 +1299,7 @@ DwFlushRxFifo (
 
   Status = Wait4Bit (Timeout, DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_RXFFLSH, 0);
   if (Status)
-    DEBUG ((EFI_D_ERROR, "DwFlushRxFifo: Timeout!\n"));
+    DEBUG ((DEBUG_ERROR, "DwFlushRxFifo: Timeout!\n"));
 
   MicroSecondDelay (1);
 }
@@ -1354,7 +1352,7 @@ DwHcInit (
                      (DWC2_HCCHAR_CHEN | DWC2_HCCHAR_CHDIS));
     Status = Wait4Bit (Timeout, DwHc->DwUsbBase + HCCHAR(i), DWC2_HCCHAR_CHEN, 0);
     if (Status) {
-      DEBUG ((EFI_D_ERROR, "DwHcInit: Timeout!\n"));
+      DEBUG ((DEBUG_ERROR, "DwHcInit: Timeout!\n"));
       return Status;
     }
   }
@@ -1564,14 +1562,14 @@ CreateDwUsbHc (
   Pages = EFI_SIZE_TO_PAGES (DWC2_STATUS_BUF_SIZE);
   DwHc->StatusBuffer = AllocatePages(Pages);
   if (DwHc->StatusBuffer == NULL) {
-    DEBUG ((EFI_D_ERROR, "CreateDwUsbHc: No pages available for StatusBuffer\n"));
+    DEBUG ((DEBUG_ERROR, "CreateDwUsbHc: No pages available for StatusBuffer\n"));
     return EFI_OUT_OF_RESOURCES;
   }
 
   Pages = EFI_SIZE_TO_PAGES (DWC2_DATA_BUF_SIZE);
   Status = DmaAllocateBuffer (EfiBootServicesData, Pages, (VOID **) &DwHc->AlignedBuffer);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "CreateDwUsbHc: DmaAllocateBuffer: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "CreateDwUsbHc: DmaAllocateBuffer: %r\n", Status));
     return Status;
   }
 
@@ -1579,7 +1577,7 @@ CreateDwUsbHc (
   Status = DmaMap (MapOperationBusMasterCommonBuffer, DwHc->AlignedBuffer, &BufferSize,
                    &DwHc->AlignedBufferBusAddress, &DwHc->AlignedBufferMapping);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "CreateDwUsbHc: DmaMap: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "CreateDwUsbHc: DmaMap: %r\n", Status));
     return Status;
   }
 
@@ -1595,7 +1593,7 @@ CreateDwUsbHc (
                                );
 
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "CreateDwUsbHc: DwUsbHcExitBootService: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "CreateDwUsbHc: DwUsbHcExitBootService: %r\n", Status));
     return Status;
   }
 
@@ -1606,14 +1604,14 @@ CreateDwUsbHc (
                              DwHc, &DwHc->PeriodicEvent
                              );
   if (Status != EFI_SUCCESS) {
-    DEBUG ((EFI_D_ERROR, "CreateDwUsbHc: DwHcPeriodicHandler: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "CreateDwUsbHc: DwHcPeriodicHandler: %r\n", Status));
     return Status;
   }
 
   Status = gBS->SetTimer (DwHc->PeriodicEvent, TimerPeriodic,
                           EFI_TIMER_PERIOD_MILLISECONDS(1));
   if (Status != EFI_SUCCESS) {
-    DEBUG ((EFI_D_ERROR, "CreateDwUsbHc: PeriodicEvent: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "CreateDwUsbHc: PeriodicEvent: %r\n", Status));
     return Status;
   }
 

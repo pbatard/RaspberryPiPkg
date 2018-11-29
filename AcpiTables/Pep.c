@@ -1,20 +1,23 @@
-/*
- * PEP device tables.
+/** @file
  *
- * Copyright (c), 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
- * Copyright (c), Microsoft Corporation. All rights reserved.
+ *  PEP device tables
  *
- * This program and the accompanying materials
- * are licensed and made available under the terms and conditions of the BSD License
- * which accompanies this distribution.  The full text of the license may be found at
- * http://opensource.org/licenses/bsd-license.php
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
- * THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
- * WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
- */
-#include "pep.h"
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
-PEP_PROCESSOR_TABLE_PLAT RPI2Processors = {
+#include "Pep.h"
+
+PEP_PROCESSOR_TABLE_PLAT RPI3Processors = {
   1, //Version
   1, //NumberProcessors
   { //ProcessorInfo
@@ -32,7 +35,7 @@ PEP_PROCESSOR_TABLE_PLAT RPI2Processors = {
   }
 };
 
-PEP_COORDINATED_STATE_TABLE_PLAT RPI2CoordinatedStates = {
+PEP_COORDINATED_STATE_TABLE_PLAT RPI3CoordinatedStates = {
   1, //Version
   1, //CoordinatedStateCount
   { //CordinatedStates[]
@@ -54,7 +57,7 @@ PEP_COORDINATED_STATE_TABLE_PLAT RPI2CoordinatedStates = {
   }
 };
 
-PEP_DEVICE_TABLE_PLAT RPI2Devices = {
+PEP_DEVICE_TABLE_PLAT RPI3Devices = {
   1, //Version
   1, //NumberDevices
   { //DeviceInfo

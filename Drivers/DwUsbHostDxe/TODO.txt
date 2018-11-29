@@ -1,1 +1,0 @@
-TODO: Move these files to edk2-non-osi/Platform/Broadcom/Bcm283x/

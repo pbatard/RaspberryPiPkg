@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -71,7 +71,7 @@ HypLogSetColors(
   mSetAttributeString[FOREGROUND_CONTROL_OFFSET + 1]  = '0' + (ForegroundControl % 10);
 
   SerialPortWrite (U8P(mSetAttributeString),
-                   sizeof(mSetAttributeString));  
+                   sizeof(mSetAttributeString));
 }
 
 

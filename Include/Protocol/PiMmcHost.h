@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2011-2014, ARM Limited. All rights reserved.
  *
  *  This program and the accompanying materials

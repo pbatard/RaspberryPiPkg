@@ -3,14 +3,16 @@ Raspberry Pi (Broadcom BCM283x) EDK2 Platform Support
 
 # Summary
 
-This is a port of 64-bit Tiano Core UEFI firmware for the Pi 3/3B+ platforms,
+This is a port of 64-bit Tiano Core UEFI firmware for the Raspberry Pi 3/3B+ platforms,
 based on [Ard Bisheuvel's 64-bit](http://www.workofard.com/2017/02/uefi-on-the-pi/)
 and [Microsoft's 32-bit](https://github.com/ms-iot/RPi-UEFI/tree/ms-iot/Pi3BoardPkg)
 implementations, as maintained by [Andrei Warkentin](https://github.com/andreiw/RaspberryPiPkg).
 
-This is meant as a generally useful 64-bit ATF + UEFI implementation for the Pi 3/3B+
-which should be good enough for most kind of UEFI development, as well as for running
-real operating systems.
+This is meant as a generally useful 64-bit ATF + UEFI implementation for the Raspberry
+Pi 3/3B+ which should be good enough for most kind of UEFI development, as well as for
+running consummer Operating Systems in such as Linux or Windows.
+
+Raspberry Pi is a trademark of the [Raspberry Pi Foundation](http://www.raspberrypi.org).
 
 # Status
 
@@ -138,15 +140,15 @@ still requiring some support.
 
 Below are the steps you can follow to install Ubuntu LTS onto SD/USB:
 * Download the latest Ubuntu LTS ARM64 [`mini.iso`](http://ports.ubuntu.com/ubuntu-ports/dists/bionic/main/installer-arm64/current/images/netboot/mini.iso).
-* Partition the media as MBR and create a ~200 MB FAT32 partition on it with MBR type `0x0c`.  
+* Partition the media as MBR and create a ~200 MB FAT32 partition on it with MBR type `0x0c`.
   Note: Do not be tempted to use GPT partition scheme or `0xef` (EFI System Partition) for the
   type, as none of these are supported by the Raspberry Pi's internal boot rom.
 * Extract the full content of the ISO onto the partition you created.
-* Also extract the GRUB EFI bootloader `bootaa64.efi` from `/boot/grub/efi.img` to `/boot/grub/`.  
+* Also extract the GRUB EFI bootloader `bootaa64.efi` from `/boot/grub/efi.img` to `/boot/grub/`.
   Note: Do not be tempted to copy this file to another directory (such as `/efi/boot/`) as GRUB looks for its
   modules and configuration data in the same directory as the EFI loader and also, the installation
   process will create a `bootaa64.efi` into `/efi/boot/`.
-* If needed, copy the UEFI firmware files (`RPI_EFI.fd`, `bootcode.bin`, `fixup.dat` and `start.elf`)  
+* If needed, copy the UEFI firmware files (`RPI_EFI.fd`, `bootcode.bin`, `fixup.dat` and `start.elf`)
   onto the FAT partition.
 * Boot the pi and let it go into the UEFI shell.
 * Navigate to `fs0:` then `/boot/grub/` and launch the GRUB efi loader.

@@ -128,7 +128,7 @@ FindWritableFs (
 
     Status = SimpleFs->OpenVolume(SimpleFs, &Fs);
     if (EFI_ERROR (Status)) {
-      DEBUG((EFI_D_ERROR, "%a OpenVolume[%u] returned %r\n", __FUNCTION__,
+      DEBUG((DEBUG_ERROR, "%a OpenVolume[%u] returned %r\n", __FUNCTION__,
              Index, Status));
       continue;
     }
@@ -137,7 +137,7 @@ FindWritableFs (
                       EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ |
                       EFI_FILE_MODE_WRITE, 0);
     if (EFI_ERROR (Status)) {
-      DEBUG((EFI_D_ERROR, "%a Open[%u] returned %r\n", __FUNCTION__,
+      DEBUG((DEBUG_ERROR, "%a Open[%u] returned %r\n", __FUNCTION__,
              Index, Status));
       continue;
     }
@@ -292,7 +292,7 @@ ProcessScreenshotHandler(
                                               &Handle
                                               );
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "%a: couldn't register key notification: %r\n",
+    DEBUG ((DEBUG_ERROR, "%a: couldn't register key notification: %r\n",
             __FUNCTION__, Status));
     return Status;
   }
@@ -363,7 +363,7 @@ RegisterScreenshotHandlers(
                             OnTextInExInstall, NULL,
                             &TextInExInstallEvent);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "%a: couldn't create protocol install event: %r\n",
+    DEBUG ((DEBUG_ERROR, "%a: couldn't create protocol install event: %r\n",
             __FUNCTION__, Status));
     return;
   }
@@ -372,7 +372,7 @@ RegisterScreenshotHandlers(
                                        TextInExInstallEvent,
                                        &TextInExInstallRegistration);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "%a: couldn't register protocol install notify: %r\n",
+    DEBUG ((DEBUG_ERROR, "%a: couldn't register protocol install notify: %r\n",
             __FUNCTION__, Status));
     return;
   }

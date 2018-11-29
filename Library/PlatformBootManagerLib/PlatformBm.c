@@ -1,11 +1,11 @@
 /** @file
  *
- *  Copyright (C) 2015-2016, Red Hat, Inc.
- *  Copyright (c) 2014, ARM Ltd. All rights reserved.
- *  Copyright (c) 2004 - 2016, Intel Corporation. All rights reserved.
- *  Copyright (c) 2016, Linaro Ltd. All rights reserved.
- *  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2018, Pete Batard <pete@akeo.ie>
+ *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2016, Linaro Ltd. All rights reserved.
+ *  Copyright (c) 2015-2016, Red Hat, Inc.
+ *  Copyright (c) 2014, ARM Ltd. All rights reserved.
+ *  Copyright (c) 2004-2016, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -293,7 +293,7 @@ FilterAndProcess (
     //
     // This is not an error, just an informative condition.
     //
-    DEBUG ((EFI_D_VERBOSE, "%a: %g: %r\n", __FUNCTION__, ProtocolGuid,
+    DEBUG ((DEBUG_VERBOSE, "%a: %g: %r\n", __FUNCTION__, ProtocolGuid,
       Status));
     return;
   }
@@ -343,26 +343,26 @@ AddOutput (
 
   DevicePath = DevicePathFromHandle (Handle);
   if (DevicePath == NULL) {
-    DEBUG ((EFI_D_ERROR, "%a: %s: handle %p: device path not found\n",
+    DEBUG ((DEBUG_ERROR, "%a: %s: handle %p: device path not found\n",
       __FUNCTION__, ReportText, Handle));
     return;
   }
 
   Status = EfiBootManagerUpdateConsoleVariable (ConOut, DevicePath, NULL);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "%a: %s: adding to ConOut: %r\n", __FUNCTION__,
+    DEBUG ((DEBUG_ERROR, "%a: %s: adding to ConOut: %r\n", __FUNCTION__,
       ReportText, Status));
     return;
   }
 
   Status = EfiBootManagerUpdateConsoleVariable (ErrOut, DevicePath, NULL);
   if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "%a: %s: adding to ErrOut: %r\n", __FUNCTION__,
+    DEBUG ((DEBUG_ERROR, "%a: %s: adding to ErrOut: %r\n", __FUNCTION__,
       ReportText, Status));
     return;
   }
 
-  DEBUG ((EFI_D_VERBOSE, "%a: %s: added to ConOut and ErrOut\n", __FUNCTION__,
+  DEBUG ((DEBUG_VERBOSE, "%a: %s: added to ConOut and ErrOut\n", __FUNCTION__,
     ReportText));
 }
 

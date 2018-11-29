@@ -228,7 +228,7 @@ SetupVariables (
 
   return EFI_SUCCESS;
 }
-  
+
 
 STATIC VOID
 ApplyVariables (
@@ -249,7 +249,7 @@ ApplyVariables (
        */
       Status = mFwProtocol->GetMaxClockRate(RPI_FW_CLOCK_RATE_ARM, &Rate);
       if (Status != EFI_SUCCESS) {
-        DEBUG((EFI_D_ERROR, "Couldn't get the max CPU speed, leaving as is: %r\n",
+        DEBUG((DEBUG_ERROR, "Couldn't get the max CPU speed, leaving as is: %r\n",
                Status));
       }
     } else {
@@ -258,20 +258,20 @@ ApplyVariables (
   }
 
   if (Rate != 0) {
-    DEBUG((EFI_D_INFO, "Setting CPU speed to %uHz\n", Rate));
+    DEBUG((DEBUG_INFO, "Setting CPU speed to %uHz\n", Rate));
     Status = mFwProtocol->SetClockRate(RPI_FW_CLOCK_RATE_ARM, Rate);
     if (Status != EFI_SUCCESS) {
-      DEBUG((EFI_D_ERROR, "Couldn't set the CPU speed: %r\n",
+      DEBUG((DEBUG_ERROR, "Couldn't set the CPU speed: %r\n",
              Status));
     }
   }
 
   Status = mFwProtocol->GetClockRate(RPI_FW_CLOCK_RATE_ARM, &Rate);
   if (Status != EFI_SUCCESS) {
-    DEBUG((EFI_D_ERROR, "Couldn't get the CPU speed: %r\n",
+    DEBUG((DEBUG_ERROR, "Couldn't get the CPU speed: %r\n",
            Status));
   } else {
-    DEBUG((EFI_D_INFO, "Current CPU speed is %uHz\n", Rate));
+    DEBUG((DEBUG_INFO, "Current CPU speed is %uHz\n", Rate));
   }
 
   /*
@@ -293,14 +293,14 @@ ApplyVariables (
   GpioPinFuncSet(52, GPIO_FSEL_INPUT);
   GpioPinFuncSet(53, GPIO_FSEL_INPUT);
   if (PcdGet32 (PcdSdIsArasan)) {
-    DEBUG((EFI_D_INFO, "Routing SD to Arasan\n"));
+    DEBUG((DEBUG_INFO, "Routing SD to Arasan\n"));
     Gpio48Group = GPIO_FSEL_ALT3;
     /*
      * Route SDIO to SdHost.
      */
     Gpio34Group = GPIO_FSEL_ALT0;
   } else {
-    DEBUG((EFI_D_INFO, "Routing SD to SdHost\n"));
+    DEBUG((DEBUG_INFO, "Routing SD to SdHost\n"));
     Gpio48Group = GPIO_FSEL_ALT0;
     /*
      * Route SDIO to Arasan.
@@ -367,7 +367,7 @@ ConfigInitialize(
 
   Status = SetupVariables();
   if (Status != EFI_SUCCESS) {
-    DEBUG((EFI_D_ERROR, "Couldn't not setup NV vars: %r\n",
+    DEBUG((DEBUG_ERROR, "Couldn't not setup NV vars: %r\n",
            Status));
   }
 
@@ -380,7 +380,7 @@ ConfigInitialize(
 
   Status = InstallHiiPages();
   if (Status != EFI_SUCCESS) {
-    DEBUG((EFI_D_ERROR, "Couldn't install ConfigDxe configuration pages: %r\n",
+    DEBUG((DEBUG_ERROR, "Couldn't install ConfigDxe configuration pages: %r\n",
            Status));
   }
 

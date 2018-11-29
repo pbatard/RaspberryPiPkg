@@ -1,8 +1,8 @@
-#/* @file
+#/** @file
 #
 #  Implement dummy EFI RealTimeClock runtime services.
 #
-#  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+#  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #  Copyright (c) Microsoft Corporation. All rights reserved.
 #
 #  This program and the accompanying materials
@@ -13,7 +13,7 @@
 #  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 #  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #
-#*/
+#**/
 
 [Defines]
   INF_VERSION                    = 0x00010005

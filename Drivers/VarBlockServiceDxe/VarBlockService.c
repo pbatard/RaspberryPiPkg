@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2006 - 2014, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
@@ -223,7 +223,7 @@ Arguments:
 Returns:
   EFI_SUCCESS           - The erase request was successfully completed
   EFI_ACCESS_DENIED     - The firmware volume is in the WriteDisabled state
-  EFI_DEVICE_ERROR      - The block device is not functioning correctly and 
+  EFI_DEVICE_ERROR      - The block device is not functioning correctly and
                           could not be written. Firmware device may have been
                           partially erased
   EFI_INVALID_PARAMETER
@@ -797,7 +797,7 @@ ValidateFvHeader (
     Expected =
       (UINT16) (((UINTN) FwVolHeader->Checksum + 0x10000 - Checksum) & 0xffff);
 
-    DEBUG ((EFI_D_INFO, "FV@%p Checksum is 0x%x, expected 0x%x\n",
+    DEBUG ((DEBUG_INFO, "FV@%p Checksum is 0x%x, expected 0x%x\n",
             FwVolHeader, FwVolHeader->Checksum, Expected));
     return EFI_NOT_FOUND;
   }
@@ -868,7 +868,7 @@ FvbInitialize (
     EFI_FIRMWARE_VOLUME_HEADER *GoodFwVolHeader;
     UINTN WriteLength;
 
-    DEBUG ((EFI_D_INFO,
+    DEBUG ((DEBUG_INFO,
       "Variable FV header is not valid. It will be reinitialized.\n"));
 
     //

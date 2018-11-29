@@ -1,22 +1,26 @@
+/** @file
+ *
+ *  PEP device defines
+ *
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
+
 /*
- * PEP device defines.
- *
  * Note: Not everything is here. At least SOC_STATE_TYPE is missing.
- *
- * Copyright (c), 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
- * Copyright (c), Microsoft Corporation. All rights reserved.
- *
- * This program and the accompanying materials
- * are licensed and made available under the terms and conditions of the BSD License
- * which accompanies this distribution.  The full text of the license may be found at
- * http://opensource.org/licenses/bsd-license.php
- *
- * THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
- * WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
  */
 
-#ifndef _RPI2PEP_H_INCLUDED_
-#define _RPI2PEP_H_INCLUDED_
+#ifndef _RPI3PEP_H_INCLUDED_
+#define _RPI3PEP_H_INCLUDED_
 
 #include <IndustryStandard/Acpi50.h>
 
@@ -87,7 +91,7 @@ typedef struct _PEP_PROCESSOR_INFO_PLAT {
   //
   ULONG NumberIdleStates;
   ULONG NumberPerfStates;
-  
+
   PEP_PROCESSOR_IDLE_INFO_PLAT IdleInfo;
   PEP_PROCESSOR_PERF_INFO PerfInfo;
 } PEP_PROCESSOR_INFO_PLAT, *PPEP_PROCESSOR_INFO_PLAT;

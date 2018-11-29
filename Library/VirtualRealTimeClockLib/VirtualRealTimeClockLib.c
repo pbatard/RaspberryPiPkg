@@ -1,19 +1,19 @@
 /** @file
-*
-*  Implement dummy EFI RealTimeClock runtime services.
-*
-*  Copyright (c), 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
-*  Copyright (c) Microsoft Corporation. All rights reserved.
-*
-*  This program and the accompanying materials
-*  are licensed and made available under the terms and conditions of the BSD License
-*  which accompanies this distribution.  The full text of the license may be found at
-*  http://opensource.org/licenses/bsd-license.php
-*
-*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-*
-**/
+ *
+ *  Implement dummy EFI RealTimeClock runtime services.
+ *
+ *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+ *
+ **/
 
 #include <PiDxe.h>
 #include <Library/BaseLib.h>
@@ -28,10 +28,10 @@
 /**
    Returns the current time and date information, and the time-keeping capabilities
    of the virtual RTC.
-  
+
    For simplicity, this LibGetTime does not report Years/Months, instead it will only report current
-   Day, Hours, Minutes and Seconds starting from the begining of CPU up-time. Otherwise, a more 
-   complex logic will be required to account for leap years and days/month differences. 
+   Day, Hours, Minutes and Seconds starting from the begining of CPU up-time. Otherwise, a more
+   complex logic will be required to account for leap years and days/month differences.
 
    @param  Time                  A pointer to storage to receive a snapshot of the current time.
    @param  Capabilities          An optional pointer to a buffer to receive the real time clock

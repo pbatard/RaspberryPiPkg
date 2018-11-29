@@ -1,10 +1,10 @@
 /** @file
  *
- *  Copyright (C) 2015-2016, Red Hat, Inc.
- *  Copyright (c) 2014, ARM Ltd. All rights reserved.
- *  Copyright (c) 2004 - 2016, Intel Corporation. All rights reserved.
+ *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro Ltd. All rights reserved.
- *  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2015-2016, Red Hat, Inc.
+ *  Copyright (c) 2014, ARM Ltd. All rights reserved.
+ *  Copyright (c) 2004-2016, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License

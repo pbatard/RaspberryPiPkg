@@ -1,7 +1,7 @@
 /** @file
  *
- *  Copyright (c) 2006 - 2016, Intel Corporation. All rights reserved.
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2006-2016, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
