@@ -96,8 +96,7 @@ you may also be able to boot from a FAT32 USB driver rather than uSD.
 
 ## ARM Trusted Firmware (ATF)
 
-The ATF binaries being used were compiled from the latest ATF source (with one extra pull
-request applied).
+The ATF binaries being used were compiled from the latest ATF source.
 
 For more details on the ATF compilation, see the [README](./Binary/README.md) in the `Binary/` directory.
 
