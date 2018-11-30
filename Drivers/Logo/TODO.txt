@@ -1,1 +1,0 @@
-TODO: Move the bmp logo edk2-non-osi (and get formal licensing terms from trademarks@raspberrypi.org)
