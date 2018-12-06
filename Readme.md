@@ -70,7 +70,7 @@ export GCC5_AARCH64_PREFIX=aarch64-linux-gnu-
 export WORKSPACE=$PWD
 export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms:$WORKSPACE/edk2-non-osi
 . edk2/edksetup.sh
-build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Broadcom/Bcm283x/RaspberryPiPkg.dsc -b RELEASE
+build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Broadcom/Bcm283x/RaspberryPiPkg.dsc -b RELEASE -DBUILD_EPOCH=`date +%s`
 ```
 
 # Booting the firmware
@@ -178,8 +178,13 @@ Then, to have your changes applied run `update-grub` and reboot.
 
 ## Windows
 
-Windows 10 (for ARM64) build 17134 has been tested and confirmed to work.
-Builds 17125-17133 and 17672 have also been reported to work.
+Windows 10 1809 for ARM64 (build 17763) has been tested and confirmed to work (after replacing
+`C:\Windows\System32\Drivers\WppRecorder.sys` with an older version, since the one from 1809
+appears to be buggy across all archs, and results in a similar BSOD when trying to run Windows
+To Go on x64 with native drivers for instance).
+
+Windows 10 1803 for ARM64 and earlier do not work due to the presence of a hardware ASSERT check
+in the Windows kernel, that was removed in later versions.
 
 You probably want to look at https://www.worproject.ml/ as well as the
 [Windows thread in the original RaspberryPiPkg](https://github.com/andreiw/RaspberryPiPkg/issues/12)

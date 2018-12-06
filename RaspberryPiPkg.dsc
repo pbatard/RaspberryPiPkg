@@ -39,16 +39,9 @@
   DEFINE SECURE_BOOT_ENABLE      = FALSE
   DEFINE DEBUG_PRINT_ERROR_LEVEL = 0x8000004F
 
-!ifndef BUILD_DATE
-DEFINE BUILD_DATE = 12/11/2018
-!endif
 !ifndef BUILD_EPOCH
-DEFINE BUILD_EPOCH = 1542039319
+  DEFINE BUILD_EPOCH             = 1546300800
 !endif
-!ifndef BUILD_COMMIT
-DEFINE BUILD_COMMIT = current
-!endif
-
 ################################################################################
 #
 # Library Class section - list of all Library Classes needed by this Platform.
@@ -234,7 +227,6 @@ DEFINE BUILD_COMMIT = current
 
 [BuildOptions]
   GCC:RELEASE_*_*_CC_FLAGS    = -DMDEPKG_NDEBUG -DNDEBUG
-  GCC:*_*_*_CC_FLAGS          = -DBUILD_DATE=$(BUILD_DATE) -DBUILD_COMMIT=$(BUILD_COMMIT)
 
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
@@ -408,7 +400,7 @@ DEFINE BUILD_COMMIT = current
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"Raspberry Pi 3 64-bit UEFI"
 
   #
-  # Build dae/time. This is used if RtcEpochSeconds NVRAM
+  # Build timestamp. This is used if RtcEpochSeconds NVRAM
   # variable is not present.
   #
   gRaspberryPiTokenSpaceGuid.PcdBootEpochSeconds|$(BUILD_EPOCH)

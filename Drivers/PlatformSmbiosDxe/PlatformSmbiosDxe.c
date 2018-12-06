@@ -118,9 +118,9 @@ SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
 };
 
 CHAR8 *mBIOSInfoType0Strings[] = {
-  "https://github.com/andreiw/RaspberryPiPkg",      // Vendor String
-  "Raspberry Pi 64-bit UEFI (" S(BUILD_COMMIT)" on " S(BUILD_DATE) ")", // BiosVersion String
-  S(BUILD_DATE),
+  "https://github.com/andreiw/RaspberryPiPkg",             // Vendor String
+  "Raspberry Pi 64-bit UEFI (" __DATE__ " " __TIME__ ")",  // BiosVersion String
+  __DATE__,
   NULL
 };
 
