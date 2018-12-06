@@ -117,6 +117,7 @@
  * Assumes 4K granularity.
  */
 #define PTE_2_TAB(x)      ((VOID *)M((x), 47, 12))
+#define VA_2_PL0_IX(x)    X((x), 39, 47)
 #define VA_2_PL1_IX(x)    X((x), 30, 38)
 #define VA_2_PL2_IX(x)    X((x), 21, 29)
 #define VA_2_PL3_IX(x)    X((x), 20, 12)

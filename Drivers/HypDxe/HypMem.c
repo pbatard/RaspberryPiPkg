@@ -43,7 +43,7 @@ HypMemInit(
   }
 
   mHypFirst = (MPA) LoadedImage->ImageBase;
-  mHypLast = mHypFirst +  LoadedImage->ImageSize - 1;
+  mHypLast = mHypFirst + LoadedImage->ImageSize - 1;
   HLOG((HLOG_INFO, "HypDxe at 0x%lx-0x%lx\n",
         mHypFirst, mHypLast));
   HLOG((HLOG_VERBOSE, "mPages at 0x%lx-0x%lx\n",
@@ -84,12 +84,7 @@ HypMemIsHyp2M(
   MPA HypFirst2MB = A_DOWN(mHypFirst, SIZE_2MB);
   MPA HypAfterLast2MB = A_UP(mHypLast, SIZE_2MB);
 
-  if (A >= HypFirst2MB &&
-      A < HypAfterLast2MB) {
-    return TRUE;
-  }
-
-  return FALSE;
+  return (A >= HypFirst2MB && A < HypAfterLast2MB);
 }
 
 
@@ -98,9 +93,5 @@ HypMemIsHypAddr(
   IN  MPA A
   )
 {
-  if (A >= mHypFirst && A <= mHypLast) {
-    return TRUE;
-  }
-
-  return FALSE;
+  return (A >= mHypFirst && A <= mHypLast);
 }

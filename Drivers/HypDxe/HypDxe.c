@@ -32,7 +32,7 @@ HypIsEnabled(
 VOID
 CaptureEL2State(
   OUT CAPTURED_EL2_STATE *State
-)
+  )
 {
   ReadSysReg(State->Mdcr, mdcr_el2);
   ReadSysReg(State->Hcr, hcr_el2);
@@ -52,7 +52,9 @@ CaptureEL2State(
 
 
 STATIC EFI_STATUS
-HypBuildS2PT(IN  CAPTURED_EL2_STATE *State)
+HypBuildS2PT(
+  IN  CAPTURED_EL2_STATE *State
+  )
 {
   UINT64 Vtcr;
   UINT64 *PL1;
@@ -64,11 +66,11 @@ HypBuildS2PT(IN  CAPTURED_EL2_STATE *State)
    * This is not a general purpose page table
    * builder.
    *
-   * T0SZ assumed 32-bit.
+   * T0SZ assumed 24-bit.
    * Granule 4K.
    */
-  ASSERT (X(State->Tcr, 0, 5) == (64 - 32));
-  ASSERT (X(State->Tcr, 14, 15) == 0x0);
+  ASSERT (X(State->Tcr, 0, 5) == 24);
+  ASSERT (X(State->Tcr, 14, 15) == 0);
 
   PL1 = (VOID *) HypMemAlloc(1);
   if (PL1 == NULL) {
@@ -121,7 +123,7 @@ HypBuildS2PT(IN  CAPTURED_EL2_STATE *State)
         PL2[ix2] = ((UINTN) PL3) | PTE_TYPE_TAB;
       }
 
-      PL3[ix3] = PTE_TYPE_BLOCK_L3 | PTE_SH_INNER  |
+      PL3[ix3] = PTE_TYPE_BLOCK_L3 | PTE_SH_INNER |
         PTE_AF | A | PTE_S2_ATTR_MEM;
       if (HypMemIsHypAddr(A)) {
         PL3[ix3] |= PTE_S2_RO;
@@ -165,38 +167,54 @@ HypBuildS2PT(IN  CAPTURED_EL2_STATE *State)
 
 
 STATIC EFI_STATUS
-HypBuildPT(IN  CAPTURED_EL2_STATE *State)
+HypBuildPT(
+  IN  CAPTURED_EL2_STATE *State
+  )
 {
-  UINT64 *PL1;
+  UINT64 *PL0;
   EFI_PHYSICAL_ADDRESS A = 0;
   EFI_PHYSICAL_ADDRESS E = BCM2836_SOC_REGISTERS +
     BCM2836_SOC_REGISTER_LENGTH;
   /*
-   * This is not a general purpose page table
-   * builder.
+   * Custom Page Table builder.
    *
-   * T0SZ assumed 32-bit.
+   * T0SZ assumed 24-bit.
    * Granule 4K.
    */
-  ASSERT (X(State->Tcr, 0, 5) == (64 - 32));
-  ASSERT (X(State->Tcr, 14, 15) == 0x0);
+  ASSERT (X(State->Tcr, 0, 5) == 24);
+  ASSERT (X(State->Tcr, 14, 15) == 0);
 
-  PL1 = (VOID *) HypMemAlloc(1);
-  if (PL1 == NULL) {
-    HLOG((HLOG_ERROR, "Couldn't alloc L1 table\n"));
+  PL0 = (VOID *) HypMemAlloc(1);
+  if (PL0 == NULL) {
+    HLOG((HLOG_ERROR, "Couldn't alloc L0 table\n"));
     return EFI_OUT_OF_RESOURCES;
   }
 
-  ZeroMem(PL1, EFI_PAGE_SIZE);
+  ZeroMem(PL0, EFI_PAGE_SIZE);
 
   while (A < E) {
     /*
-     * Each PL2 covers 1GB, each entry being 2MB.
+     * PL1 covers 512GB (512 entries ^ (4-1) * 4K Granule)
+     * PL2 covers 1GB   (512 entries ^ (4-2) * 4K Granule)
      */
+    UINT64 *PL1;
     UINT64 *PL2;
 
+    UINTN ix0 = VA_2_PL0_IX(A);
     UINTN ix1 = VA_2_PL1_IX(A);
     UINTN ix2 = VA_2_PL2_IX(A);
+
+    PL1 = PTE_2_TAB(PL0[ix0]);
+    if (PTE_2_TYPE(PL0[ix0]) != PTE_TYPE_TAB) {
+      PL1 = (VOID *)HypMemAlloc(1);
+      if (PL1 == NULL) {
+        HLOG((HLOG_ERROR, "Couldn't alloc L1 table for %u\n", ix0));
+        return EFI_OUT_OF_RESOURCES;
+      }
+
+      ZeroMem(PL1, EFI_PAGE_SIZE);
+      PL0[ix0] = ((UINTN)PL1) | PTE_TYPE_TAB;
+    }
 
     PL2 = PTE_2_TAB(PL1[ix1]);
     if (PTE_2_TYPE(PL1[ix1]) != PTE_TYPE_TAB) {
@@ -223,10 +241,10 @@ HypBuildPT(IN  CAPTURED_EL2_STATE *State)
   }
 
   HLOG((HLOG_INFO, "Setting page table root to 0x%lx\n",
-        (UINT64) PL1));
+        (UINT64) PL0));
 
   DSB_ISH();
-  WriteSysReg(ttbr0_el2, PL1);
+  WriteSysReg(ttbr0_el2, PL0);
   ISB();
 
   asm volatile("tlbi alle2");
@@ -240,8 +258,10 @@ HypBuildPT(IN  CAPTURED_EL2_STATE *State)
 
 
 STATIC EFI_STATUS
-HypModeInit(IN  CAPTURED_EL2_STATE *State,
-            OUT EFI_PHYSICAL_ADDRESS *ExceptionStackTop)
+HypModeInit(
+  IN  CAPTURED_EL2_STATE *State,
+  OUT EFI_PHYSICAL_ADDRESS *ExceptionStackTop
+  )
 {
   VOID *Stack;
   UINTN StackSize;
@@ -313,8 +333,10 @@ HypModeInit(IN  CAPTURED_EL2_STATE *State,
 
 
 STATIC VOID
-HypSwitchToEL1(IN  CAPTURED_EL2_STATE *State,
-               IN  EFI_PHYSICAL_ADDRESS ExceptionStack)
+HypSwitchToEL1(
+  IN  CAPTURED_EL2_STATE *State,
+  IN  EFI_PHYSICAL_ADDRESS ExceptionStack
+  )
 {
 
   UINT64 Tcr;
@@ -371,7 +393,7 @@ STATIC VOID
 HypExceptionFatal (
   IN     EFI_EXCEPTION_TYPE ExceptionType,
   IN OUT EFI_SYSTEM_CONTEXT_AARCH64 *SystemContext
-)
+  )
 {
   UINTN EL = SPSR_2_EL(SystemContext->SPSR);
 
@@ -411,7 +433,7 @@ VOID
 HypExceptionHandler (
   IN     EFI_EXCEPTION_TYPE ExceptionType,
   IN OUT EFI_SYSTEM_CONTEXT_AARCH64 *SystemContext
-)
+  )
 {
   BOOLEAN Handled = FALSE;
   UINTN EC = ESR_2_EC(SystemContext->ESR);
@@ -543,4 +565,3 @@ HypInitialize(
   WriteSysReg(daif, DAIF);
   return EFI_SUCCESS;
 }
-

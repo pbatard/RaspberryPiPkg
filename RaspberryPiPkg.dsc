@@ -420,7 +420,6 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdShellFile|{ 0x83, 0xA5, 0x04, 0x7C, 0x3E, 0x9E, 0x1C, 0x4F, 0xAD, 0x65, 0xE0, 0x52, 0x68, 0xD0, 0xB4, 0xD1 }
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"Raspberry Pi 3 64-bit UEFI"
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|32
 
   #
   # Build dae/time. This is used if RtcEpochSeconds NVRAM
