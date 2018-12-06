@@ -49,20 +49,6 @@ DEFINE BUILD_EPOCH = 1542039319
 DEFINE BUILD_COMMIT = current
 !endif
 
-!ifndef HYP_LOG_MASK
-#
-# HLOG_ERROR   0x00000000
-# HLOG_INFO    0x00000001
-# HLOG_VERBOSE 0x00000002
-# HLOG_VM      0x00000004
-#
-!if $(TARGET) == RELEASE
-DEFINE HYP_LOG_MASK = 0x4
-!else
-DEFINE HYP_LOG_MASK = 0xffffffff
-!endif
-!endif
-
 ################################################################################
 #
 # Library Class section - list of all Library Classes needed by this Platform.
@@ -431,15 +417,6 @@ DEFINE HYP_LOG_MASK = 0xffffffff
 [PcdsDynamicHii.common.DEFAULT]
 
   #
-  # HypDxe/Windows related.
-  #
-
-  gRaspberryPiTokenSpaceGuid.PcdHypEnable|L"HypEnable"|gConfigDxeFormSetGuid|0x0|1
-  gRaspberryPiTokenSpaceGuid.PcdHypLogMask|L"HypLogMask"|gConfigDxeFormSetGuid|0x0|$(HYP_LOG_MASK)
-  gRaspberryPiTokenSpaceGuid.PcdHypWindowsDebugHook|L"HypWindowsDebugHook"|gConfigDxeFormSetGuid|0x0|0
-  gRaspberryPiTokenSpaceGuid.PcdHypWin2000Mask|L"HypWin2000Mask"|gConfigDxeFormSetGuid|0x0|0
-
-  #
   # Clock overrides.
   #
 
@@ -563,7 +540,6 @@ DEFINE HYP_LOG_MASK = 0xffffffff
   Platform/Broadcom/Bcm283x/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
   Platform/Broadcom/Bcm283x/Drivers/RpiFdtDxe/RpiFdtDxe.inf
   Platform/Broadcom/Bcm283x/Drivers/ConfigDxe/ConfigDxe.inf
-  Platform/Broadcom/Bcm283x/Drivers/HypDxe/HypDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   MdeModulePkg/Universal/EbcDxe/EbcDxe.inf

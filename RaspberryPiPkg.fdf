@@ -222,7 +222,6 @@ READ_LOCK_STATUS   = TRUE
   INF Platform/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
   INF Platform/Broadcom/Bcm283x/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
   INF Platform/Broadcom/Bcm283x/Drivers/RpiFdtDxe/RpiFdtDxe.inf
-  INF Platform/Broadcom/Bcm283x/Drivers/HypDxe/HypDxe.inf
   INF Platform/Broadcom/Bcm283x/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf

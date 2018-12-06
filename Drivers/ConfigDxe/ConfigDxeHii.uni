@@ -20,29 +20,6 @@
 #string STR_FORM_SET_TITLE_HELP  #language en-US "Press <Enter> to configure system settings."
 
 /*
- * HypDxe settings go here.
- */
-
-#string STR_HYP_FORM_TITLE          #language en-US "HypDxe Configuration"
-#string STR_HYP_FORM_SUBTITLE       #language en-US "Experimental Windows on Arm Support"
-
-#string STR_HYP_EL_PROMPT           #language en-US "System Boot Mode"
-#string STR_HYP_EL_HELP             #language en-US "Boot UEFI/OS in EL1 (for Windows) or EL2 (KVM)."
-#string STR_HYP_EL_EL1              #language en-US "Boot in EL1"
-#string STR_HYP_EL_EL2              #language en-US "Boot in EL2"
-
-#string STR_HYP_WIN_DBG_HOOK_PROMPT #language en-US "Windows Debug Hook"
-#string STR_HYP_WIN_DBG_HOOK_HELP   #language en-US "Redirect NT dmesg to UART. WinDBG will not work."
-#string STR_HYP_WIN_DBG_HOOK_YES    #language en-US "Hook"
-#string STR_HYP_WIN_DBG_HOOK_NO     #language en-US "Don't Hook"
-
-#string STR_HYP_WIN2000_MASK_PROMPT #language en-US "Kd_WIN2000_Mask Override"
-#string STR_HYP_WIN2000_MASK_HELP   #language en-US "Only on builds 17125, 17672. 0 leaves the mask alone.
-"
-#string STR_HYP_LOG_MASK_PROMPT     #language en-US "Debug Log Mask"
-#string STR_HYP_LOG_MASK_HELP       #language en-US "HypDxe Verbosity"
-
-/*
  * Chipset config.
  */
 
