@@ -43,7 +43,7 @@ ArmPlatformGetBootMode (
 **/
 RETURN_STATUS
 ArmPlatformInitialize (
-  IN  UINTN                     MpId
+  IN  UINTN  MpId
   )
 {
   return RETURN_SUCCESS;
@@ -66,21 +66,21 @@ STATIC ARM_CORE_INFO mRpi3InfoTable[] = {
 STATIC
 EFI_STATUS
 PrePeiCoreGetMpCoreInfo (
-  OUT UINTN                   *CoreCount,
-  OUT ARM_CORE_INFO           **ArmCoreTable
+  OUT UINTN          *CoreCount,
+  OUT ARM_CORE_INFO  **ArmCoreTable
   )
 {
   // Only support one cluster
-  *CoreCount    = sizeof(mRpi3InfoTable) / sizeof(ARM_CORE_INFO);
+  *CoreCount = sizeof (mRpi3InfoTable) / sizeof (ARM_CORE_INFO);
   *ArmCoreTable = mRpi3InfoTable;
 
   return EFI_SUCCESS;
 }
 
-STATIC ARM_MP_CORE_INFO_PPI     mMpCoreInfoPpi = {
+STATIC ARM_MP_CORE_INFO_PPI mMpCoreInfoPpi = {
   PrePeiCoreGetMpCoreInfo
 };
-STATIC EFI_PEI_PPI_DESCRIPTOR   mPlatformPpiTable[] = {
+STATIC EFI_PEI_PPI_DESCRIPTOR mPlatformPpiTable[] = {
   {
     EFI_PEI_PPI_DESCRIPTOR_PPI,
     &gArmMpCoreInfoPpiGuid,
@@ -94,6 +94,6 @@ ArmPlatformGetPlatformPpiList (
   OUT EFI_PEI_PPI_DESCRIPTOR  **PpiList
   )
 {
-  *PpiListSize = sizeof(mPlatformPpiTable);
+  *PpiListSize = sizeof (mPlatformPpiTable);
   *PpiList = mPlatformPpiTable;
 }

@@ -14,7 +14,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010019
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = RpiFirmwareDxe
   FILE_GUID                      = 6d4628df-49a0-4b67-a325-d5af35c65745
   MODULE_TYPE                    = DXE_DRIVER

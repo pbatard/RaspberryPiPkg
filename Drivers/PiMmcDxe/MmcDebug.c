@@ -52,9 +52,10 @@ PrintCSD (
   }
 
   DEBUG ((DEBUG_ERROR, "\t- Supported card command class: 0x%X\n", MMC_CSD_GET_CCC (Csd)));
-  DEBUG ((DEBUG_ERROR, "\t- Max Speed: %a * %a\n",mStrValue[(MMC_CSD_GET_TRANSPEED (Csd) >> 3) & 0xF],mStrUnit[MMC_CSD_GET_TRANSPEED (Csd) & 7]));
-  DEBUG ((DEBUG_ERROR, "\t- Maximum Read Data Block: %d\n",2 << (MMC_CSD_GET_READBLLEN (Csd)-1)));
-  DEBUG ((DEBUG_ERROR, "\t- Maximum Write Data Block: %d\n",2 << (MMC_CSD_GET_WRITEBLLEN (Csd)-1)));
+  DEBUG ((DEBUG_ERROR, "\t- Max Speed: %a * %a\n", mStrValue[(MMC_CSD_GET_TRANSPEED (Csd) >> 3) & 0xF],
+    mStrUnit[MMC_CSD_GET_TRANSPEED (Csd) & 7]));
+  DEBUG ((DEBUG_ERROR, "\t- Maximum Read Data Block: %d\n", 2 << (MMC_CSD_GET_READBLLEN (Csd) - 1)));
+  DEBUG ((DEBUG_ERROR, "\t- Maximum Write Data Block: %d\n", 2 << (MMC_CSD_GET_WRITEBLLEN (Csd) - 1)));
 
   if (!MMC_CSD_GET_FILEFORMATGRP (Csd)) {
     Value = MMC_CSD_GET_FILEFORMAT (Csd);
@@ -109,8 +110,8 @@ PrintOCR (
     Volts++;
   }
 
-  DEBUG ((DEBUG_ERROR, "- PrintOCR Ocr (0x%X)\n",Ocr));
-  DEBUG ((DEBUG_ERROR, "\t- Card operating voltage: %d.%d to %d.%d\n", MinV/10, MinV % 10, MaxV/10, MaxV % 10));
+  DEBUG ((DEBUG_ERROR, "- PrintOCR Ocr (0x%X)\n", Ocr));
+  DEBUG ((DEBUG_ERROR, "\t- Card operating voltage: %d.%d to %d.%d\n", MinV / 10, MinV % 10, MaxV / 10, MaxV % 10));
   if (((Ocr >> 29) & 3) == 0) {
     DEBUG ((DEBUG_ERROR, "\t- AccessMode: Byte Mode\n"));
   } else {

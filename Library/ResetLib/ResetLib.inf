@@ -19,7 +19,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = ResetLib
   FILE_GUID                      = B9F59B69-A105-41C7-8F5A-2C60DD7FD7AB
   MODULE_TYPE                    = BASE

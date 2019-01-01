@@ -15,7 +15,7 @@
 
 #include "DisplayDxe.h"
 
-#define POS_TO_FB(posX, posY) ((UINT8 *)                                \
+#define POS_TO_FB(posX, posY) ((UINT8*)                                 \
                                ((UINTN)This->Mode->FrameBufferBase +    \
                                 (posY) * This->Mode->Info->PixelsPerScanLine * \
                                 PI3_BYTES_PER_PIXEL +                   \
@@ -52,36 +52,36 @@ DriverStop (
 STATIC
 EFI_STATUS
 EFIAPI
-DisplayQueryMode(
-                 IN  EFI_GRAPHICS_OUTPUT_PROTOCOL          *This,
-                 IN  UINT32                                ModeNumber,
-                 OUT UINTN                                 *SizeOfInfo,
-                 OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  **Info
-                 );
+DisplayQueryMode (
+  IN  EFI_GRAPHICS_OUTPUT_PROTOCOL          *This,
+  IN  UINT32                                ModeNumber,
+  OUT UINTN                                 *SizeOfInfo,
+  OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  **Info
+  );
 
 STATIC
 EFI_STATUS
 EFIAPI
-DisplaySetMode(
-               IN  EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
-               IN  UINT32                       ModeNumber
-               );
+DisplaySetMode (
+  IN  EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
+  IN  UINT32                       ModeNumber
+  );
 
 STATIC
 EFI_STATUS
 EFIAPI
-DisplayBlt(
-           IN  EFI_GRAPHICS_OUTPUT_PROTOCOL            *This,
-           IN  EFI_GRAPHICS_OUTPUT_BLT_PIXEL           *BltBuffer,   OPTIONAL
-           IN  EFI_GRAPHICS_OUTPUT_BLT_OPERATION       BltOperation,
-           IN  UINTN                                   SourceX,
-           IN  UINTN                                   SourceY,
-           IN  UINTN                                   DestinationX,
-           IN  UINTN                                   DestinationY,
-           IN  UINTN                                   Width,
-           IN  UINTN                                   Height,
-           IN  UINTN                                   Delta         OPTIONAL
-           );
+DisplayBlt (
+  IN  EFI_GRAPHICS_OUTPUT_PROTOCOL            *This,
+  IN  EFI_GRAPHICS_OUTPUT_BLT_PIXEL           *BltBuffer, OPTIONAL
+  IN  EFI_GRAPHICS_OUTPUT_BLT_OPERATION       BltOperation,
+  IN  UINTN                                   SourceX,
+  IN  UINTN                                   SourceY,
+  IN  UINTN                                   DestinationX,
+  IN  UINTN                                   DestinationY,
+  IN  UINTN                                   Width,
+  IN  UINTN                                   Height,
+  IN  UINTN                                   Delta         OPTIONAL
+  );
 
 STATIC EFI_DRIVER_BINDING_PROTOCOL mDriverBinding = {
   DriverSupported,
@@ -119,27 +119,27 @@ STATIC GOP_MODE_DATA mGopModeData[] = {
 };
 
 STATIC DISPLAY_DEVICE_PATH mDisplayProtoDevicePath =
+{
   {
     {
+      HARDWARE_DEVICE_PATH,
+      HW_VENDOR_DP,
       {
-        HARDWARE_DEVICE_PATH,
-        HW_VENDOR_DP,
-        {
-          (UINT8)(sizeof(VENDOR_DEVICE_PATH)),
-          (UINT8)((sizeof(VENDOR_DEVICE_PATH)) >> 8),
-        }
-      },
-      EFI_CALLER_ID_GUID,
-    },
-    {
-      END_DEVICE_PATH_TYPE,
-      END_ENTIRE_DEVICE_PATH_SUBTYPE,
-      {
-        sizeof(EFI_DEVICE_PATH_PROTOCOL),
-        0
+        (UINT8)(sizeof (VENDOR_DEVICE_PATH)),
+        (UINT8)((sizeof (VENDOR_DEVICE_PATH)) >> 8),
       }
+    },
+    EFI_CALLER_ID_GUID,
+  },
+  {
+    END_DEVICE_PATH_TYPE,
+    END_ENTIRE_DEVICE_PATH_SUBTYPE,
+    {
+      sizeof (EFI_DEVICE_PATH_PROTOCOL),
+      0
     }
-  };
+  }
+};
 
 #define PI3_BITS_PER_PIXEL              (32)
 #define PI3_BYTES_PER_PIXEL             (PI3_BITS_PER_PIXEL / 8)
@@ -154,12 +154,12 @@ EFI_GRAPHICS_OUTPUT_PROTOCOL gDisplayProto = {
 STATIC
 EFI_STATUS
 EFIAPI
-DisplayQueryMode(
-                 IN  EFI_GRAPHICS_OUTPUT_PROTOCOL          *This,
-                 IN  UINT32                                ModeNumber,
-                 OUT UINTN                                 *SizeOfInfo,
-                 OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  **Info
-                 )
+DisplayQueryMode (
+  IN  EFI_GRAPHICS_OUTPUT_PROTOCOL          *This,
+  IN  UINT32                                ModeNumber,
+  OUT UINTN                                 *SizeOfInfo,
+  OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  **Info
+  )
 {
   EFI_STATUS Status;
   GOP_MODE_DATA *Mode;
@@ -168,18 +168,18 @@ DisplayQueryMode(
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = gBS->AllocatePool(
-                             EfiBootServicesData,
-                             sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION),
-                             (VOID **)Info
-                             );
+  Status = gBS->AllocatePool (
+                  EfiBootServicesData,
+                  sizeof (EFI_GRAPHICS_OUTPUT_MODE_INFORMATION),
+                  (VOID**)Info
+                );
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
   Mode = &mGopModeData[ModeNumber];
 
-  *SizeOfInfo = sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION);
+  *SizeOfInfo = sizeof (EFI_GRAPHICS_OUTPUT_MODE_INFORMATION);
   (*Info)->Version = This->Mode->Info->Version;
   (*Info)->HorizontalResolution = Mode->Width;
   (*Info)->VerticalResolution = Mode->Height;
@@ -191,26 +191,26 @@ DisplayQueryMode(
 
 STATIC
 VOID
-ClearScreen(
+ClearScreen (
   IN  EFI_GRAPHICS_OUTPUT_PROTOCOL *This
   )
 {
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL Fill;
 
-  Fill.Red                      = 0x00;
-  Fill.Green                    = 0x00;
-  Fill.Blue                     = 0x00;
+  Fill.Red = 0x00;
+  Fill.Green = 0x00;
+  Fill.Blue = 0x00;
   This->Blt (This, &Fill, EfiBltVideoFill,
-             0, 0, 0, 0, This->Mode->Info->HorizontalResolution,
-             This->Mode->Info->VerticalResolution,
-             This->Mode->Info->HorizontalResolution *
-             sizeof (EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+          0, 0, 0, 0, This->Mode->Info->HorizontalResolution,
+          This->Mode->Info->VerticalResolution,
+          This->Mode->Info->HorizontalResolution *
+          sizeof (EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
 }
 
 STATIC
 EFI_STATUS
 EFIAPI
-DisplaySetMode(
+DisplaySetMode (
   IN  EFI_GRAPHICS_OUTPUT_PROTOCOL *This,
   IN  UINT32                       ModeNumber
   )
@@ -225,22 +225,22 @@ DisplaySetMode(
     return EFI_UNSUPPORTED;
   }
 
-  DEBUG((DEBUG_INFO, "Setting mode %u from %u: %u x %u\n",
-         ModeNumber, This->Mode->Mode, Mode->Width, Mode->Height));
-  Status = mFwProtocol->GetFB(Mode->Width, Mode->Height,
-                              PI3_BITS_PER_PIXEL, &FbBase,
-                              &FbSize, &FbPitch);
-  if (EFI_ERROR(Status)) {
-    DEBUG((DEBUG_ERROR, "Could not set mode %u\n", ModeNumber));
+  DEBUG ((DEBUG_INFO, "Setting mode %u from %u: %u x %u\n",
+    ModeNumber, This->Mode->Mode, Mode->Width, Mode->Height));
+  Status = mFwProtocol->GetFB (Mode->Width, Mode->Height,
+                          PI3_BITS_PER_PIXEL, &FbBase,
+                          &FbSize, &FbPitch);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Could not set mode %u\n", ModeNumber));
     return EFI_DEVICE_ERROR;
   }
 
-  DEBUG((DEBUG_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
-         ModeNumber, Mode->Width, Mode->Height, FbSize, FbBase));
+  DEBUG ((DEBUG_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
+    ModeNumber, Mode->Width, Mode->Height, FbSize, FbBase));
 
   if (FbPitch / PI3_BYTES_PER_PIXEL != Mode->Width) {
-    DEBUG((DEBUG_ERROR, "Error: Expected width %u, got width %u\n",
-           Mode->Width, FbPitch / PI3_BYTES_PER_PIXEL));
+    DEBUG ((DEBUG_ERROR, "Error: Expected width %u, got width %u\n",
+      Mode->Width, FbPitch / PI3_BYTES_PER_PIXEL));
     return EFI_DEVICE_ERROR;
   }
 
@@ -249,11 +249,11 @@ DisplaySetMode(
    * and we don't want to see corruption due to missing WB cache
    * maintenance. Performance with WT is good.
    */
-  Status = mCpu->SetMemoryAttributes(mCpu, FbBase,
-                                     ALIGN_VALUE(FbSize, EFI_PAGE_SIZE),
-                                     EFI_MEMORY_WT);
+  Status = mCpu->SetMemoryAttributes (mCpu, FbBase,
+                   ALIGN_VALUE (FbSize, EFI_PAGE_SIZE),
+                   EFI_MEMORY_WT);
   if (Status != EFI_SUCCESS) {
-    DEBUG((DEBUG_ERROR, "Couldn't set framebuffer attributes: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "Couldn't set framebuffer attributes: %r\n", Status));
     return Status;
   }
 
@@ -266,41 +266,41 @@ DisplaySetMode(
    */
   This->Mode->Info->PixelFormat = PixelBlueGreenRedReserved8BitPerColor;
   This->Mode->Info->PixelsPerScanLine = Mode->Width;
-  This->Mode->SizeOfInfo = sizeof(*This->Mode->Info);
+  This->Mode->SizeOfInfo = sizeof (*This->Mode->Info);
   This->Mode->FrameBufferBase = FbBase;
   This->Mode->FrameBufferSize = FbSize;
 
-  ClearScreen(This);
+  ClearScreen (This);
   return EFI_SUCCESS;
 }
 
 STATIC
 EFI_STATUS
 EFIAPI
-DisplayBlt(
-           IN  EFI_GRAPHICS_OUTPUT_PROTOCOL      *This,
-           IN  EFI_GRAPHICS_OUTPUT_BLT_PIXEL     *BltBuffer,   OPTIONAL
-           IN  EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation,
-           IN  UINTN                             SourceX,
-           IN  UINTN                             SourceY,
-           IN  UINTN                             DestinationX,
-           IN  UINTN                             DestinationY,
-           IN  UINTN                             Width,
-           IN  UINTN                             Height,
-           IN  UINTN                             Delta         OPTIONAL
-           )
+DisplayBlt (
+  IN  EFI_GRAPHICS_OUTPUT_PROTOCOL      *This,
+  IN  EFI_GRAPHICS_OUTPUT_BLT_PIXEL     *BltBuffer, OPTIONAL
+  IN  EFI_GRAPHICS_OUTPUT_BLT_OPERATION BltOperation,
+  IN  UINTN                             SourceX,
+  IN  UINTN                             SourceY,
+  IN  UINTN                             DestinationX,
+  IN  UINTN                             DestinationY,
+  IN  UINTN                             Width,
+  IN  UINTN                             Height,
+  IN  UINTN                             Delta         OPTIONAL
+  )
 {
   UINT8 *VidBuf, *BltBuf, *VidBuf1;
   UINTN i;
 
-  switch(BltOperation) {
+  switch (BltOperation) {
   case EfiBltVideoFill:
-    BltBuf = (UINT8 *)BltBuffer;
+    BltBuf = (UINT8*)BltBuffer;
 
     for (i = 0; i < Height; i++) {
-      VidBuf = POS_TO_FB(DestinationX, DestinationY + i);
+      VidBuf = POS_TO_FB (DestinationX, DestinationY + i);
 
-      SetMem32(VidBuf, Width * PI3_BYTES_PER_PIXEL, *(UINT32 *) BltBuf);
+      SetMem32 (VidBuf, Width * PI3_BYTES_PER_PIXEL, *(UINT32*)BltBuf);
     }
     break;
 
@@ -310,12 +310,12 @@ DisplayBlt(
     }
 
     for (i = 0; i < Height; i++) {
-      VidBuf = POS_TO_FB(SourceX, SourceY + i);
+      VidBuf = POS_TO_FB (SourceX, SourceY + i);
 
-      BltBuf = (UINT8 *)((UINTN)BltBuffer + (DestinationY + i) * Delta +
-                         DestinationX * PI3_BYTES_PER_PIXEL);
+      BltBuf = (UINT8*)((UINTN)BltBuffer + (DestinationY + i) * Delta +
+        DestinationX * PI3_BYTES_PER_PIXEL);
 
-      gBS->CopyMem((VOID *)BltBuf, (VOID *)VidBuf, PI3_BYTES_PER_PIXEL * Width);
+      gBS->CopyMem ((VOID*)BltBuf, (VOID*)VidBuf, PI3_BYTES_PER_PIXEL * Width);
     }
     break;
 
@@ -325,25 +325,25 @@ DisplayBlt(
     }
 
     for (i = 0; i < Height; i++) {
-      VidBuf = POS_TO_FB(DestinationX, DestinationY + i);
-      BltBuf = (UINT8 *)((UINTN) BltBuffer + (SourceY + i) * Delta +
-                         SourceX * PI3_BYTES_PER_PIXEL);
+      VidBuf = POS_TO_FB (DestinationX, DestinationY + i);
+      BltBuf = (UINT8*)((UINTN)BltBuffer + (SourceY + i) * Delta +
+        SourceX * PI3_BYTES_PER_PIXEL);
 
-      gBS->CopyMem((VOID *)VidBuf, (VOID *)BltBuf, Width * PI3_BYTES_PER_PIXEL);
+      gBS->CopyMem ((VOID*)VidBuf, (VOID*)BltBuf, Width * PI3_BYTES_PER_PIXEL);
     }
     break;
 
   case EfiBltVideoToVideo:
     for (i = 0; i < Height; i++) {
-      VidBuf = POS_TO_FB(SourceX, SourceY + i);
-      VidBuf1 = POS_TO_FB(DestinationX, DestinationY + i);
+      VidBuf = POS_TO_FB (SourceX, SourceY + i);
+      VidBuf1 = POS_TO_FB (DestinationX, DestinationY + i);
 
-      gBS->CopyMem((VOID *)VidBuf1, (VOID *)VidBuf, Width * PI3_BYTES_PER_PIXEL);
+      gBS->CopyMem ((VOID*)VidBuf1, (VOID*)VidBuf, Width * PI3_BYTES_PER_PIXEL);
     }
     break;
 
   default:
-    ASSERT_EFI_ERROR(EFI_SUCCESS);
+    ASSERT_EFI_ERROR (EFI_SUCCESS);
     break;
   }
 
@@ -364,34 +364,34 @@ DisplayBlt(
 EFI_STATUS
 EFIAPI
 DisplayDxeInitialize (
-                      IN EFI_HANDLE         ImageHandle,
-                      IN EFI_SYSTEM_TABLE   *SystemTable
-                      )
+  IN EFI_HANDLE         ImageHandle,
+  IN EFI_SYSTEM_TABLE   *SystemTable
+  )
 {
   EFI_STATUS Status;
 
   Status = gBS->LocateProtocol (&gRaspberryPiFirmwareProtocolGuid, NULL,
-                                (VOID **)&mFwProtocol);
+                  (VOID**)&mFwProtocol);
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
   Status = gBS->LocateProtocol (&gEfiCpuArchProtocolGuid, NULL,
-                                (VOID **) &mCpu);
+                  (VOID**)&mCpu);
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
   // Query the current display resolution from mailbox
-  Status = mFwProtocol->GetFBSize(&mBootWidth, &mBootHeight);
-  if(EFI_ERROR(Status)) {
+  Status = mFwProtocol->GetFBSize (&mBootWidth, &mBootHeight);
+  if (EFI_ERROR (Status)) {
     return Status;
   }
 
-  DEBUG((DEBUG_INFO, "Display boot mode is %u x %u\n",
-         mBootWidth, mBootHeight));
+  DEBUG ((DEBUG_INFO, "Display boot mode is %u x %u\n",
+    mBootWidth, mBootHeight));
 
   Status = gBS->InstallMultipleProtocolInterfaces (
     &mDevice, &gEfiDevicePathProtocolGuid,
@@ -409,7 +409,7 @@ DisplayDxeInitialize (
              ImageHandle,
              &gComponentName,
              &gComponentName2
-             );
+           );
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
@@ -433,8 +433,8 @@ DriverSupported (
     return EFI_UNSUPPORTED;
   }
 
-  if (gBS->HandleProtocol(Controller, &gEfiGraphicsOutputProtocolGuid,
-                          (VOID **) &Temp) == EFI_SUCCESS) {
+  if (gBS->HandleProtocol (Controller, &gEfiGraphicsOutputProtocolGuid,
+             (VOID**)&Temp) == EFI_SUCCESS) {
     return EFI_ALREADY_STARTED;
   }
 
@@ -455,32 +455,32 @@ DriverStart (
   VOID *Dummy;
 
   Status = gBS->OpenProtocol (
-    Controller,
-    &gEfiCallerIdGuid,
-    (VOID **) &Dummy,
-    This->DriverBindingHandle,
-    Controller,
-    EFI_OPEN_PROTOCOL_BY_DRIVER
-    );
+                  Controller,
+                  &gEfiCallerIdGuid,
+                  (VOID**)&Dummy,
+                  This->DriverBindingHandle,
+                  Controller,
+                  EFI_OPEN_PROTOCOL_BY_DRIVER
+                );
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
-  gDisplayProto.Mode = AllocateZeroPool(sizeof(EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE));
+  gDisplayProto.Mode = AllocateZeroPool (sizeof (EFI_GRAPHICS_OUTPUT_PROTOCOL_MODE));
   if (gDisplayProto.Mode == NULL) {
     Status = EFI_OUT_OF_RESOURCES;
-    goto done;
+    goto Done;
   }
 
-  gDisplayProto.Mode->Info = AllocateZeroPool(sizeof(EFI_GRAPHICS_OUTPUT_MODE_INFORMATION));
+  gDisplayProto.Mode->Info = AllocateZeroPool (sizeof (EFI_GRAPHICS_OUTPUT_MODE_INFORMATION));
   if (gDisplayProto.Mode->Info == NULL) {
     Status = EFI_OUT_OF_RESOURCES;
-    goto done;
+    goto Done;
   }
 
 
-  if (PcdGet32(PcdDisplayEnableVModes)) {
-    mLastMode = ELES(mGopModeData) - 1;
+  if (PcdGet32 (PcdDisplayEnableVModes)) {
+    mLastMode = ELES (mGopModeData) - 1;
   } else {
     mLastMode = 0;
     /*
@@ -488,8 +488,7 @@ DriverStart (
      * so clean it up, since we won't be adding
      * any other extra vmodes.
      */
-    if (mBootWidth < 640 ||
-        mBootHeight < 480) {
+    if (mBootWidth < 640 || mBootHeight < 480) {
       mBootWidth = 640;
       mBootHeight = 480;
     }
@@ -505,11 +504,11 @@ DriverStart (
 
     GOP_MODE_DATA *Mode = &mGopModeData[Index];
 
-    Status = mFwProtocol->GetFB(Mode->Width, Mode->Height,
-                                PI3_BITS_PER_PIXEL, &FbBase,
-                                &FbSize, &FbPitch);
-    if (EFI_ERROR(Status)) {
-      goto done;
+    Status = mFwProtocol->GetFB (Mode->Width, Mode->Height,
+                            PI3_BITS_PER_PIXEL, &FbBase,
+                            &FbSize, &FbPitch);
+    if (EFI_ERROR (Status)) {
+      goto Done;
     }
 
     //
@@ -521,8 +520,8 @@ DriverStart (
     //
     Mode->Width = FbPitch / PI3_BYTES_PER_PIXEL;
 
-    DEBUG((DEBUG_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
-           Index, Mode->Width, Mode->Height, FbSize, FbBase));
+    DEBUG ((DEBUG_INFO, "Mode %u: %u x %u framebuffer is %u bytes at %p\n",
+      Index, Mode->Width, Mode->Height, FbSize, FbBase));
 
     ASSERT (FbPitch != 0);
     ASSERT (FbBase != 0);
@@ -531,40 +530,40 @@ DriverStart (
 
   // Both set the mode and initialize current mode information.
   gDisplayProto.Mode->MaxMode = mLastMode + 1;
-  DisplaySetMode(&gDisplayProto, 0);
+  DisplaySetMode (&gDisplayProto, 0);
 
   Status = gBS->InstallMultipleProtocolInterfaces (
     &Controller, &gEfiGraphicsOutputProtocolGuid,
     &gDisplayProto, NULL);
   if (EFI_ERROR (Status)) {
-    goto done;
+    goto Done;
   }
 
-  if (PcdGet32(PcdDisplayEnableSShot)) {
-    RegisterScreenshotHandlers();
+  if (PcdGet32 (PcdDisplayEnableSShot)) {
+    RegisterScreenshotHandlers ();
   } else {
-    DEBUG((DEBUG_INFO, "Screenshot capture disabled\n"));
+    DEBUG ((DEBUG_INFO, "Screenshot capture disabled\n"));
   }
 
-done:
+Done:
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "Could not start DisplayDxe: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "Could not start DisplayDxe: %r\n", Status));
     if (gDisplayProto.Mode->Info != NULL) {
-      FreePool(gDisplayProto.Mode->Info);
+      FreePool (gDisplayProto.Mode->Info);
       gDisplayProto.Mode->Info = NULL;
     }
 
     if (gDisplayProto.Mode != NULL) {
-      FreePool(gDisplayProto.Mode);
+      FreePool (gDisplayProto.Mode);
       gDisplayProto.Mode = NULL;
     }
 
     gBS->CloseProtocol (
-      Controller,
-      &gEfiCallerIdGuid,
-      This->DriverBindingHandle,
-      Controller
-      );
+           Controller,
+           &gEfiCallerIdGuid,
+           This->DriverBindingHandle,
+           Controller
+         );
   }
   return Status;
 }
@@ -581,7 +580,7 @@ DriverStop (
 {
   EFI_STATUS Status;
 
-  ClearScreen(&gDisplayProto);
+  ClearScreen (&gDisplayProto);
 
   Status = gBS->UninstallMultipleProtocolInterfaces (
     Controller, &gEfiGraphicsOutputProtocolGuid,
@@ -590,17 +589,17 @@ DriverStop (
     return Status;
   }
 
-  FreePool(gDisplayProto.Mode->Info);
+  FreePool (gDisplayProto.Mode->Info);
   gDisplayProto.Mode->Info = NULL;
-  FreePool(gDisplayProto.Mode);
+  FreePool (gDisplayProto.Mode);
   gDisplayProto.Mode = NULL;
 
   gBS->CloseProtocol (
-    Controller,
-    &gEfiCallerIdGuid,
-    This->DriverBindingHandle,
-    Controller
-    );
+         Controller,
+         &gEfiCallerIdGuid,
+         This->DriverBindingHandle,
+         Controller
+       );
 
   return Status;
 }

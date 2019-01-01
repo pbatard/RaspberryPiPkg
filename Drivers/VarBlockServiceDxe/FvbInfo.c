@@ -21,9 +21,6 @@
 typedef struct {
   UINT64                      FvLength;
   EFI_FIRMWARE_VOLUME_HEADER  FvbInfo;
-  //
-  // EFI_FV_BLOCK_MAP_ENTRY    ExtraBlockMap[n];//n=0
-  //
   EFI_FV_BLOCK_MAP_ENTRY      End[1];
 } EFI_FVB_MEDIA_INFO;
 
@@ -97,9 +94,9 @@ GetFvbInfo (
       UINT16 Checksum;
       mPlatformFvbMediaInfo[Index].FvbInfo.Checksum = 0;
       Checksum = CalculateCheckSum16 (
-                   (UINT16*) &mPlatformFvbMediaInfo[Index].FvbInfo,
+                   (UINT16*)&mPlatformFvbMediaInfo[Index].FvbInfo,
                    mPlatformFvbMediaInfo[Index].FvbInfo.HeaderLength
-                   );
+                 );
       mPlatformFvbMediaInfo[Index].FvbInfo.Checksum = Checksum;
     }
     Checksummed = TRUE;

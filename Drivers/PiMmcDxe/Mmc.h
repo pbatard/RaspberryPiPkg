@@ -327,7 +327,7 @@ typedef struct {
   UINT8   RESERVED_23[6];                     // Reserved [511:506]
 } ECSD;
 
-typedef struct  {
+typedef struct {
   UINT16    RCA;
   CARD_TYPE CardType;
   OCR       OCRData;

@@ -28,8 +28,8 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME_PROTOCOL  gGraphicsConsoleCompo
 // EFI Component Name 2 Protocol
 //
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME2_PROTOCOL gGraphicsConsoleComponentName2 = {
-  (EFI_COMPONENT_NAME2_GET_DRIVER_NAME) GraphicsConsoleComponentNameGetDriverName,
-  (EFI_COMPONENT_NAME2_GET_CONTROLLER_NAME) GraphicsConsoleComponentNameGetControllerName,
+  (EFI_COMPONENT_NAME2_GET_DRIVER_NAME)GraphicsConsoleComponentNameGetDriverName,
+  (EFI_COMPONENT_NAME2_GET_CONTROLLER_NAME)GraphicsConsoleComponentNameGetControllerName,
   "en"
 };
 
@@ -37,7 +37,7 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME2_PROTOCOL gGraphicsConsoleCompo
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_UNICODE_STRING_TABLE mGraphicsConsoleDriverNameTable[] = {
   {
     "eng;en",
-    (CHAR16 *)L"Graphics Console Driver"
+    (CHAR16*)L"Graphics Console Driver"
   },
   {
     NULL,
@@ -98,7 +98,7 @@ GraphicsConsoleComponentNameGetDriverName (
            mGraphicsConsoleDriverNameTable,
            DriverName,
            (BOOLEAN)(This == &gGraphicsConsoleComponentName)
-           );
+         );
 }
 
 /**
@@ -172,11 +172,11 @@ GraphicsConsoleComponentNameGetDriverName (
 EFI_STATUS
 EFIAPI
 GraphicsConsoleComponentNameGetControllerName (
-  IN  EFI_COMPONENT_NAME_PROTOCOL                     *This,
-  IN  EFI_HANDLE                                      ControllerHandle,
-  IN  EFI_HANDLE                                      ChildHandle        OPTIONAL,
-  IN  CHAR8                                           *Language,
-  OUT CHAR16                                          **ControllerName
+  IN  EFI_COMPONENT_NAME_PROTOCOL  *This,
+  IN  EFI_HANDLE                   ControllerHandle,
+  IN  EFI_HANDLE                   ChildHandle        OPTIONAL,
+  IN  CHAR8                        *Language,
+  OUT CHAR16                       **ControllerName
   )
 {
   return EFI_UNSUPPORTED;

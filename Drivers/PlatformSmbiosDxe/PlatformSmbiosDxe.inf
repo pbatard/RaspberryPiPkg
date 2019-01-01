@@ -17,7 +17,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = PlatformSmbiosDxe
   FILE_GUID                      = BAD0554E-22E9-4D83-9AFD-CC87727A1A45
   MODULE_TYPE                    = DXE_DRIVER

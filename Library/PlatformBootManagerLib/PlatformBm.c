@@ -310,7 +310,7 @@ FilterAndProcess (
                        DevicePathFromHandle (Handles[Idx]),
                        FALSE, // DisplayOnly
                        FALSE  // AllowShortcuts
-                       );
+                     );
     if (DevicePathText == NULL) {
       DevicePathText = Fallback;
     }
@@ -389,16 +389,12 @@ PlatformRegisterBootOption (
              DevicePath,
              NULL,
              0
-             );
+           );
   ASSERT_EFI_ERROR (Status);
 
-  BootOptions = EfiBootManagerGetLoadOptions (
-                  &BootOptionCount, LoadOptionTypeBoot
-                  );
+  BootOptions = EfiBootManagerGetLoadOptions (&BootOptionCount, LoadOptionTypeBoot);
 
-  OptionIndex = EfiBootManagerFindLoadOption (
-                  &NewOption, BootOptions, BootOptionCount
-                  );
+  OptionIndex = EfiBootManagerFindLoadOption (&NewOption, BootOptions, BootOptionCount);
 
   if (OptionIndex == -1) {
     Status = EfiBootManagerAddLoadOptionVariable (&NewOption, MAX_UINTN);
@@ -429,22 +425,17 @@ PlatformRegisterFvBootOption (
   Status = gBS->HandleProtocol (
                   gImageHandle,
                   &gEfiLoadedImageProtocolGuid,
-                  (VOID **) &LoadedImage
-                  );
+                  (VOID**)&LoadedImage
+                );
   ASSERT_EFI_ERROR (Status);
 
   EfiInitializeFwVolDevicepathNode (&FileNode, FileGuid);
   DevicePath = DevicePathFromHandle (LoadedImage->DeviceHandle);
   ASSERT (DevicePath != NULL);
-  DevicePath = AppendDevicePathNode (
-                 DevicePath,
-                 (EFI_DEVICE_PATH_PROTOCOL *) &FileNode
-                 );
+  DevicePath = AppendDevicePathNode (DevicePath, (EFI_DEVICE_PATH_PROTOCOL*)&FileNode);
   ASSERT (DevicePath != NULL);
 
-  OptionIndex = PlatformRegisterBootOption (DevicePath,
-                                            Description,
-                                            Attributes);
+  OptionIndex = PlatformRegisterBootOption (DevicePath, Description, Attributes);
   FreePool (DevicePath);
 
   return OptionIndex;
@@ -464,23 +455,21 @@ PlatformRegisterOptionsAndKeys (
   EFI_BOOT_MANAGER_LOAD_OPTION BootOption;
   INTN ShellOption;
 
-  ShellOption = PlatformRegisterFvBootOption (&gUefiShellFileGuid, L"UEFI Shell",
-                                              LOAD_OPTION_ACTIVE);
+  ShellOption = PlatformRegisterFvBootOption (&gUefiShellFileGuid, L"UEFI Shell", LOAD_OPTION_ACTIVE);
   if (ShellOption != -1) {
     //
     // F1 boots Shell.
     //
     F1.ScanCode = SCAN_F1;
     F1.UnicodeChar = CHAR_NULL;
-    Status = EfiBootManagerAddKeyOptionVariable (
-      NULL, (UINT16) ShellOption, 0, &F1, NULL);
+    Status = EfiBootManagerAddKeyOptionVariable (NULL, (UINT16)ShellOption, 0, &F1, NULL);
     ASSERT (Status == EFI_SUCCESS || Status == EFI_ALREADY_STARTED);
   }
 
   //
   // Register ENTER as CONTINUE key
   //
-  Enter.ScanCode    = SCAN_NULL;
+  Enter.ScanCode = SCAN_NULL;
   Enter.UnicodeChar = CHAR_CARRIAGE_RETURN;
   Status = EfiBootManagerRegisterContinueKeyOption (0, &Enter, NULL);
   ASSERT_EFI_ERROR (Status);
@@ -488,13 +477,11 @@ PlatformRegisterOptionsAndKeys (
   //
   // Map ESC to Boot Manager Menu
   //
-  Esc.ScanCode    = SCAN_ESC;
+  Esc.ScanCode = SCAN_ESC;
   Esc.UnicodeChar = CHAR_NULL;
   Status = EfiBootManagerGetBootManagerMenu (&BootOption);
   ASSERT_EFI_ERROR (Status);
-  Status = EfiBootManagerAddKeyOptionVariable (
-             NULL, (UINT16) BootOption.OptionNumber, 0, &Esc, NULL
-             );
+  Status = EfiBootManagerAddKeyOptionVariable (NULL, (UINT16)BootOption.OptionNumber, 0, &Esc, NULL);
   ASSERT (Status == EFI_SUCCESS || Status == EFI_ALREADY_STARTED);
 }
 
@@ -508,11 +495,13 @@ SerialConPrint (
   }
 }
 
-STATIC VOID EFIAPI
+STATIC
+VOID
+EFIAPI
 ExitBootServicesHandler (
-                         EFI_EVENT     Event,
-                         VOID          *Context
-                         )
+  IN EFI_EVENT  Event,
+  IN VOID       *Context
+  )
 {
   EFI_STATUS Status;
   CHAR16 *OsBootStr;
@@ -541,16 +530,16 @@ ExitBootServicesHandler (
   Yellow.Raw = 0x00FFFF00;
 
   Status = BootLogoUpdateProgress (Yellow.Pixel,
-                                   Black.Pixel,
-                                   OsBootStr,
-                                   Green.Pixel,
-                                   100, 0);
+             Black.Pixel,
+             OsBootStr,
+             Green.Pixel,
+             100, 0);
   if (Status == EFI_SUCCESS) {
-    SerialConPrint(OsBootStr);
+    SerialConPrint (OsBootStr);
   } else {
-    Print(L"\n");
-    Print(OsBootStr);
-    Print(L"\n");
+    Print (L"\n");
+    Print (OsBootStr);
+    Print (L"\n");
   }
 }
 
@@ -579,25 +568,23 @@ PlatformBootManagerBeforeConsole (
   ESRT_MANAGEMENT_PROTOCOL *EsrtManagement;
 
   Status = gBS->CreateEventEx (
-                               EVT_NOTIFY_SIGNAL,
-                               TPL_NOTIFY,
-                               ExitBootServicesHandler,
-                               NULL,
-                               &gEfiEventExitBootServicesGuid,
-                               &ExitBSEvent
-                               );
+                  EVT_NOTIFY_SIGNAL,
+                  TPL_NOTIFY,
+                  ExitBootServicesHandler,
+                  NULL,
+                  &gEfiEventExitBootServicesGuid,
+                  &ExitBSEvent
+                );
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to register ExitBootServices handler\n",
-            __FUNCTION__));
+    DEBUG ((DEBUG_ERROR, "%a: failed to register ExitBootServices handler\n", __FUNCTION__));
   }
 
-  if (GetBootModeHob() == BOOT_ON_FLASH_UPDATE) {
+  if (GetBootModeHob () == BOOT_ON_FLASH_UPDATE) {
     DEBUG ((DEBUG_INFO, "ProcessCapsules Before EndOfDxe ......\n"));
     Status = ProcessCapsules ();
     DEBUG ((DEBUG_INFO, "ProcessCapsules returned %r\n", Status));
   } else {
-    Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL,
-                    (VOID **)&EsrtManagement);
+    Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL, (VOID**)&EsrtManagement);
     if (!EFI_ERROR (Status)) {
       EsrtManagement->SyncEsrtFmp ();
     }
@@ -612,8 +599,7 @@ PlatformBootManagerBeforeConsole (
   //
   // Add the hardcoded short-form USB keyboard device path to ConIn.
   //
-  EfiBootManagerUpdateConsoleVariable (ConIn,
-    (EFI_DEVICE_PATH_PROTOCOL *)&mUsbKeyboard, NULL);
+  EfiBootManagerUpdateConsoleVariable (ConIn, (EFI_DEVICE_PATH_PROTOCOL*)&mUsbKeyboard, NULL);
 
   //
   // Add the hardcoded serial console device path to ConIn, ConOut, ErrOut.
@@ -621,12 +607,9 @@ PlatformBootManagerBeforeConsole (
   ASSERT (FixedPcdGet8 (PcdDefaultTerminalType) == 4);
   CopyGuid (&mSerialConsole.TermType.Guid, &gEfiTtyTermGuid);
 
-  EfiBootManagerUpdateConsoleVariable (ConIn,
-    (EFI_DEVICE_PATH_PROTOCOL *)&mSerialConsole, NULL);
-  EfiBootManagerUpdateConsoleVariable (ConOut,
-    (EFI_DEVICE_PATH_PROTOCOL *)&mSerialConsole, NULL);
-  EfiBootManagerUpdateConsoleVariable (ErrOut,
-    (EFI_DEVICE_PATH_PROTOCOL *)&mSerialConsole, NULL);
+  EfiBootManagerUpdateConsoleVariable (ConIn, (EFI_DEVICE_PATH_PROTOCOL*)&mSerialConsole, NULL);
+  EfiBootManagerUpdateConsoleVariable (ConOut, (EFI_DEVICE_PATH_PROTOCOL*)&mSerialConsole, NULL);
+  EfiBootManagerUpdateConsoleVariable (ErrOut, (EFI_DEVICE_PATH_PROTOCOL*)&mSerialConsole, NULL);
 
   //
   // Signal EndOfDxe PI Event
@@ -661,10 +644,9 @@ PlatformBootManagerAfterConsole (
   EFI_STATUS                    Status;
   EFI_HANDLE SerialHandle;
 
-  Status = EfiBootManagerConnectDevicePath((EFI_DEVICE_PATH_PROTOCOL *)&mSerialConsole, &SerialHandle);
+  Status = EfiBootManagerConnectDevicePath ((EFI_DEVICE_PATH_PROTOCOL*)&mSerialConsole, &SerialHandle);
   if (Status == EFI_SUCCESS) {
-    gBS->HandleProtocol(SerialHandle, &gEfiSimpleTextOutProtocolGuid,
-                        (VOID **) &mSerialConProtocol);
+    gBS->HandleProtocol (SerialHandle, &gEfiSimpleTextOutProtocolGuid, (VOID**)&mSerialConProtocol);
   }
 
   //
@@ -672,9 +654,9 @@ PlatformBootManagerAfterConsole (
   //
   Status = BootLogoEnableLogo ();
   if (Status == EFI_SUCCESS) {
-    SerialConPrint(BOOT_PROMPT);
+    SerialConPrint (BOOT_PROMPT);
   } else {
-    Print(BOOT_PROMPT);
+    Print (BOOT_PROMPT);
   }
 
   //
@@ -682,16 +664,15 @@ PlatformBootManagerAfterConsole (
   //
   EfiBootManagerConnectAll ();
 
-  Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL,
-                  (VOID **)&EsrtManagement);
+  Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL, (VOID**)&EsrtManagement);
   if (!EFI_ERROR (Status)) {
     EsrtManagement->SyncEsrtFmp ();
   }
 
-  if (GetBootModeHob() == BOOT_ON_FLASH_UPDATE) {
-    DEBUG((DEBUG_INFO, "ProcessCapsules After EndOfDxe ......\n"));
+  if (GetBootModeHob () == BOOT_ON_FLASH_UPDATE) {
+    DEBUG ((DEBUG_INFO, "ProcessCapsules After EndOfDxe ......\n"));
     Status = ProcessCapsules ();
-    DEBUG((DEBUG_INFO, "ProcessCapsules returned %r\n", Status));
+    DEBUG ((DEBUG_INFO, "ProcessCapsules returned %r\n", Status));
   }
 
   for (Index = 1; Index < 5; Index++) {
@@ -702,17 +683,12 @@ PlatformBootManagerAfterConsole (
      * of the RPi USB ports.
      */
     mUsbHubPort.Dev.ParentPortNumber = Index;
-    UnicodeSPrint(Desc, sizeof (Desc), L"USB Port %u", Index);
-    PlatformRegisterBootOption ((VOID *) &mUsbHubPort,
-                                Desc, LOAD_OPTION_ACTIVE);
+    UnicodeSPrint (Desc, sizeof (Desc), L"USB Port %u", Index);
+    PlatformRegisterBootOption ((VOID*)&mUsbHubPort, Desc, LOAD_OPTION_ACTIVE);
   }
 
-  PlatformRegisterBootOption ((VOID *) &mSDHost,
-                              L"uSD on SD Host",
-                              LOAD_OPTION_ACTIVE);
-  PlatformRegisterBootOption ((VOID *) &mArasan,
-                              L"uSD on Arasan MMC Host",
-                              LOAD_OPTION_ACTIVE);
+  PlatformRegisterBootOption ((VOID*)&mSDHost, L"uSD on SD Host", LOAD_OPTION_ACTIVE);
+  PlatformRegisterBootOption ((VOID*)&mArasan, L"uSD on Arasan MMC Host", LOAD_OPTION_ACTIVE);
 
   PlatformRegisterOptionsAndKeys ();
 }
@@ -726,7 +702,7 @@ PlatformBootManagerAfterConsole (
 VOID
 EFIAPI
 PlatformBootManagerWaitCallback (
-  UINT16          TimeoutRemain
+  IN UINT16  TimeoutRemain
   )
 {
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Black;
@@ -741,17 +717,17 @@ PlatformBootManagerWaitCallback (
   White.Raw = 0x00FFFFFF;
 
   Status = BootLogoUpdateProgress (
-    White.Pixel,
-    Black.Pixel,
-    BOOT_PROMPT,
-    White.Pixel,
-    (Timeout - TimeoutRemain) * 100 / Timeout,
-    0
-    );
+             White.Pixel,
+             Black.Pixel,
+             BOOT_PROMPT,
+             White.Pixel,
+             (Timeout - TimeoutRemain) * 100 / Timeout,
+             0
+           );
   if (Status == EFI_SUCCESS) {
-    SerialConPrint(L".");
+    SerialConPrint (L".");
   } else {
-    Print(L".");
+    Print (L".");
   }
 
   if (TimeoutRemain == 0) {
@@ -761,7 +737,7 @@ PlatformBootManagerWaitCallback (
     // Clear out the boot logo so that Windows displays its own logo
     // instead of ours.
     //
-    Status = gBS->LocateProtocol (&gEfiBootLogoProtocolGuid, NULL, (VOID **) &BootLogo);
+    Status = gBS->LocateProtocol (&gEfiBootLogoProtocolGuid, NULL, (VOID**)&BootLogo);
     if (!EFI_ERROR (Status) && (BootLogo != NULL)) {
       Status = BootLogo->SetBootLogo (BootLogo, NULL, 0, 0, 0, 0);
       ASSERT_EFI_ERROR (Status);
@@ -779,9 +755,9 @@ PlatformBootManagerWaitCallback (
 **/
 VOID
 EFIAPI
-PlatformBootManagerUnableToBoot(
-    VOID
-)
+PlatformBootManagerUnableToBoot (
+  VOID
+  )
 {
   EFI_STATUS                   Status;
   EFI_INPUT_KEY                Key;
@@ -792,8 +768,8 @@ PlatformBootManagerUnableToBoot(
   // BootManagerMenu doesn't contain the correct information when return status
   // is EFI_NOT_FOUND.
   //
-  Status = EfiBootManagerGetBootManagerMenu(&BootManagerMenu);
-  if (EFI_ERROR(Status)) {
+  Status = EfiBootManagerGetBootManagerMenu (&BootManagerMenu);
+  if (EFI_ERROR (Status)) {
     return;
   }
   //
@@ -805,20 +781,19 @@ PlatformBootManagerUnableToBoot(
   // here to see if it makes sense to request and wait for a keypress.
   //
   if (gST->ConIn != NULL) {
-    AsciiPrint(
+    AsciiPrint (
       "%a: No bootable option or device was found.\n"
       "%a: Press any key to enter the Boot Manager Menu.\n",
       gEfiCallerBaseName,
-      gEfiCallerBaseName
-    );
-    Status = gBS->WaitForEvent(1, &gST->ConIn->WaitForKey, &Index);
-    ASSERT_EFI_ERROR(Status);
-    ASSERT(Index == 0);
+      gEfiCallerBaseName);
+    Status = gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &Index);
+    ASSERT_EFI_ERROR (Status);
+    ASSERT (Index == 0);
 
     //
     // Drain any queued keys.
     //
-    while (!EFI_ERROR(gST->ConIn->ReadKeyStroke(gST->ConIn, &Key))) {
+    while (!EFI_ERROR (gST->ConIn->ReadKeyStroke (gST->ConIn, &Key))) {
       //
       // just throw away Key
       //
@@ -826,6 +801,6 @@ PlatformBootManagerUnableToBoot(
   }
 
   for (;;) {
-    EfiBootManagerBoot(&BootManagerMenu);
+    EfiBootManagerBoot (&BootManagerMenu);
   }
 }

@@ -16,9 +16,9 @@
 #ifndef __PI_MMC_HOST_H__
 #define __PI_MMC_HOST_H__
 
-///
-/// Global ID for the MMC Host Protocol
-///
+/*
+ * Global ID for the MMC Host Protocol
+ */
 #define RASPBERRY_PI_MMC_HOST_PROTOCOL_GUID \
   { 0x3e591c00, 0x9e4a, 0x11df, {0x92, 0x44, 0x00, 0x02, 0xA5, 0xF5, 0xF5, 0x1B } }
 
@@ -103,58 +103,78 @@ typedef enum _MMC_STATE {
 ///
 typedef struct _EFI_MMC_HOST_PROTOCOL  EFI_MMC_HOST_PROTOCOL;
 
-typedef BOOLEAN (EFIAPI *MMC_ISCARDPRESENT) (
+typedef
+BOOLEAN
+(EFIAPI *MMC_ISCARDPRESENT) (
   IN  EFI_MMC_HOST_PROTOCOL   *This
   );
 
-typedef BOOLEAN (EFIAPI *MMC_ISREADONLY) (
+typedef
+BOOLEAN
+(EFIAPI *MMC_ISREADONLY) (
   IN  EFI_MMC_HOST_PROTOCOL   *This
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_BUILDDEVICEPATH) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_BUILDDEVICEPATH) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   OUT EFI_DEVICE_PATH_PROTOCOL  **DevicePath
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_NOTIFYSTATE) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_NOTIFYSTATE) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   IN  MMC_STATE                 State
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_SENDCOMMAND) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_SENDCOMMAND) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   IN  MMC_CMD                   Cmd,
   IN  UINT32                    Argument
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_RECEIVERESPONSE) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_RECEIVERESPONSE) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   IN  MMC_RESPONSE_TYPE         Type,
   IN  UINT32                    *Buffer
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_READBLOCKDATA) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_READBLOCKDATA) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   IN  EFI_LBA                   Lba,
   IN  UINTN                     Length,
   OUT UINT32                    *Buffer
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_WRITEBLOCKDATA) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_WRITEBLOCKDATA) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   IN  EFI_LBA                   Lba,
   IN  UINTN                     Length,
   IN  UINT32                    *Buffer
   );
 
-typedef EFI_STATUS (EFIAPI *MMC_SETIOS) (
+typedef
+EFI_STATUS
+(EFIAPI *MMC_SETIOS) (
   IN  EFI_MMC_HOST_PROTOCOL     *This,
   IN  UINT32                    BusClockFreq,
   IN  UINT32                    BusWidth,
   IN  UINT32                    TimingMode
   );
 
-typedef BOOLEAN (EFIAPI *MMC_ISMULTIBLOCK) (
+typedef
+BOOLEAN
+(EFIAPI *MMC_ISMULTIBLOCK) (
   IN  EFI_MMC_HOST_PROTOCOL     *This
   );
 
@@ -178,8 +198,8 @@ struct _EFI_MMC_HOST_PROTOCOL {
 
 #define MMC_HOST_PROTOCOL_REVISION    0x00010002    // 1.2
 
-#define MMC_HOST_HAS_SETIOS(Host)     (Host->Revision >= MMC_HOST_PROTOCOL_REVISION && \
-                                       Host->SetIos != NULL)
+#define MMC_HOST_HAS_SETIOS(Host)       (Host->Revision >= MMC_HOST_PROTOCOL_REVISION && \
+                                         Host->SetIos != NULL)
 #define MMC_HOST_HAS_ISMULTIBLOCK(Host) (Host->Revision >= MMC_HOST_PROTOCOL_REVISION && \
                                          Host->IsMultiBlock != NULL)
 

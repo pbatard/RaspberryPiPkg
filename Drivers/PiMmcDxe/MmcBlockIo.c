@@ -21,10 +21,12 @@
 
 STATIC
 EFI_STATUS
-R1TranAndReady(UINT32 *Response)
+R1TranAndReady (
+  UINT32 *Response
+  )
 {
   if ((*Response & MMC_R0_READY_FOR_DATA) != 0 &&
-      MMC_R0_CURRENTSTATE(Response) == MMC_R0_STATE_TRAN) {
+      MMC_R0_CURRENTSTATE (Response) == MMC_R0_STATE_TRAN) {
     return EFI_SUCCESS;
   }
 
@@ -33,7 +35,7 @@ R1TranAndReady(UINT32 *Response)
 
 STATIC
 EFI_STATUS
-ValidateWrittenBlockCount(
+ValidateWrittenBlockCount (
   IN  MMC_HOST_INSTANCE *MmcHostInstance,
   IN  UINTN Count,
   OUT UINTN *TransferredBlocks
@@ -55,45 +57,43 @@ ValidateWrittenBlockCount(
   }
 
   Status = MmcHost->SendCommand (MmcHost, MMC_CMD55,
-                                 MmcHostInstance->CardInfo.RCA << 16);
+                      MmcHostInstance->CardInfo.RCA << 16);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a(%u): error: %r\n",
-            __FUNCTION__, __LINE__, Status));
+    DEBUG ((DEBUG_ERROR, "%a(%u): error: %r\n", __FUNCTION__, __LINE__, Status));
     return Status;
   }
 
   Status = MmcHost->SendCommand (MmcHost, MMC_ACMD22, 0);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a(%u): error: %r\n",
-            __FUNCTION__, __LINE__, Status));
+      __FUNCTION__, __LINE__, Status));
     return Status;
   }
 
   MmcHost->ReceiveResponse (MmcHost, MMC_RESPONSE_TYPE_R1, &R1);
-  Status = R1TranAndReady(&R1);
+  Status = R1TranAndReady (&R1);
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
   // Read Data
-  Status = MmcHost->ReadBlockData (MmcHost, 0, sizeof(Data),
-                                   (VOID *) Data);
+  Status = MmcHost->ReadBlockData (MmcHost, 0, sizeof (Data),
+                      (VOID*)Data);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a(%u): error: %r\n",
-            __FUNCTION__, __LINE__, Status));
+    DEBUG ((DEBUG_ERROR, "%a(%u): error: %r\n", __FUNCTION__, __LINE__, Status));
     return Status;
   }
 
   /*
    * Big Endian.
    */
-  BlocksWritten = ((UINT32) Data[0] << 24) |
-    ((UINT32) Data[1] << 16) |
-    ((UINT32) Data[2] << 8) |
-    ((UINT32) Data[3] << 0);
+  BlocksWritten = ((UINT32)Data[0] << 24) |
+                  ((UINT32)Data[1] << 16) |
+                  ((UINT32)Data[2] << 8) |
+                  ((UINT32)Data[3] << 0);
   if (BlocksWritten != Count) {
     DEBUG ((DEBUG_ERROR, "%a(%u): expected %u != gotten %u\n",
-            __FUNCTION__, __LINE__, Count, BlocksWritten));
+      __FUNCTION__, __LINE__, Count, BlocksWritten));
     if (BlocksWritten == 0) {
       return EFI_DEVICE_ERROR;
     }
@@ -105,7 +105,7 @@ ValidateWrittenBlockCount(
 
 STATIC
 EFI_STATUS
-WaitUntilTran(
+WaitUntilTran (
   IN MMC_HOST_INSTANCE *MmcHostInstance
   )
 {
@@ -115,28 +115,27 @@ WaitUntilTran(
   EFI_MMC_HOST_PROTOCOL *MmcHost = MmcHostInstance->MmcHost;
 
   Timeout = MMCI0_TIMEOUT;
-  while(Timeout--) {
+  while (Timeout--) {
     /*
      * We expect CMD13 to timeout while card is programming,
      * because the card holds DAT0 low (busy).
      */
     Status = MmcHost->SendCommand (MmcHost, MMC_CMD13,
-       MmcHostInstance->CardInfo.RCA << 16);
-    if (EFI_ERROR(Status) && Status != EFI_TIMEOUT) {
-      DEBUG ((DEBUG_ERROR, "%a(%u) CMD13 failed: %r\n",
-              __FUNCTION__, __LINE__, Status));
+                        MmcHostInstance->CardInfo.RCA << 16);
+    if (EFI_ERROR (Status) && Status != EFI_TIMEOUT) {
+      DEBUG ((DEBUG_ERROR, "%a(%u) CMD13 failed: %r\n", __FUNCTION__, __LINE__, Status));
       break;
     }
 
     if (Status == EFI_SUCCESS) {
       MmcHost->ReceiveResponse (MmcHost, MMC_RESPONSE_TYPE_R1, Response);
-      Status = R1TranAndReady(Response);
-      if (!EFI_ERROR(Status)) {
+      Status = R1TranAndReady (Response);
+      if (!EFI_ERROR (Status)) {
         break;
       }
     }
 
-    gBS->Stall(1000);
+    gBS->Stall (1000);
   }
 
   if (0 == Timeout) {
@@ -186,14 +185,14 @@ MmcReset (
     return EFI_SUCCESS;
   }
 
-  // Implement me. Either send a CMD0 (could not work for some MMC host) or just turn off/turn
-  //      on power and restart Identification mode
+  // Implement me. Either send a CMD0 (could not work for some MMC host)
+  // or just turn off/turn on power and restart Identification mode.
   return EFI_SUCCESS;
 }
 
 EFI_STATUS
 MmcDetectCard (
-  EFI_MMC_HOST_PROTOCOL     *MmcHost
+  EFI_MMC_HOST_PROTOCOL *MmcHost
   )
 {
   if (!MmcHost->IsCardPresent (MmcHost)) {
@@ -205,7 +204,7 @@ MmcDetectCard (
 
 EFI_STATUS
 MmcStopTransmission (
-  EFI_MMC_HOST_PROTOCOL     *MmcHost
+  EFI_MMC_HOST_PROTOCOL *MmcHost
   )
 {
   EFI_STATUS              Status;
@@ -250,8 +249,7 @@ MmcTransferBlock (
 
   Status = MmcHost->SendCommand (MmcHost, Cmd, CmdArg);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a(MMC_CMD%d): Error %r\n", __func__,
-            MMC_INDX(Cmd), Status));
+    DEBUG ((DEBUG_ERROR, "%a(MMC_CMD%d): Error %r\n", __func__, MMC_INDX (Cmd), Status));
     return Status;
   }
 
@@ -262,7 +260,7 @@ MmcTransferBlock (
     if (!EFI_ERROR (Status)) {
       Status = MmcNotifyState (MmcHostInstance, MmcProgrammingState);
       if (EFI_ERROR (Status)) {
-        DEBUG ((DEBUG_ERROR, "%a() : Error MmcProgrammingState\n", __func__));
+        DEBUG ((DEBUG_ERROR, "%a(): Error MmcProgrammingState\n", __func__));
         return Status;
       }
     }
@@ -276,15 +274,14 @@ MmcTransferBlock (
      */
     EFI_STATUS Status2 = MmcStopTransmission (MmcHost);
     if (EFI_ERROR (Status2)) {
-      DEBUG ((DEBUG_ERROR, "MmcIoBlocks() : CMD12 error on Status %r: %r\n",
-              Status, Status2));
+      DEBUG ((DEBUG_ERROR, "MmcIoBlocks(): CMD12 error on Status %r: %r\n",
+        Status, Status2));
       return Status2;
     }
 
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_BLKIO, "%a(): Error %a Block Data and Status = %r\n",
-              __func__, Transfer == MMC_IOBLOCKS_READ ? "Read" : "Write",
-              Status));
+        __func__, Transfer == MMC_IOBLOCKS_READ ? "Read" : "Write", Status));
       return Status;
     }
 
@@ -295,9 +292,9 @@ MmcTransferBlock (
   // For reads, should be already in TRAN. For writes, wait
   // until programming finishes.
   //
-  Status = WaitUntilTran(MmcHostInstance);
+  Status = WaitUntilTran (MmcHostInstance);
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "WaitUntilTran after write failed\n"));
+    DEBUG ((DEBUG_ERROR, "WaitUntilTran after write failed\n"));
     return Status;
   }
 
@@ -311,11 +308,10 @@ MmcTransferBlock (
     UINTN BlocksWritten = 0;
 
     Status = ValidateWrittenBlockCount (MmcHostInstance,
-                                        BufferSize /
-                                        This->Media->BlockSize,
-                                        &BlocksWritten);
-    *TransferredSize = BlocksWritten *
-      This->Media->BlockSize;
+               BufferSize /
+               This->Media->BlockSize,
+               &BlocksWritten);
+    *TransferredSize = BlocksWritten * This->Media->BlockSize;
   } else {
     *TransferredSize = BufferSize;
   }
@@ -360,9 +356,9 @@ MmcIoBlocks (
     return EFI_NO_MEDIA;
   }
 
-  if (PcdGet32(PcdMmcDisableMulti) == 0 &&
-      MMC_HOST_HAS_ISMULTIBLOCK(MmcHost) &&
-      MmcHost->IsMultiBlock(MmcHost)) {
+  if (PcdGet32 (PcdMmcDisableMulti) == 0 &&
+      MMC_HOST_HAS_ISMULTIBLOCK (MmcHost) &&
+      MmcHost->IsMultiBlock (MmcHost)) {
     BlockCount = (BufferSize + This->Media->BlockSize - 1) / This->Media->BlockSize;
   }
 
@@ -392,9 +388,9 @@ MmcIoBlocks (
 
   BytesRemainingToBeTransfered = BufferSize;
   while (BytesRemainingToBeTransfered > 0) {
-    Status = WaitUntilTran(MmcHostInstance);
+    Status = WaitUntilTran (MmcHostInstance);
     if (EFI_ERROR (Status)) {
-      DEBUG((DEBUG_ERROR, "WaitUntilTran before IO failed"));
+      DEBUG ((DEBUG_ERROR, "WaitUntilTran before IO failed"));
       return Status;
     }
 
@@ -429,8 +425,8 @@ MmcIoBlocks (
 
     BytesRemainingToBeTransfered -= ConsumeSize;
     if (BytesRemainingToBeTransfered > 0) {
-      Lba    += BlockCount;
-      Buffer = (UINT8 *)Buffer + ConsumeSize;
+      Lba += BlockCount;
+      Buffer = (UINT8*)Buffer + ConsumeSize;
     }
   }
 

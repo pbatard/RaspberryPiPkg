@@ -168,8 +168,8 @@ typedef struct {
 } RPI_FW_TAG_HEAD;
 
 typedef struct {
-  UINT32                      DeviceId;
-  UINT32                      PowerState;
+  UINT32                    DeviceId;
+  UINT32                    PowerState;
 } RPI_FW_POWER_STATE_TAG;
 
 typedef struct {
@@ -189,9 +189,9 @@ RpiFirmwareSetPowerState (
   IN  BOOLEAN   Wait
   )
 {
-  RPI_FW_SET_POWER_STATE_CMD      *Cmd;
-  EFI_STATUS                        Status;
-  UINT32                            Result;
+  RPI_FW_SET_POWER_STATE_CMD  *Cmd;
+  EFI_STATUS                  Status;
+  UINT32                      Result;
 
   if (!AcquireSpinLockOrFail (&mMailboxLock)) {
     DEBUG ((DEBUG_ERROR, "%a: failed to acquire spinlock\n", __FUNCTION__));
@@ -199,12 +199,12 @@ RpiFirmwareSetPowerState (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_SET_POWER_STATE;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->TagBody.DeviceId       = DeviceId;
   Cmd->TagBody.PowerState     = (PowerState ? RPI_FW_POWER_STATE_ENABLE : 0) |
@@ -227,7 +227,7 @@ RpiFirmwareSetPowerState (
       PowerState ^ (Cmd->TagBody.PowerState & RPI_FW_POWER_STATE_ENABLE)) {
     DEBUG ((DEBUG_ERROR, "%a: failed to %sable power for device %d\n",
       __FUNCTION__, PowerState ? "en" : "dis", DeviceId));
-      Status = EFI_DEVICE_ERROR;
+    Status = EFI_DEVICE_ERROR;
   }
 
   return Status;
@@ -265,12 +265,12 @@ RpiFirmwareGetArmMemory (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_ARM_MEMSIZE;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
@@ -322,12 +322,12 @@ RpiFirmwareGetMacAddress (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_MAC_ADDRESS;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
@@ -343,7 +343,7 @@ RpiFirmwareGetMacAddress (
     return EFI_DEVICE_ERROR;
   }
 
-  CopyMem (MacAddress, Cmd->TagBody.MacAddress, sizeof Cmd->TagBody.MacAddress);
+  CopyMem (MacAddress, Cmd->TagBody.MacAddress, sizeof (Cmd->TagBody.MacAddress));
   return EFI_SUCCESS;
 }
 
@@ -377,12 +377,12 @@ RpiFirmwareGetSerial (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_BOARD_SERIAL;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
@@ -432,12 +432,12 @@ RpiFirmwareGetModel (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_BOARD_MODEL;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
@@ -487,12 +487,12 @@ RpiFirmwareGetModelRevision (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_BOARD_REVISION;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
@@ -578,12 +578,12 @@ RpiFirmwareGetFbSize (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_FB_GEOMETRY;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
@@ -619,10 +619,10 @@ RpiFirmwareFreeFb (VOID)
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize     = sizeof *Cmd;
-  Cmd->BufferHead.Response       = 0;
+  Cmd->BufferHead.BufferSize   = sizeof (*Cmd);
+  Cmd->BufferHead.Response     = 0;
 
   Cmd->FreeFbTag.TagId         = RPI_FW_FREE_FB;
   Cmd->FreeFbTag.TagSize       = 0;
@@ -652,7 +652,8 @@ RpiFirmwareAllocFb (
   IN  UINT32 Depth,
   OUT EFI_PHYSICAL_ADDRESS *FbBase,
   OUT UINTN *FbSize,
-  OUT UINTN *Pitch)
+  OUT UINTN *Pitch
+  )
 {
   RPI_FW_INIT_FB_CMD *Cmd;
   EFI_STATUS         Status;
@@ -667,28 +668,28 @@ RpiFirmwareAllocFb (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize     = sizeof *Cmd;
-  Cmd->BufferHead.Response       = 0;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
+  Cmd->BufferHead.Response    = 0;
 
-  Cmd->PhysSizeTag.TagId         = RPI_FW_SET_FB_PGEOM;
-  Cmd->PhysSizeTag.TagSize       = sizeof Cmd->PhysSize;
-  Cmd->PhysSize.Width = Width;
-  Cmd->PhysSize.Height = Height;
-  Cmd->VirtSizeTag.TagId         = RPI_FW_SET_FB_VGEOM;
-  Cmd->VirtSizeTag.TagSize       = sizeof Cmd->VirtSize;
-  Cmd->VirtSize.Width = Width;
-  Cmd->VirtSize.Height = Height;
-  Cmd->DepthTag.TagId            = RPI_FW_SET_FB_DEPTH;
-  Cmd->DepthTag.TagSize          = sizeof Cmd->Depth;
-  Cmd->Depth.Depth               = Depth;
-  Cmd->AllocFbTag.TagId          = RPI_FW_ALLOC_FB;
-  Cmd->AllocFbTag.TagSize        = sizeof Cmd->AllocFb;
-  Cmd->AllocFb.AlignmentBase     = 32;
-  Cmd->PitchTag.TagId            = RPI_FW_GET_FB_LINELENGTH;
-  Cmd->PitchTag.TagSize          = sizeof Cmd->Pitch;
-  Cmd->EndTag                    = 0;
+  Cmd->PhysSizeTag.TagId      = RPI_FW_SET_FB_PGEOM;
+  Cmd->PhysSizeTag.TagSize    = sizeof (Cmd->PhysSize);
+  Cmd->PhysSize.Width         = Width;
+  Cmd->PhysSize.Height        = Height;
+  Cmd->VirtSizeTag.TagId      = RPI_FW_SET_FB_VGEOM;
+  Cmd->VirtSizeTag.TagSize    = sizeof (Cmd->VirtSize);
+  Cmd->VirtSize.Width         = Width;
+  Cmd->VirtSize.Height        = Height;
+  Cmd->DepthTag.TagId         = RPI_FW_SET_FB_DEPTH;
+  Cmd->DepthTag.TagSize       = sizeof (Cmd->Depth);
+  Cmd->Depth.Depth            = Depth;
+  Cmd->AllocFbTag.TagId       = RPI_FW_ALLOC_FB;
+  Cmd->AllocFbTag.TagSize     = sizeof (Cmd->AllocFb);
+  Cmd->AllocFb.AlignmentBase  = 32;
+  Cmd->PitchTag.TagId         = RPI_FW_GET_FB_LINELENGTH;
+  Cmd->PitchTag.TagSize       = sizeof (Cmd->Pitch);
+  Cmd->EndTag                 = 0;
 
   Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
 
@@ -734,7 +735,7 @@ RpiFirmwareGetCommmandLine (
     return EFI_INVALID_PARAMETER;
   }
 
-  if (sizeof *Cmd + BufferSize > EFI_PAGES_TO_SIZE (NUM_PAGES)) {
+  if (sizeof (*Cmd) + BufferSize > EFI_PAGES_TO_SIZE (NUM_PAGES)) {
     DEBUG ((DEBUG_ERROR, "%a: BufferSize exceeds size of DMA buffer\n",
       __FUNCTION__));
     return EFI_OUT_OF_RESOURCES;
@@ -746,9 +747,9 @@ RpiFirmwareGetCommmandLine (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd + BufferSize + sizeof (UINT32));
+  ZeroMem (Cmd, sizeof (*Cmd) + BufferSize + sizeof (UINT32));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd + BufferSize + sizeof (UINT32);
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd) + BufferSize + sizeof (UINT32);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_GET_COMMAND_LINE;
   Cmd->TagHead.TagSize        = BufferSize;
@@ -818,12 +819,12 @@ RpiFirmwareSetClockRate (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_SET_CLOCK_RATE,
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagId          = RPI_FW_SET_CLOCK_RATE;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->TagBody.ClockId        = ClockId;
   Cmd->TagBody.ClockRate      = ClockRate;
@@ -878,12 +879,12 @@ RpiFirmwareGetClockRate (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = ClockKind,
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagId          = ClockKind;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->TagBody.ClockId        = ClockId;
   Cmd->EndTag                 = 0;
@@ -912,7 +913,7 @@ RpiFirmwareGetCurrentClockRate (
   OUT UINT32    *ClockRate
   )
 {
-  return RpiFirmwareGetClockRate(ClockId, RPI_FW_GET_CLOCK_RATE, ClockRate);
+  return RpiFirmwareGetClockRate (ClockId, RPI_FW_GET_CLOCK_RATE, ClockRate);
 }
 
 STATIC
@@ -923,7 +924,7 @@ RpiFirmwareGetMaxClockRate (
   OUT UINT32    *ClockRate
   )
 {
-  return RpiFirmwareGetClockRate(ClockId, RPI_FW_GET_MAX_CLOCK_RATE, ClockRate);
+  return RpiFirmwareGetClockRate (ClockId, RPI_FW_GET_MAX_CLOCK_RATE, ClockRate);
 }
 
 STATIC
@@ -934,7 +935,7 @@ RpiFirmwareGetMinClockRate (
   OUT UINT32    *ClockRate
   )
 {
-  return RpiFirmwareGetClockRate(ClockId, RPI_FW_GET_MIN_CLOCK_RATE, ClockRate);
+  return RpiFirmwareGetClockRate (ClockId, RPI_FW_GET_MIN_CLOCK_RATE, ClockRate);
 }
 
 #pragma pack()
@@ -967,12 +968,12 @@ RpiFirmwareLedSet (
   }
 
   Cmd = mDmaBuffer;
-  ZeroMem (Cmd, sizeof *Cmd);
+  ZeroMem (Cmd, sizeof (*Cmd));
 
-  Cmd->BufferHead.BufferSize  = sizeof *Cmd;
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
   Cmd->TagHead.TagId          = RPI_FW_SET_GPIO;
-  Cmd->TagHead.TagSize        = sizeof Cmd->TagBody;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   /*
    * GPIO_PIN_2 = Activity LED
    * GPIO_PIN_4 = HDMI Detect (Input / Active Low)
@@ -1044,8 +1045,7 @@ RpiFirmwareDxeInitialize (
 
   Status = DmaAllocateBuffer (EfiBootServicesData, NUM_PAGES, &mDmaBuffer);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to allocate DMA buffer (Status == %r)\n",
-      __FUNCTION__));
+    DEBUG ((DEBUG_ERROR, "%a: failed to allocate DMA buffer (Status == %r)\n", __FUNCTION__));
     return Status;
   }
 
@@ -1053,8 +1053,7 @@ RpiFirmwareDxeInitialize (
   Status = DmaMap (MapOperationBusMasterCommonBuffer, mDmaBuffer, &BufferSize,
              &mDmaBufferBusAddress, &mDmaBufferMapping);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to map DMA buffer (Status == %r)\n",
-      __FUNCTION__));
+    DEBUG ((DEBUG_ERROR, "%a: failed to map DMA buffer (Status == %r)\n", __FUNCTION__));
     goto FreeBuffer;
   }
 

@@ -33,7 +33,7 @@ If there no bootable media media is found, the UEFI Shell is launched.
 # Building
 
 (These instructions were validated against the latest edk2 / edk2-platforms /
-edk2-non-osi as of 2018.11.15, on a Debian 9.6 x64 system).
+edk2-non-osi as of 2019.01.01, on a Debian 9.6 x64 system).
 
 You may need to install the relevant compilation tools. Especially you should have the
 ACPI Source Language (ASL) compiler, `nasm` as well as a native compiler installed.

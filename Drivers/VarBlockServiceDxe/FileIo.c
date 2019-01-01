@@ -29,7 +29,7 @@ FileWrite (
   Status = File->SetPosition (File, Offset);
   ASSERT_EFI_ERROR (Status);
   if (!EFI_ERROR (Status)) {
-    Status = File->Write (File, &Size, (VOID *) Buffer);
+    Status = File->Write (File, &Size, (VOID*)Buffer);
     ASSERT_EFI_ERROR (Status);
   }
   return Status;
@@ -65,7 +65,7 @@ FileOpen (
                   &gEfiSimpleFileSystemProtocolGuid,
                   &Device,
                   &Handle
-                  );
+                );
 
   if (EFI_ERROR (Status)) {
     return Status;
@@ -74,8 +74,8 @@ FileOpen (
   Status = gBS->HandleProtocol (
                   Handle,
                   &gEfiSimpleFileSystemProtocolGuid,
-                  (void **) &Volume
-                  );
+                  (VOID**)&Volume
+                );
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
@@ -88,7 +88,7 @@ FileOpen (
   Status = Volume->OpenVolume (
                      Volume,
                      &Root
-                     );
+                   );
   ASSERT_EFI_ERROR (Status);
   ASSERT (Root != NULL);
 
@@ -101,7 +101,7 @@ FileOpen (
                    MappedFile,
                    OpenMode,
                    0
-                   );
+                 );
   if (EFI_ERROR (Status)) {
     *File = NULL;
   }
@@ -125,11 +125,11 @@ CheckStore (
   EFI_FILE_PROTOCOL *File;
 
   *Device = NULL;
-  Status  = gBS->HandleProtocol (
-                   SimpleFileSystemHandle,
-                   &gEfiBlockIoProtocolGuid,
-                   (VOID*)&BlkIo
-                   );
+  Status = gBS->HandleProtocol (
+                  SimpleFileSystemHandle,
+                  &gEfiBlockIoProtocolGuid,
+                  (VOID*)&BlkIo
+                );
 
   if (EFI_ERROR (Status)) {
     goto ErrHandle;
@@ -146,8 +146,8 @@ CheckStore (
   }
 
   Status = FileOpen (DevicePathFromHandle (SimpleFileSystemHandle),
-                     mFvInstance->MappedFile, &File,
-                     EFI_FILE_MODE_READ);
+             mFvInstance->MappedFile, &File,
+             EFI_FILE_MODE_READ);
   if (EFI_ERROR (Status)) {
     goto ErrHandle;
   }
@@ -177,7 +177,7 @@ CheckStoreExists (
                   &gEfiSimpleFileSystemProtocolGuid,
                   &Device,
                   &Handle
-                  );
+                );
 
   if (EFI_ERROR (Status)) {
     return Status;
@@ -186,8 +186,8 @@ CheckStoreExists (
   Status = gBS->HandleProtocol (
                   Handle,
                   &gEfiSimpleFileSystemProtocolGuid,
-                  (void **) &Volume
-                  );
+                  (VOID**)&Volume
+                );
   if (EFI_ERROR (Status)) {
     return Status;
   }

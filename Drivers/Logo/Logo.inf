@@ -14,7 +14,7 @@
 ##
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = Logo
   MODULE_UNI_FILE                = Logo.uni
   FILE_GUID                      = 7BB28B99-61BB-11D5-9A5D-0090273FC14D

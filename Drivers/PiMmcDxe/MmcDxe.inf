@@ -14,7 +14,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = PiMmcDxe
   FILE_GUID                      = b6f44cc0-9e45-11df-be21-0002a5f5f51b
   MODULE_TYPE                    = DXE_DRIVER

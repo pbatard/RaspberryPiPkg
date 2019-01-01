@@ -36,7 +36,7 @@ extern EFI_COMPONENT_NAME_PROTOCOL  gComponentName;
 extern EFI_COMPONENT_NAME2_PROTOCOL gComponentName2;
 
 VOID
-RegisterScreenshotHandlers(
+RegisterScreenshotHandlers (
   VOID
   );
 

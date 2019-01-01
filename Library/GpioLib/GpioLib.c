@@ -23,26 +23,26 @@
 #include <Utils.h>
 
 STATIC VOID
-GpioFSELModify(
+GpioFSELModify (
   IN  UINTN RegIndex,
   IN  UINT32 ModifyMask,
   IN  UINT32 FunctionMask
   )
 {
   UINT32 Val;
-  EFI_PHYSICAL_ADDRESS Reg = RegIndex * sizeof(UINT32) + GPIO_GPFSEL0;
+  EFI_PHYSICAL_ADDRESS Reg = RegIndex * sizeof (UINT32) + GPIO_GPFSEL0;
 
-  ASSERT(Reg <= GPIO_GPFSEL5);
-  ASSERT((~ModifyMask & FunctionMask) == 0);
+  ASSERT (Reg <= GPIO_GPFSEL5);
+  ASSERT ((~ModifyMask & FunctionMask) == 0);
 
-  Val = MmioRead32(Reg);
+  Val = MmioRead32 (Reg);
   Val &= ~ModifyMask;
   Val |= FunctionMask;
-  MmioWrite32(Reg, Val);
+  MmioWrite32 (Reg, Val);
 }
 
 VOID
-GpioPinFuncSet(
+GpioPinFuncSet (
   IN  UINTN Pin,
   IN  UINTN Function
   )
@@ -52,27 +52,27 @@ GpioPinFuncSet(
   UINT32 ModifyMask;
   UINT32 FunctionMask;
 
-  ASSERT(Pin < GPIO_PINS);
-  ASSERT(Function <= GPIO_FSEL_MASK);
+  ASSERT (Pin < GPIO_PINS);
+  ASSERT (Function <= GPIO_FSEL_MASK);
 
   ModifyMask = GPIO_FSEL_MASK << (SelIndex * GPIO_FSEL_BITS_PER_PIN);
   FunctionMask = Function << (SelIndex * GPIO_FSEL_BITS_PER_PIN);
-  GpioFSELModify(RegIndex, ModifyMask, FunctionMask);
+  GpioFSELModify (RegIndex, ModifyMask, FunctionMask);
 }
 
 UINTN
-GpioPinFuncGet(
+GpioPinFuncGet (
   IN  UINTN Pin
   )
 {
   UINT32 Val;
   UINTN RegIndex = Pin / 10;
   UINTN SelIndex = Pin % 10;
-  EFI_PHYSICAL_ADDRESS Reg = RegIndex * sizeof(UINT32) + GPIO_GPFSEL0;
+  EFI_PHYSICAL_ADDRESS Reg = RegIndex * sizeof (UINT32) + GPIO_GPFSEL0;
 
-  ASSERT(Pin < GPIO_PINS);
+  ASSERT (Pin < GPIO_PINS);
 
-  Val = MmioRead32(Reg);
+  Val = MmioRead32 (Reg);
   Val >>= SelIndex * GPIO_FSEL_BITS_PER_PIN;
   Val &= GPIO_FSEL_MASK;
   return Val;

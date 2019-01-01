@@ -43,10 +43,9 @@ UpdateMacAddress (
   //
   // Locate the node that the 'ethernet' alias refers to
   //
-  Node = fdt_path_offset(mFdtImage, "ethernet");
+  Node = fdt_path_offset (mFdtImage, "ethernet");
   if (Node < 0) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to locate 'ethernet' alias\n",
-      __FUNCTION__));
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate 'ethernet' alias\n", __FUNCTION__));
     return;
   }
 
@@ -64,11 +63,10 @@ UpdateMacAddress (
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "%a: failed to create 'mac-address' property (%d)\n",
       __FUNCTION__, Retval));
-      return;
+    return;
   }
 
-  DEBUG ((DEBUG_INFO,
-    "%a: setting MAC address to %02x:%02x:%02x:%02x:%02x:%02x\n",
+  DEBUG ((DEBUG_INFO, "%a: setting MAC address to %02x:%02x:%02x:%02x:%02x:%02x\n",
     __FUNCTION__, MacAddress[0], MacAddress[1], MacAddress[2], MacAddress[3],
     MacAddress[4], MacAddress[5]));
 }
@@ -82,7 +80,7 @@ CleanMemoryNodes (
   INTN Node;
   INT32 Retval;
 
-  Node = fdt_path_offset(mFdtImage, "/memory");
+  Node = fdt_path_offset (mFdtImage, "/memory");
   if (Node < 0) {
     return;
   }
@@ -92,7 +90,7 @@ CleanMemoryNodes (
    * OS go crazy and ignore the UEFI map.
    */
   DEBUG ((DEBUG_INFO, "Removing bogus /memory\n"));
-  Retval = fdt_del_node(mFdtImage, Node);
+  Retval = fdt_del_node (mFdtImage, Node);
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Failed to remove /memory\n"));
   }
@@ -108,15 +106,15 @@ SanitizePSCI (
   INTN Root;
   INT32 Retval;
 
-  Root = fdt_path_offset(mFdtImage, "/");
+  Root = fdt_path_offset (mFdtImage, "/");
   ASSERT (Root >= 0);
   if (Root < 0) {
     return;
   }
 
-  Node = fdt_path_offset(mFdtImage, "/psci");
+  Node = fdt_path_offset (mFdtImage, "/psci");
   if (Node < 0) {
-    Node = fdt_add_subnode(mFdtImage, Root, "psci");
+    Node = fdt_add_subnode (mFdtImage, Root, "psci");
   }
 
   ASSERT (Node >= 0);
@@ -125,34 +123,33 @@ SanitizePSCI (
     return;
   }
 
-  Retval = fdt_setprop_string(mFdtImage, Node, "compatible",
-                               "arm,psci-1.0");
+  Retval = fdt_setprop_string (mFdtImage, Node, "compatible", "arm,psci-1.0");
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't set /psci compatible property\n"));
     return;
   }
 
-  Retval = fdt_setprop_string(mFdtImage, Node, "method", "smc");
+  Retval = fdt_setprop_string (mFdtImage, Node, "method", "smc");
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't set /psci method property\n"));
     return;
   }
 
-  Root = fdt_path_offset(mFdtImage, "/cpus");
+  Root = fdt_path_offset (mFdtImage, "/cpus");
   if (Root < 0) {
     DEBUG ((DEBUG_ERROR, "No CPUs to update with PSCI enable-method?\n"));
     return;
   }
 
-  Node = fdt_first_subnode(mFdtImage, Root);
+  Node = fdt_first_subnode (mFdtImage, Root);
   while (Node >= 0) {
-    if (fdt_setprop_string(mFdtImage, Node, "enable-method", "psci") != 0) {
+    if (fdt_setprop_string (mFdtImage, Node, "enable-method", "psci") != 0) {
       DEBUG ((DEBUG_ERROR, "Failed to update enable-method for a CPU\n"));
       return;
     }
 
-    fdt_delprop(mFdtImage, Node, "cpu-release-addr");
-    Node = fdt_next_subnode(mFdtImage, Node);
+    fdt_delprop (mFdtImage, Node, "cpu-release-addr");
+    Node = fdt_next_subnode (mFdtImage, Node);
   }
 }
 
@@ -169,7 +166,7 @@ CleanSimpleFramebuffer (
    * Should look for nodes by kind and remove aliases
    * by matching against device.
    */
-  Node = fdt_path_offset(mFdtImage, "display0");
+  Node = fdt_path_offset (mFdtImage, "display0");
   if (Node < 0) {
     return;
   }
@@ -179,19 +176,19 @@ CleanSimpleFramebuffer (
    * doesn't reflect the framebuffer built by UEFI.
    */
   DEBUG ((DEBUG_INFO, "Removing bogus display0\n"));
-  Retval = fdt_del_node(mFdtImage, Node);
+  Retval = fdt_del_node (mFdtImage, Node);
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Failed to remove display0\n"));
     return;
   }
 
-  Node =  fdt_path_offset(mFdtImage, "/aliases");
+  Node = fdt_path_offset (mFdtImage, "/aliases");
   if (Node < 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't find /aliases to remove display0\n"));
     return;
   }
 
-  Retval = fdt_delprop(mFdtImage, Node, "display0");
+  Retval = fdt_delprop (mFdtImage, Node, "display0");
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Failed to remove display0 alias\n"));
   }
@@ -213,10 +210,9 @@ UpdateBootArgs (
   //
   // Locate the /chosen node
   //
-  Node = fdt_path_offset(mFdtImage, "/chosen");
+  Node = fdt_path_offset (mFdtImage, "/chosen");
   if (Node < 0) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to locate /chosen node\n",
-      __FUNCTION__));
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate /chosen node\n", __FUNCTION__));
     return;
   }
 
@@ -237,8 +233,7 @@ UpdateBootArgs (
   //
   Status = mFwProtocol->GetCommandLine (MAX_CMDLINE_SIZE, CommandLine + 4);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to retrieve command line\n",
-      __FUNCTION__));
+    DEBUG ((DEBUG_ERROR, "%a: failed to retrieve command line\n", __FUNCTION__));
     return;
   }
 
@@ -305,11 +300,11 @@ RpiFdtDxeInitialize (
   BOOLEAN    Internal;
 
   Status = gBS->LocateProtocol (&gRaspberryPiFirmwareProtocolGuid, NULL,
-                  (VOID **)&mFwProtocol);
+                  (VOID**)&mFwProtocol);
   ASSERT_EFI_ERROR (Status);
 
   Internal = FALSE;
-  FdtImage =  (VOID *) (UINTN) PcdGet32(PcdFdtBaseAddress);
+  FdtImage = (VOID*)(UINTN)PcdGet32 (PcdFdtBaseAddress);
   Retval = fdt_check_header (FdtImage);
   if (Retval == 0) {
     /*
@@ -321,9 +316,9 @@ RpiFdtDxeInitialize (
   } else {
     Internal = TRUE;
     DEBUG ((DEBUG_INFO, "No/bad FDT at %p (%a), trying internal DTB...\n",
-            FdtImage, fdt_strerror (Retval)));
+      FdtImage, fdt_strerror (Retval)));
     Status = GetSectionFromAnyFv (&gRaspberryPiFdtFileGuid, EFI_SECTION_RAW, 0,
-                                  &FdtImage, &FdtSize);
+               &FdtImage, &FdtSize);
     if (Status == EFI_SUCCESS) {
       if (fdt_check_header (FdtImage) != 0) {
         Status = EFI_INCOMPATIBLE_VERSION;
@@ -341,8 +336,8 @@ RpiFdtDxeInitialize (
    */
   FdtSize += EFI_PAGE_SIZE * 2;
   Status = gBS->AllocatePages (AllocateAnyPages, EfiRuntimeServicesData,
-                               EFI_SIZE_TO_PAGES(FdtSize),
-                               (EFI_PHYSICAL_ADDRESS *) &mFdtImage);
+                  EFI_SIZE_TO_PAGES (FdtSize),
+                  (EFI_PHYSICAL_ADDRESS*)&mFdtImage);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Failed to allocate new device tree: %r\n", Status));
     return Status;

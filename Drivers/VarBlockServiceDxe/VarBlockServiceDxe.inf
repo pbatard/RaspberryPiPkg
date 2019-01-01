@@ -18,7 +18,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = VarBlockServiceDxe
   FILE_GUID                      = 733cbac2-b23f-4b92-bc8e-fb01ce5907b7
   MODULE_TYPE                    = DXE_RUNTIME_DRIVER

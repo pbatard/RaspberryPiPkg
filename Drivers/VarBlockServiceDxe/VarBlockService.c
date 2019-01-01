@@ -1,7 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2006 - 2014, Intel Corporation. All rights reserved.
+ *  Copyright (c) 2006-2014, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
  *  are licensed and made available under the terms and conditions of the BSD License
@@ -42,8 +42,8 @@ FV_MEMMAP_DEVICE_PATH mFvMemmapDevicePathTemplate = {
       }
     },
     EfiMemoryMappedIO,
-    (EFI_PHYSICAL_ADDRESS) 0,
-    (EFI_PHYSICAL_ADDRESS) 0,
+    (EFI_PHYSICAL_ADDRESS)0,
+    (EFI_PHYSICAL_ADDRESS)0,
   },
   {
     END_DEVICE_PATH_TYPE,
@@ -99,7 +99,7 @@ VarStoreWrite (
   IN     UINT8 *Buffer
   )
 {
-  CopyMem ((VOID *) Address, Buffer, *NumBytes);
+  CopyMem ((VOID*)Address, Buffer, *NumBytes);
   mFvInstance->Dirty = TRUE;
 
   return EFI_SUCCESS;
@@ -112,7 +112,7 @@ VarStoreErase (
   IN UINTN LbaLength
   )
 {
-  SetMem ((VOID *)Address, LbaLength, 0xff);
+  SetMem ((VOID*)Address, LbaLength, 0xff);
   mFvInstance->Dirty = TRUE;
 
   return EFI_SUCCESS;
@@ -164,15 +164,15 @@ FvbGetLbaAddress (
   EFI_LBA NextLba;
   EFI_FV_BLOCK_MAP_ENTRY *BlockMap;
 
-  StartLba  = 0;
-  Offset    = 0;
-  BlockMap  = &(mFvInstance->VolumeHeader->BlockMap[0]);
+  StartLba = 0;
+  Offset = 0;
+  BlockMap = &(mFvInstance->VolumeHeader->BlockMap[0]);
 
   //
   // Parse the blockmap of the FV to find which map entry the Lba belongs to.
   //
   while (TRUE) {
-    NumBlocks   = BlockMap->NumBlocks;
+    NumBlocks = BlockMap->NumBlocks;
     BlockLength = BlockMap->Length;
 
     if (NumBlocks == 0 || BlockLength == 0) {
@@ -185,7 +185,7 @@ FvbGetLbaAddress (
     // The map entry found.
     //
     if (Lba >= StartLba && Lba < NextLba) {
-      Offset = Offset + (UINTN) MultU64x32 ((Lba - StartLba), BlockLength);
+      Offset = Offset + (UINTN)MultU64x32 ((Lba - StartLba), BlockLength);
       if (LbaAddress != NULL) {
         *LbaAddress = mFvInstance->FvBase + Offset;
       }
@@ -195,14 +195,14 @@ FvbGetLbaAddress (
       }
 
       if (NumOfBlocks != NULL) {
-        *NumOfBlocks = (UINTN) (NextLba - Lba);
+        *NumOfBlocks = (UINTN)(NextLba - Lba);
       }
 
       return EFI_SUCCESS;
     }
 
-    StartLba  = NextLba;
-    Offset    = Offset + NumBlocks * BlockLength;
+    StartLba = NextLba;
+    Offset = Offset + NumBlocks * BlockLength;
     BlockMap++;
   }
 }
@@ -253,9 +253,9 @@ Returns:
   }
 
   return VarStoreErase (
-          LbaAddress,
-          LbaLength
-          );
+           LbaAddress,
+           LbaLength
+         );
 }
 
 
@@ -289,7 +289,7 @@ FvbSetVolumeAttributes (
   EFI_FVB_ATTRIBUTES_2 UnchangedAttributes;
 
   AttribPtr =
-    (EFI_FVB_ATTRIBUTES_2 *) &(mFvInstance->VolumeHeader->Attributes);
+    (EFI_FVB_ATTRIBUTES_2*) &(mFvInstance->VolumeHeader->Attributes);
   OldAttributes = *AttribPtr;
   Capabilities = OldAttributes & (EFI_FVB2_READ_DISABLED_CAP | \
                                   EFI_FVB2_READ_ENABLED_CAP |    \
@@ -315,8 +315,7 @@ FvbSetVolumeAttributes (
   //
   // Some attributes of FV is read only can *not* be set.
   //
-  if ((OldAttributes & UnchangedAttributes) ^
-      (*Attributes & UnchangedAttributes)) {
+  if ((OldAttributes & UnchangedAttributes) ^ (*Attributes & UnchangedAttributes)) {
     return EFI_INVALID_PARAMETER;
   }
 
@@ -374,8 +373,8 @@ FvbSetVolumeAttributes (
     }
   }
 
-  *AttribPtr  = (*AttribPtr) & (0xFFFFFFFF & (~EFI_FVB2_STATUS));
-  *AttribPtr  = (*AttribPtr) | NewStatus;
+  *AttribPtr = (*AttribPtr) & (0xFFFFFFFF & (~EFI_FVB2_STATUS));
+  *AttribPtr = (*AttribPtr) | NewStatus;
   *Attributes = *AttribPtr;
 
   return EFI_SUCCESS;
@@ -424,11 +423,11 @@ FvbProtocolGetBlockSize (
 --*/
 {
   return FvbGetLbaAddress (
-          Lba,
-          NULL,
-          BlockSize,
-          NumOfBlocks
-          );
+           Lba,
+           NULL,
+           BlockSize,
+           NumOfBlocks
+         );
 }
 
 
@@ -645,15 +644,15 @@ FvbProtocolWrite (
   }
 
   if (LbaLength < (*NumBytes + Offset)) {
-    *NumBytes = (UINT32) (LbaLength - Offset);
-    Status    = EFI_BAD_BUFFER_SIZE;
+    *NumBytes = (UINT32)(LbaLength - Offset);
+    Status = EFI_BAD_BUFFER_SIZE;
   }
 
   ReturnStatus = VarStoreWrite (
-                  LbaAddress + Offset,
-                  NumBytes,
-                  Buffer
-                  );
+                   LbaAddress + Offset,
+                   NumBytes,
+                   Buffer
+                 );
   if (EFI_ERROR (ReturnStatus)) {
     return ReturnStatus;
   }
@@ -741,11 +740,11 @@ FvbProtocolRead (
   }
 
   if (LbaLength < (*NumBytes + Offset)) {
-    *NumBytes = (UINT32) (LbaLength - Offset);
-    Status    = EFI_BAD_BUFFER_SIZE;
+    *NumBytes = (UINT32)(LbaLength - Offset);
+    Status = EFI_BAD_BUFFER_SIZE;
   }
 
-  CopyMem (Buffer, (VOID *) (LbaAddress + Offset), (UINTN) *NumBytes);
+  CopyMem (Buffer, (VOID*)(LbaAddress + Offset), (UINTN)*NumBytes);
 
   return Status;
 }
@@ -779,7 +778,7 @@ ValidateFvHeader (
   //
   if ((FwVolHeader->Revision != EFI_FVH_REVISION) ||
       (FwVolHeader->Signature != EFI_FVH_SIGNATURE) ||
-      (FwVolHeader->FvLength == ((UINTN) -1)) ||
+      (FwVolHeader->FvLength == ((UINTN)-1)) ||
       ((FwVolHeader->HeaderLength & 0x01) != 0)
       ) {
     return EFI_NOT_FOUND;
@@ -789,16 +788,15 @@ ValidateFvHeader (
   // Verify the header checksum.
   //
 
-  Checksum = CalculateSum16 ((UINT16 *) FwVolHeader,
-               FwVolHeader->HeaderLength);
+  Checksum = CalculateSum16 ((UINT16*)FwVolHeader, FwVolHeader->HeaderLength);
   if (Checksum != 0) {
     UINT16 Expected;
 
     Expected =
-      (UINT16) (((UINTN) FwVolHeader->Checksum + 0x10000 - Checksum) & 0xffff);
+      (UINT16)(((UINTN)FwVolHeader->Checksum + 0x10000 - Checksum) & 0xffff);
 
     DEBUG ((DEBUG_INFO, "FV@%p Checksum is 0x%x, expected 0x%x\n",
-            FwVolHeader, FwVolHeader->Checksum, Expected));
+      FwVolHeader, FwVolHeader->Checksum, Expected));
     return EFI_NOT_FOUND;
   }
 
@@ -836,9 +834,9 @@ FvbInitialize (
 
   BaseAddress = PcdGet32 (PcdNvStorageVariableBase);
   Length = (FixedPcdGet32 (PcdFlashNvStorageVariableSize) +
-     FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize) +
-     FixedPcdGet32 (PcdFlashNvStorageFtwSpareSize) +
-     FixedPcdGet32 (PcdNvStorageEventLogSize));
+    FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize) +
+    FixedPcdGet32 (PcdFlashNvStorageFtwSpareSize) +
+    FixedPcdGet32 (PcdNvStorageEventLogSize));
   StartOffset = BaseAddress - FixedPcdGet64 (PcdFdBaseAddress);
 
   BufferSize = sizeof (EFI_FW_VOL_INSTANCE);
@@ -848,8 +846,8 @@ FvbInitialize (
     return EFI_OUT_OF_RESOURCES;
   }
 
-  mFvInstance->FvBase = (UINTN) BaseAddress;
-  mFvInstance->FvLength = (UINTN) Length;
+  mFvInstance->FvBase = (UINTN)BaseAddress;
+  mFvInstance->FvLength = (UINTN)Length;
   mFvInstance->Offset = StartOffset;
   /*
    * Should I parse config.txt instead and find the real name?
@@ -880,16 +878,14 @@ FvbInitialize (
     //
     // Erase all the blocks
     //
-    Status = VarStoreErase ((UINTN) mFvInstance->FvBase,
-                            mFvInstance->FvLength);
+    Status = VarStoreErase ((UINTN)mFvInstance->FvBase, mFvInstance->FvLength);
     ASSERT_EFI_ERROR (Status);
     //
     // Write good FV header
     //
     WriteLength = GoodFwVolHeader->HeaderLength;
-    Status = VarStoreWrite((UINTN) mFvInstance->FvBase,
-                          &WriteLength,
-                          (UINT8*) GoodFwVolHeader);
+    Status = VarStoreWrite ((UINTN)mFvInstance->FvBase, &WriteLength,
+               (UINT8*)GoodFwVolHeader);
     ASSERT_EFI_ERROR (Status);
     ASSERT (WriteLength == GoodFwVolHeader->HeaderLength);
 
@@ -938,18 +934,15 @@ FvbInitialize (
     FvMemmapDevicePath->MemMapDevPath.StartingAddress = mFvInstance->FvBase;
     FvMemmapDevicePath->MemMapDevPath.EndingAddress = mFvInstance->FvBase +
       mFvInstance->FvLength - 1;
-    FvbDevice->DevicePath = (EFI_DEVICE_PATH_PROTOCOL *)FvMemmapDevicePath;
+    FvbDevice->DevicePath = (EFI_DEVICE_PATH_PROTOCOL*)FvMemmapDevicePath;
   } else {
     FV_PIWG_DEVICE_PATH *FvPiwgDevicePath;
 
     FvPiwgDevicePath = AllocateCopyPool (sizeof (FV_PIWG_DEVICE_PATH),
                          &mFvPIWGDevicePathTemplate);
-    CopyGuid (
-      &FvPiwgDevicePath->FvDevPath.FvName,
-      (GUID *)(UINTN)(mFvInstance->FvBase +
-                      mFvInstance->VolumeHeader->ExtHeaderOffset)
-      );
-    FvbDevice->DevicePath = (EFI_DEVICE_PATH_PROTOCOL *)FvPiwgDevicePath;
+    CopyGuid (&FvPiwgDevicePath->FvDevPath.FvName,
+      (GUID*)(UINTN)(mFvInstance->FvBase + mFvInstance->VolumeHeader->ExtHeaderOffset));
+    FvbDevice->DevicePath = (EFI_DEVICE_PATH_PROTOCOL*)FvPiwgDevicePath;
   }
 
   //
@@ -960,20 +953,14 @@ FvbInitialize (
   //
   // Set several PCD values to point to flash.
   //
-  PcdStatus = PcdSet64S (
-    PcdFlashNvStorageVariableBase64,
-    (UINTN) PcdGet32 (PcdNvStorageVariableBase)
-    );
+  PcdStatus = PcdSet64S (PcdFlashNvStorageVariableBase64,
+                (UINTN)PcdGet32 (PcdNvStorageVariableBase));
   ASSERT_RETURN_ERROR (PcdStatus);
-  PcdStatus = PcdSet32S (
-    PcdFlashNvStorageFtwWorkingBase,
-    PcdGet32 (PcdNvStorageFtwWorkingBase)
-    );
+  PcdStatus = PcdSet32S (PcdFlashNvStorageFtwWorkingBase,
+                PcdGet32 (PcdNvStorageFtwWorkingBase));
   ASSERT_RETURN_ERROR (PcdStatus);
-  PcdStatus = PcdSet32S (
-    PcdFlashNvStorageFtwSpareBase,
-    PcdGet32 (PcdNvStorageFtwSpareBase)
-    );
+  PcdStatus = PcdSet32S (PcdFlashNvStorageFtwSpareBase,
+                PcdGet32 (PcdNvStorageFtwSpareBase));
   ASSERT_RETURN_ERROR (PcdStatus);
 
   InstallFSNotifyHandler ();

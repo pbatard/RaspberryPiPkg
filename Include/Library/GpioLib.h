@@ -20,13 +20,13 @@
 #include <IndustryStandard/Bcm2837Gpio.h>
 
 VOID
-GpioPinFuncSet(
+GpioPinFuncSet (
   IN  UINTN Pin,
   IN  UINTN Function
   );
 
 UINTN
-GpioPinFuncGet(
+GpioPinFuncGet (
   IN  UINTN Pin
   );
 

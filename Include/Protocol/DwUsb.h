@@ -40,7 +40,7 @@ EFI_STATUS
 typedef
 EFI_STATUS
 (EFIAPI *DW_USB_PHY_INIT) (
-  IN UINT8                           Mode
+  IN UINT8                             Mode
   );
 
 struct _DW_USB_PROTOCOL {

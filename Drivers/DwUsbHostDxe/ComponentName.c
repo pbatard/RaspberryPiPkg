@@ -15,7 +15,7 @@ ComponentNameGetDriverName (
   IN  EFI_COMPONENT_NAME_PROTOCOL  *This,
   IN  CHAR8                        *Language,
   OUT CHAR16                       **DriverName
-);
+  );
 
 STATIC
 EFI_STATUS
@@ -41,8 +41,8 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME_PROTOCOL gComponentName = {
 // EFI Component Name 2 Protocol
 //
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME2_PROTOCOL gComponentName2 = {
-  (EFI_COMPONENT_NAME2_GET_DRIVER_NAME) ComponentNameGetDriverName,
-  (EFI_COMPONENT_NAME2_GET_CONTROLLER_NAME) ComponentNameGetControllerName,
+  (EFI_COMPONENT_NAME2_GET_DRIVER_NAME)ComponentNameGetDriverName,
+  (EFI_COMPONENT_NAME2_GET_CONTROLLER_NAME)ComponentNameGetControllerName,
   "en"
 };
 
@@ -50,7 +50,7 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME2_PROTOCOL gComponentName2 = {
 STATIC EFI_UNICODE_STRING_TABLE mDriverName[] = {
   {
     "eng;en",
-    (CHAR16 *)L"Raspberry Pi USB Host Driver"
+    (CHAR16*)L"Raspberry Pi USB Host Driver"
   },
   {
     NULL,
@@ -61,7 +61,7 @@ STATIC EFI_UNICODE_STRING_TABLE mDriverName[] = {
 STATIC EFI_UNICODE_STRING_TABLE mDeviceName[] = {
   {
     "eng;en",
-    (CHAR16 *)L"Raspberry Pi USB Host"
+    (CHAR16*)L"Raspberry Pi USB Host"
   },
   {
     NULL,
@@ -123,7 +123,7 @@ ComponentNameGetDriverName (
            mDriverName,
            DriverName,
            (BOOLEAN)(This == &gComponentName)
-           );
+         );
 }
 
 /**
@@ -215,5 +215,5 @@ ComponentNameGetControllerName (
            mDeviceName,
            ControllerName,
            (BOOLEAN)(This == &gComponentName)
-           );
+         );
 }

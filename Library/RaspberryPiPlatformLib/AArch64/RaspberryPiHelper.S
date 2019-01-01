@@ -41,7 +41,7 @@
 1:
     .endm
 
-ASM_FUNC(ArmPlatformPeiBootAction)
+ASM_FUNC (ArmPlatformPeiBootAction)
     adr     x0, .Lmeminfo_buffer
     mov     x1, #FixedPcdGet64 (PcdDmaDeviceOffset)
     orr     x0, x0, #RPI_FW_MBOX_CHANNEL
@@ -81,7 +81,7 @@ ASM_FUNC(ArmPlatformPeiBootAction)
 //ArmPlatformGetPrimaryCoreMpId (
 //  VOID
 //  );
-ASM_FUNC(ArmPlatformGetPrimaryCoreMpId)
+ASM_FUNC (ArmPlatformGetPrimaryCoreMpId)
     MOV32  (w0, FixedPcdGet32 (PcdArmPrimaryCore))
     ret
 
@@ -89,7 +89,7 @@ ASM_FUNC(ArmPlatformGetPrimaryCoreMpId)
 //ArmPlatformIsPrimaryCore (
 //  IN UINTN MpId
 //  );
-ASM_FUNC(ArmPlatformIsPrimaryCore)
+ASM_FUNC (ArmPlatformIsPrimaryCore)
     mov   x0, #1
     ret
 
@@ -98,7 +98,7 @@ ASM_FUNC(ArmPlatformIsPrimaryCore)
 //  IN UINTN MpId
 //  );
 // With this function: CorePos = (ClusterId * 4) + CoreId
-ASM_FUNC(ArmPlatformGetCorePosition)
+ASM_FUNC (ArmPlatformGetCorePosition)
     and   x1, x0, #ARM_CORE_MASK
     and   x0, x0, #ARM_CLUSTER_MASK
     add   x0, x1, x0, LSR #6

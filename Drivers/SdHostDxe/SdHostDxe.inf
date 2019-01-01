@@ -14,7 +14,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = SdHost
   FILE_GUID                      = 58ABD787-F64D-4CA2-A034-B9AC2D5AD0CF
   MODULE_TYPE                    = DXE_DRIVER

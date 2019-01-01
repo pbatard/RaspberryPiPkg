@@ -35,7 +35,6 @@ InitMmu (
   IN ARM_MEMORY_REGION_DESCRIPTOR  *MemoryTable
   )
 {
-
   VOID                          *TranslationTableBase;
   UINTN                         TranslationTableSize;
   RETURN_STATUS                 Status;
@@ -50,69 +49,75 @@ InitMmu (
 
 STATIC
 VOID
-AddAndRTSData(ARM_MEMORY_REGION_DESCRIPTOR *Desc)
+AddAndRTSData (
+  IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
+)
 {
   BuildResourceDescriptorHob (
-                              EFI_RESOURCE_SYSTEM_MEMORY,
-                              EFI_RESOURCE_ATTRIBUTE_PRESENT |
-                              EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_TESTED,
-                              Desc->PhysicalBase,
-                              Desc->Length
-                              );
+    EFI_RESOURCE_SYSTEM_MEMORY,
+    EFI_RESOURCE_ATTRIBUTE_PRESENT |
+    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_TESTED,
+    Desc->PhysicalBase,
+    Desc->Length
+  );
 
   BuildMemoryAllocationHob (
-                            Desc->PhysicalBase,
-                            Desc->Length,
-                            EfiRuntimeServicesData
-                            );
+    Desc->PhysicalBase,
+    Desc->Length,
+    EfiRuntimeServicesData
+  );
 }
 
 STATIC
 VOID
-AddAndReserved(ARM_MEMORY_REGION_DESCRIPTOR *Desc)
+AddAndReserved (
+  IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
+  )
 {
   BuildResourceDescriptorHob (
-                              EFI_RESOURCE_SYSTEM_MEMORY,
-                              EFI_RESOURCE_ATTRIBUTE_PRESENT |
-                              EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_TESTED,
-                              Desc->PhysicalBase,
-                              Desc->Length
-                              );
+    EFI_RESOURCE_SYSTEM_MEMORY,
+    EFI_RESOURCE_ATTRIBUTE_PRESENT |
+    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_TESTED,
+    Desc->PhysicalBase,
+    Desc->Length
+  );
 
   BuildMemoryAllocationHob (
-                            Desc->PhysicalBase,
-                            Desc->Length,
-                            EfiReservedMemoryType
-                            );
+    Desc->PhysicalBase,
+    Desc->Length,
+    EfiReservedMemoryType
+  );
 }
 
 STATIC
 VOID
-AddAndMmio(ARM_MEMORY_REGION_DESCRIPTOR *Desc)
+AddAndMmio (
+  IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
+  )
 {
   BuildResourceDescriptorHob (
-                              EFI_RESOURCE_SYSTEM_MEMORY,
-                              (EFI_RESOURCE_ATTRIBUTE_PRESENT    |
-                               EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-                               EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE |
-                               EFI_RESOURCE_ATTRIBUTE_TESTED),
-                              Desc->PhysicalBase,
-                              Desc->Length
-                              );
+    EFI_RESOURCE_SYSTEM_MEMORY,
+    (EFI_RESOURCE_ATTRIBUTE_PRESENT |
+      EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+      EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE |
+      EFI_RESOURCE_ATTRIBUTE_TESTED),
+    Desc->PhysicalBase,
+    Desc->Length
+  );
 
   BuildMemoryAllocationHob (
-                            Desc->PhysicalBase,
-                            Desc->Length,
-                            EfiMemoryMappedIO
-                            );
+    Desc->PhysicalBase,
+    Desc->Length,
+    EfiMemoryMappedIO
+  );
 }
 
 /*++
@@ -134,8 +139,8 @@ Returns:
 EFI_STATUS
 EFIAPI
 MemoryPeim (
-  IN EFI_PHYSICAL_ADDRESS               UefiMemoryBase,
-  IN UINT64                             UefiMemorySize
+  IN EFI_PHYSICAL_ADDRESS  UefiMemoryBase,
+  IN UINT64                UefiMemorySize
   )
 {
   ARM_MEMORY_REGION_DESCRIPTOR *MemoryTable;
@@ -147,29 +152,29 @@ MemoryPeim (
   ASSERT (PcdGet64 (PcdSystemMemorySize) != 0);
 
   // FD without variable store
-  AddAndReserved(&MemoryTable[0]);
+  AddAndReserved (&MemoryTable[0]);
 
   // Variable store.
-  AddAndRTSData(&MemoryTable[1]);
+  AddAndRTSData (&MemoryTable[1]);
 
   // Trusted Firmware region
-  AddAndReserved(&MemoryTable[2]);
+  AddAndReserved (&MemoryTable[2]);
 
   // Usable memory.
   BuildResourceDescriptorHob (
-                              EFI_RESOURCE_SYSTEM_MEMORY,
-                              EFI_RESOURCE_ATTRIBUTE_PRESENT |
-                              EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
-                              EFI_RESOURCE_ATTRIBUTE_TESTED,
-                              MemoryTable[3].PhysicalBase,
-                              MemoryTable[3].Length
-                              );
+    EFI_RESOURCE_SYSTEM_MEMORY,
+    EFI_RESOURCE_ATTRIBUTE_PRESENT |
+    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_TESTED,
+    MemoryTable[3].PhysicalBase,
+    MemoryTable[3].Length
+  );
 
-  AddAndReserved(&MemoryTable[4]);
-  AddAndMmio(&MemoryTable[5]);
+  AddAndReserved (&MemoryTable[4]);
+  AddAndMmio (&MemoryTable[5]);
 
   // Build Memory Allocation Hob
   InitMmu (MemoryTable);

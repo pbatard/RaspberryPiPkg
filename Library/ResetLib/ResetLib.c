@@ -55,7 +55,7 @@ LibResetSystem (
     /*
      * Only if still in UEFI.
      */
-    EfiEventGroupSignal(&gRaspberryPiEventResetGuid);
+    EfiEventGroupSignal (&gRaspberryPiEventResetGuid);
   }
 
   switch (ResetType) {

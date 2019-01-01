@@ -51,8 +51,8 @@ STATIC EFI_DW_DEVICE_PATH mDevicePath = {
       HARDWARE_DEVICE_PATH,
       HW_VENDOR_DP,
       {
-        (UINT8)(sizeof(VENDOR_DEVICE_PATH)),
-        (UINT8)((sizeof(VENDOR_DEVICE_PATH)) >> 8),
+        (UINT8)(sizeof (VENDOR_DEVICE_PATH)),
+        (UINT8)((sizeof (VENDOR_DEVICE_PATH)) >> 8),
       }
     },
     EFI_CALLER_ID_GUID
@@ -87,13 +87,13 @@ DriverSupported (
   }
 
   Status = gBS->LocateProtocol (&gRaspberryPiFirmwareProtocolGuid, NULL,
-                                (VOID **)&mFwProtocol);
+                  (VOID**)&mFwProtocol);
   if (EFI_ERROR (Status)) {
     return EFI_NOT_READY;
   }
 
-  if (gBS->HandleProtocol(Controller, &gEfiUsb2HcProtocolGuid,
-                          (VOID **) &Temp) == EFI_SUCCESS) {
+  if (gBS->HandleProtocol (Controller, &gEfiUsb2HcProtocolGuid,
+             (VOID**)&Temp) == EFI_SUCCESS) {
     return EFI_ALREADY_STARTED;
   }
 
@@ -114,34 +114,34 @@ DriverStart (
   DWUSB_OTGHC_DEV *DwHc = NULL;
 
   Status = gBS->OpenProtocol (
-    Controller,
-    &gEfiCallerIdGuid,
-    (VOID **) &Dummy,
-    This->DriverBindingHandle,
-    Controller,
-    EFI_OPEN_PROTOCOL_BY_DRIVER
-    );
+                  Controller,
+                  &gEfiCallerIdGuid,
+                  (VOID**)&Dummy,
+                  This->DriverBindingHandle,
+                  Controller,
+                  EFI_OPEN_PROTOCOL_BY_DRIVER
+                );
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
-  Status = mFwProtocol->SetPowerState(RPI_FW_POWER_STATE_USB_HCD, TRUE, TRUE);
+  Status = mFwProtocol->SetPowerState (RPI_FW_POWER_STATE_USB_HCD, TRUE, TRUE);
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "Couldn't power on USB: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "Couldn't power on USB: %r\n", Status));
     return Status;
   }
 
   Status = CreateDwUsbHc (&DwHc);
   if (EFI_ERROR (Status)) {
-    goto out;
+    goto Exit;
   }
 
   /*
    * UsbBusDxe as of b4e96b82b4e2e47e95014b51787ba5b43abac784 expects
    * the HCD to do this. There is no agent invoking DwHcReset anymore.
    */
-  DwHcReset(&DwHc->DwUsbOtgHc, 0);
-  DwHcSetState(&DwHc->DwUsbOtgHc, EfiUsbHcStateOperational);
+  DwHcReset (&DwHc->DwUsbOtgHc, 0);
+  DwHcSetState (&DwHc->DwUsbOtgHc, EfiUsbHcStateOperational);
 
   Status = gBS->InstallMultipleProtocolInterfaces (
     &Controller,
@@ -149,20 +149,20 @@ DriverStart (
     NULL
   );
 
-out:
+Exit:
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "Could not start DwUsbHostDxe: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "Could not start DwUsbHostDxe: %r\n", Status));
 
-    DestroyDwUsbHc(DwHc);
+    DestroyDwUsbHc (DwHc);
 
-    mFwProtocol->SetPowerState(RPI_FW_POWER_STATE_USB_HCD, FALSE, FALSE);
+    mFwProtocol->SetPowerState (RPI_FW_POWER_STATE_USB_HCD, FALSE, FALSE);
 
     gBS->CloseProtocol (
-      Controller,
-      &gEfiCallerIdGuid,
-      This->DriverBindingHandle,
-      Controller
-      );
+           Controller,
+           &gEfiCallerIdGuid,
+           This->DriverBindingHandle,
+           Controller
+         );
   }
   return Status;
 }
@@ -182,12 +182,12 @@ DriverStop (
   EFI_USB2_HC_PROTOCOL *HcProtocol;
 
   Status = gBS->HandleProtocol (
-    Controller,
-    &gEfiUsb2HcProtocolGuid,
-    (VOID **) &HcProtocol
-  );
+                  Controller,
+                  &gEfiUsb2HcProtocolGuid,
+                  (VOID**)&HcProtocol
+                );
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "DriverStop: HandleProtocol: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "DriverStop: HandleProtocol: %r\n", Status));
     return Status;
   }
 
@@ -198,20 +198,20 @@ DriverStop (
     &gEfiUsb2HcProtocolGuid, &DwHc->DwUsbOtgHc,
     NULL);
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "DriverStop: UninstallMultipleProtocolInterfaces: %r\n",
-           Status));
+    DEBUG ((DEBUG_ERROR, "DriverStop: UninstallMultipleProtocolInterfaces: %r\n",
+      Status));
     return Status;
   }
 
   DwHcQuiesce (DwHc);
-  DestroyDwUsbHc(DwHc);
+  DestroyDwUsbHc (DwHc);
 
   gBS->CloseProtocol (
-    Controller,
-    &gEfiCallerIdGuid,
-    This->DriverBindingHandle,
-    Controller
-    );
+         Controller,
+         &gEfiCallerIdGuid,
+         This->DriverBindingHandle,
+         Controller
+       );
 
   return EFI_SUCCESS;
 }
@@ -241,8 +241,7 @@ DwUsbHostEntryPoint (
     &gEfiCallerIdGuid, NULL,
     NULL);
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "InstallMultipleProtocolInterfaces: %r\n",
-           Status));
+    DEBUG ((DEBUG_ERROR, "InstallMultipleProtocolInterfaces: %r\n", Status));
     return Status;
   }
 
@@ -253,16 +252,16 @@ DwUsbHostEntryPoint (
              ImageHandle,
              &gComponentName,
              &gComponentName2
-             );
+           );
 
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "EfiLibInstallDriverBindingComponentName2: %r\n",
-           Status));
+    DEBUG ((DEBUG_ERROR, "EfiLibInstallDriverBindingComponentName2: %r\n", Status));
     gBS->UninstallMultipleProtocolInterfaces (
-       mDevice,
-       &gEfiDevicePathProtocolGuid, &mDevicePath,
-       &gEfiCallerIdGuid, NULL,
-       NULL);
+           mDevice,
+           &gEfiDevicePathProtocolGuid, &mDevicePath,
+           &gEfiCallerIdGuid, NULL,
+           NULL
+         );
   }
 
   return Status;

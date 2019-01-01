@@ -86,7 +86,7 @@ EnableInterruptSource (
   )
 {
   if (Source >= NUM_IRQS) {
-    ASSERT(FALSE);
+    ASSERT (FALSE);
     return EFI_UNSUPPORTED;
   }
 
@@ -115,7 +115,7 @@ DisableInterruptSource (
   )
 {
   if (Source >= NUM_IRQS) {
-    ASSERT(FALSE);
+    ASSERT (FALSE);
     return EFI_UNSUPPORTED;
   }
 
@@ -158,7 +158,7 @@ RegisterInterruptSource (
   }
 
   mRegisteredInterruptHandlers[Source] = Handler;
-  return EnableInterruptSource(This, Source);
+  return EnableInterruptSource (This, Source);
 }
 
 
@@ -187,7 +187,7 @@ GetInterruptSourceState (
   }
 
   if (Source >= NUM_IRQS) {
-    ASSERT(FALSE);
+    ASSERT (FALSE);
     return EFI_UNSUPPORTED;
   }
 
@@ -245,13 +245,13 @@ IrqInterruptHandler (
   UINT32                      RegVal;
 
   RegVal = MmioRead32 (RegBase + BCM2836_INTC_TIMER_PENDING_OFFSET) &
-           ((1 << NUM_IRQS) - 1);
+    ((1 << NUM_IRQS) - 1);
   Source = HighBitSet32 (RegVal);
   if (Source < 0) {
     return;
   }
 
-  InterruptHandler = mRegisteredInterruptHandlers [Source];
+  InterruptHandler = mRegisteredInterruptHandlers[Source];
   if (InterruptHandler != NULL) {
     // Call the registered interrupt handler.
     InterruptHandler (Source, SystemContext);
@@ -285,7 +285,7 @@ CpuArchEventProtocolNotify (
   //
   // Get the CPU protocol that this driver requires.
   //
-  Status = gBS->LocateProtocol(&gEfiCpuArchProtocolGuid, NULL, (VOID **)&Cpu);
+  Status = gBS->LocateProtocol (&gEfiCpuArchProtocolGuid, NULL, (VOID**)&Cpu);
   if (EFI_ERROR (Status)) {
     return;
   }
@@ -293,7 +293,7 @@ CpuArchEventProtocolNotify (
   //
   // Unregister the default exception handler.
   //
-  Status = Cpu->RegisterInterruptHandler(Cpu, ARM_ARCH_EXCEPTION_IRQ, NULL);
+  Status = Cpu->RegisterInterruptHandler (Cpu, ARM_ARCH_EXCEPTION_IRQ, NULL);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a: Cpu->RegisterInterruptHandler() - %r\n",
       __FUNCTION__, Status));
@@ -304,8 +304,7 @@ CpuArchEventProtocolNotify (
   //
   // Register to receive interrupts
   //
-  Status = Cpu->RegisterInterruptHandler(Cpu, ARM_ARCH_EXCEPTION_IRQ,
-                                         IrqInterruptHandler);
+  Status = Cpu->RegisterInterruptHandler (Cpu, ARM_ARCH_EXCEPTION_IRQ, IrqInterruptHandler);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a: Cpu->RegisterInterruptHandler() - %r\n",
       __FUNCTION__, Status));
@@ -338,12 +337,13 @@ InterruptDxeInitialize (
   // Make sure the Interrupt Controller Protocol is not already installed in the system.
   ASSERT_PROTOCOL_ALREADY_INSTALLED (NULL, &gHardwareInterruptProtocolGuid);
 
-  Status = gBS->InstallMultipleProtocolInterfaces(
+  Status = gBS->InstallMultipleProtocolInterfaces (
                   &ImageHandle,
                   &gHardwareInterruptProtocolGuid,
                   &gHardwareInterruptProtocol,
-                  NULL);
-  ASSERT_EFI_ERROR(Status);
+                  NULL
+                );
+  ASSERT_EFI_ERROR (Status);
 
   //
   // Install the interrupt handler as soon as the CPU arch protocol appears.
@@ -354,14 +354,14 @@ InterruptDxeInitialize (
                    CpuArchEventProtocolNotify,
                    NULL,
                    &mCpuArchProtocolNotifyEventRegistration
-                   );
+                 );
   ASSERT (CpuArchEvent != NULL);
 
   // Register for an ExitBootServicesEvent
-  Status = gBS->CreateEvent(EVT_SIGNAL_EXIT_BOOT_SERVICES, TPL_NOTIFY,
+  Status = gBS->CreateEvent (EVT_SIGNAL_EXIT_BOOT_SERVICES, TPL_NOTIFY,
                   ExitBootServicesEvent, NULL, &mExitBootServicesEvent);
 
-  ASSERT_EFI_ERROR(Status);
+  ASSERT_EFI_ERROR (Status);
 
   return Status;
 }

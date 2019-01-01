@@ -119,49 +119,54 @@ MmcReadWriteDataTest (
   ReadBuffer = AllocatePool (BufferSize);
 
   // Read (and save) buffer at a specific location
-  Status = MmcReadBlocks (&(MmcHostInstance->BlockIo), MmcHostInstance->BlockIo.Media->MediaId,Lba,BufferSize,BackBuffer);
+  Status = MmcReadBlocks (&(MmcHostInstance->BlockIo),
+             MmcHostInstance->BlockIo.Media->MediaId, Lba, BufferSize, BackBuffer);
   if (Status != EFI_SUCCESS) {
     DiagnosticLog (L"ERROR: Fail to Read Block (1)\n");
     return Status;
   }
 
   // Write buffer at the same location
-  GenerateRandomBuffer (WriteBuffer,BufferSize);
-  Status = MmcWriteBlocks (&(MmcHostInstance->BlockIo), MmcHostInstance->BlockIo.Media->MediaId,Lba,BufferSize,WriteBuffer);
+  GenerateRandomBuffer (WriteBuffer, BufferSize);
+  Status = MmcWriteBlocks (&(MmcHostInstance->BlockIo),
+             MmcHostInstance->BlockIo.Media->MediaId, Lba, BufferSize, WriteBuffer);
   if (Status != EFI_SUCCESS) {
     DiagnosticLog (L"ERROR: Fail to Write Block (1)\n");
     return Status;
   }
 
   // Read the buffer at the same location
-  Status = MmcReadBlocks (&(MmcHostInstance->BlockIo), MmcHostInstance->BlockIo.Media->MediaId,Lba,BufferSize,ReadBuffer);
+  Status = MmcReadBlocks (&(MmcHostInstance->BlockIo),
+             MmcHostInstance->BlockIo.Media->MediaId, Lba, BufferSize, ReadBuffer);
   if (Status != EFI_SUCCESS) {
     DiagnosticLog (L"ERROR: Fail to Read Block (2)\n");
     return Status;
   }
 
   // Check that is conform
-  if (!CompareBuffer (ReadBuffer,WriteBuffer,BufferSize)) {
+  if (!CompareBuffer (ReadBuffer, WriteBuffer, BufferSize)) {
     DiagnosticLog (L"ERROR: Fail to Read/Write Block (1)\n");
     return EFI_INVALID_PARAMETER;
   }
 
   // Restore content at the original location
-  Status = MmcWriteBlocks (&(MmcHostInstance->BlockIo), MmcHostInstance->BlockIo.Media->MediaId,Lba,BufferSize,BackBuffer);
+  Status = MmcWriteBlocks (&(MmcHostInstance->BlockIo),
+             MmcHostInstance->BlockIo.Media->MediaId, Lba, BufferSize, BackBuffer);
   if (Status != EFI_SUCCESS) {
     DiagnosticLog (L"ERROR: Fail to Write Block (2)\n");
     return Status;
   }
 
   // Read the restored content
-  Status = MmcReadBlocks (&(MmcHostInstance->BlockIo), MmcHostInstance->BlockIo.Media->MediaId,Lba,BufferSize,ReadBuffer);
+  Status = MmcReadBlocks (&(MmcHostInstance->BlockIo),
+             MmcHostInstance->BlockIo.Media->MediaId, Lba, BufferSize, ReadBuffer);
   if (Status != EFI_SUCCESS) {
     DiagnosticLog (L"ERROR: Fail to Read Block (3)\n");
     return Status;
   }
 
   // Check the content is correct
-  if (!CompareBuffer (ReadBuffer,BackBuffer,BufferSize)) {
+  if (!CompareBuffer (ReadBuffer, BackBuffer, BufferSize)) {
     DiagnosticLog (L"ERROR: Fail to Read/Write Block (2)\n");
     return EFI_INVALID_PARAMETER;
   }
@@ -200,7 +205,7 @@ MmcDriverDiagnosticsRunDiagnostics (
   }
 
   Status = EFI_SUCCESS;
-  *ErrorType  = NULL;
+  *ErrorType = NULL;
   *BufferSize = DIAGNOSTIC_LOGBUFFER_MAXCHAR;
   *Buffer = DiagnosticInitLog (DIAGNOSTIC_LOGBUFFER_MAXCHAR);
 
@@ -210,8 +215,8 @@ MmcDriverDiagnosticsRunDiagnostics (
   MmcHostInstance = NULL;
   CurrentLink = mMmcHostPool.ForwardLink;
   while (CurrentLink != NULL && CurrentLink != &mMmcHostPool && (Status == EFI_SUCCESS)) {
-    MmcHostInstance = MMC_HOST_INSTANCE_FROM_LINK(CurrentLink);
-    ASSERT(MmcHostInstance != NULL);
+    MmcHostInstance = MMC_HOST_INSTANCE_FROM_LINK (CurrentLink);
+    ASSERT (MmcHostInstance != NULL);
     if (MmcHostInstance->MmcHandle == ControllerHandle) {
       break;
     }
@@ -234,11 +239,13 @@ MmcDriverDiagnosticsRunDiagnostics (
 
   // LBA=10 Size=BlockSize
   DiagnosticLog (L"MMC Driver Diagnostics - Test: Any Block\n");
-  Status = MmcReadWriteDataTest (MmcHostInstance, MmcHostInstance->BlockIo.Media->LastBlock >> 1, MmcHostInstance->BlockIo.Media->BlockSize);
+  Status = MmcReadWriteDataTest (MmcHostInstance, MmcHostInstance->BlockIo.Media->LastBlock >> 1,
+             MmcHostInstance->BlockIo.Media->BlockSize);
 
   // LBA=LastBlock Size=BlockSize
   DiagnosticLog (L"MMC Driver Diagnostics - Test: Last Block\n");
-  Status = MmcReadWriteDataTest (MmcHostInstance, MmcHostInstance->BlockIo.Media->LastBlock, MmcHostInstance->BlockIo.Media->BlockSize);
+  Status = MmcReadWriteDataTest (MmcHostInstance, MmcHostInstance->BlockIo.Media->LastBlock,
+             MmcHostInstance->BlockIo.Media->BlockSize);
 
   // LBA=1 Size=2*BlockSize
   DiagnosticLog (L"MMC Driver Diagnostics - Test: First Block / 2 BlockSSize\n");
@@ -251,6 +258,6 @@ MmcDriverDiagnosticsRunDiagnostics (
 // EFI Driver Diagnostics 2 Protocol
 //
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_DRIVER_DIAGNOSTICS2_PROTOCOL gMmcDriverDiagnostics2 = {
-  (EFI_DRIVER_DIAGNOSTICS2_RUN_DIAGNOSTICS) MmcDriverDiagnosticsRunDiagnostics,
+  (EFI_DRIVER_DIAGNOSTICS2_RUN_DIAGNOSTICS)MmcDriverDiagnosticsRunDiagnostics,
   "en"
 };

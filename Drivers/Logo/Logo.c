@@ -75,8 +75,8 @@ GetImage (
 
   (*Instance)++;
   *Attribute = mLogos[Current].Attribute;
-  *OffsetX   = mLogos[Current].OffsetX;
-  *OffsetY   = mLogos[Current].OffsetY;
+  *OffsetX = mLogos[Current].OffsetX;
+  *OffsetY = mLogos[Current].OffsetY;
   return mHiiImageEx->GetImageEx (mHiiImageEx, mHiiHandle, mLogos[Current].ImageId, Image);
 }
 
@@ -111,15 +111,15 @@ InitializeLogo (
   Status = gBS->LocateProtocol (
                   &gEfiHiiDatabaseProtocolGuid,
                   NULL,
-                  (VOID **) &HiiDatabase
-                  );
+                  (VOID**) &HiiDatabase
+                );
   ASSERT_EFI_ERROR (Status);
 
   Status = gBS->LocateProtocol (
                   &gEfiHiiImageExProtocolGuid,
                   NULL,
-                  (VOID **) &mHiiImageEx
-                  );
+                  (VOID**) &mHiiImageEx
+                );
   ASSERT_EFI_ERROR (Status);
 
   //
@@ -128,11 +128,11 @@ InitializeLogo (
   Status = gBS->OpenProtocol (
                   ImageHandle,
                   &gEfiHiiPackageListProtocolGuid,
-                  (VOID **) &PackageList,
+                  (VOID**)&PackageList,
                   ImageHandle,
                   NULL,
                   EFI_OPEN_PROTOCOL_GET_PROTOCOL
-                  );
+                );
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "HII Image Package with logo not found in PE/COFF resource section\n"));
     return Status;
@@ -146,14 +146,14 @@ InitializeLogo (
                           PackageList,
                           NULL,
                           &mHiiHandle
-                          );
+                        );
   if (!EFI_ERROR (Status)) {
     Handle = NULL;
     Status = gBS->InstallMultipleProtocolInterfaces (
                     &Handle,
                     &gEdkiiPlatformLogoProtocolGuid, &mPlatformLogo,
                     NULL
-                    );
+                  );
   }
   return Status;
 }

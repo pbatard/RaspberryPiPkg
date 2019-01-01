@@ -66,7 +66,7 @@ ShowStatus (
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL Square[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL Backup[STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE];
 
-  for (Index = 0 ; Index < STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE; Index++) {
+  for (Index = 0; Index < STATUS_SQUARE_SIDE * STATUS_SQUARE_SIDE; Index++) {
     Square[Index].Blue = Blue;
     Square[Index].Green = Green;
     Square[Index].Red = Red;
@@ -74,39 +74,39 @@ ShowStatus (
   }
 
   // Backup current image.
-  GraphicsOutput->Blt(GraphicsOutput, Backup,
-                      EfiBltVideoToBltBuffer, 0, 0, 0, 0,
-                      STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+  GraphicsOutput->Blt (GraphicsOutput, Backup,
+                    EfiBltVideoToBltBuffer, 0, 0, 0, 0,
+                    STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
 
   // Draw the status square.
-  GraphicsOutput->Blt(GraphicsOutput, Square,
-                      EfiBltBufferToVideo, 0, 0, 0, 0,
-                      STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+  GraphicsOutput->Blt (GraphicsOutput, Square,
+                    EfiBltBufferToVideo, 0, 0, 0, 0,
+                    STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
 
   // Wait 500ms.
-  gBS->Stall(500*1000);
+  gBS->Stall (500 * 1000);
 
   // Restore the backup.
-  GraphicsOutput->Blt(GraphicsOutput, Backup,
-                      EfiBltBufferToVideo, 0, 0, 0, 0,
-                      STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
+  GraphicsOutput->Blt (GraphicsOutput, Backup,
+                    EfiBltBufferToVideo, 0, 0, 0, 0,
+                    STATUS_SQUARE_SIDE, STATUS_SQUARE_SIDE, 0);
   return EFI_SUCCESS;
 }
 
 STATIC
 EFI_STATUS
 FindWritableFs (
-    OUT EFI_FILE_PROTOCOL **WritableFs
-    )
+  OUT EFI_FILE_PROTOCOL **WritableFs
+  )
 {
   EFI_FILE_PROTOCOL *Fs = NULL;
   EFI_HANDLE *HandleBuffer = NULL;
   UINTN      HandleCount;
   UINTN      Index;
 
-  EFI_STATUS Status = gBS->LocateHandleBuffer(ByProtocol,
-                                              &gEfiSimpleFileSystemProtocolGuid,
-                                              NULL, &HandleCount, &HandleBuffer);
+  EFI_STATUS Status = gBS->LocateHandleBuffer (ByProtocol,
+                             &gEfiSimpleFileSystemProtocolGuid,
+                             NULL, &HandleCount, &HandleBuffer);
   if (EFI_ERROR (Status)) {
     return Status;
   }
@@ -115,9 +115,9 @@ FindWritableFs (
     EFI_SIMPLE_FILE_SYSTEM_PROTOCOL *SimpleFs = NULL;
     EFI_FILE_PROTOCOL *File = NULL;
 
-    Status = gBS->HandleProtocol(HandleBuffer[Index],
-                                 &gEfiSimpleFileSystemProtocolGuid,
-                                 (VOID **) &SimpleFs);
+    Status = gBS->HandleProtocol (HandleBuffer[Index],
+                    &gEfiSimpleFileSystemProtocolGuid,
+                    (VOID**)&SimpleFs);
     if (EFI_ERROR (Status)) {
       ASSERT_EFI_ERROR (Status);
       /*
@@ -126,33 +126,31 @@ FindWritableFs (
       continue;
     }
 
-    Status = SimpleFs->OpenVolume(SimpleFs, &Fs);
+    Status = SimpleFs->OpenVolume (SimpleFs, &Fs);
     if (EFI_ERROR (Status)) {
-      DEBUG((DEBUG_ERROR, "%a OpenVolume[%u] returned %r\n", __FUNCTION__,
-             Index, Status));
+      DEBUG ((DEBUG_ERROR, "%a OpenVolume[%u] returned %r\n", __FUNCTION__, Index, Status));
       continue;
     }
 
-    Status = Fs->Open(Fs, &File, L"--------.---",
-                      EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ |
-                      EFI_FILE_MODE_WRITE, 0);
+    Status = Fs->Open (Fs, &File, L"--------.---",
+                   EFI_FILE_MODE_CREATE | EFI_FILE_MODE_READ |
+                   EFI_FILE_MODE_WRITE, 0);
     if (EFI_ERROR (Status)) {
-      DEBUG((DEBUG_ERROR, "%a Open[%u] returned %r\n", __FUNCTION__,
-             Index, Status));
+      DEBUG ((DEBUG_ERROR, "%a Open[%u] returned %r\n", __FUNCTION__, Index, Status));
       continue;
     }
 
     /*
      * Okay, we have a writable filesystem!
      */
-    Fs->Delete(File);
+    Fs->Delete (File);
     *WritableFs = Fs;
     Status = EFI_SUCCESS;
     break;
   }
 
   if (HandleBuffer) {
-    FreePool(HandleBuffer);
+    FreePool (HandleBuffer);
   }
 
   return Status;
@@ -160,7 +158,7 @@ FindWritableFs (
 
 STATIC
 VOID
-TakeScreenshot(
+TakeScreenshot (
   VOID
   )
 {
@@ -170,7 +168,7 @@ TakeScreenshot(
   EFI_GRAPHICS_OUTPUT_PROTOCOL *GraphicsOutput = &gDisplayProto;
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL *Image = NULL;
   EFI_STATUS Status;
-  CHAR16 FileName[8+1+3+1];
+  CHAR16 FileName[8 + 1 + 3 + 1];
   UINT32 ScreenWidth;
   UINT32 ScreenHeight;
   UINTN ImageSize;
@@ -178,36 +176,36 @@ TakeScreenshot(
   UINTN Index;
   EFI_TIME Time;
 
-  Status = FindWritableFs(&Fs);
+  Status = FindWritableFs (&Fs);
   if (EFI_ERROR (Status)) {
-    ShowStatus(GraphicsOutput, STATUS_YELLOW);
+    ShowStatus (GraphicsOutput, STATUS_YELLOW);
   }
 
-  ScreenWidth  = GraphicsOutput->Mode->Info->HorizontalResolution;
+  ScreenWidth = GraphicsOutput->Mode->Info->HorizontalResolution;
   ScreenHeight = GraphicsOutput->Mode->Info->VerticalResolution;
   ImageSize = ScreenWidth * ScreenHeight;
 
-  Status = gRT->GetTime(&Time, NULL);
-  if (!EFI_ERROR(Status)) {
-    UnicodeSPrint(FileName, sizeof(FileName), L"%02d%02d%02d%02d.bmp",
-                  Time.Day, Time.Hour, Time.Minute, Time.Second);
+  Status = gRT->GetTime (&Time, NULL);
+  if (!EFI_ERROR (Status)) {
+    UnicodeSPrint (FileName, sizeof (FileName), L"%02d%02d%02d%02d.bmp",
+      Time.Day, Time.Hour, Time.Minute, Time.Second);
   } else {
-    UnicodeSPrint(FileName, sizeof(FileName), L"scrnshot.bmp");
+    UnicodeSPrint (FileName, sizeof (FileName), L"scrnshot.bmp");
   }
 
-  Image = AllocatePool(ImageSize * sizeof(EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
+  Image = AllocatePool (ImageSize * sizeof (EFI_GRAPHICS_OUTPUT_BLT_PIXEL));
   if (Image == NULL) {
     Status = EFI_OUT_OF_RESOURCES;
-    ShowStatus(GraphicsOutput, STATUS_RED);
-    goto done;
+    ShowStatus (GraphicsOutput, STATUS_RED);
+    goto Done;
   }
 
-  Status = GraphicsOutput->Blt(GraphicsOutput, Image,
-                               EfiBltVideoToBltBuffer, 0, 0, 0, 0,
-                               ScreenWidth, ScreenHeight, 0);
-  if (EFI_ERROR(Status)) {
-    ShowStatus(GraphicsOutput, STATUS_RED);
-    goto done;
+  Status = GraphicsOutput->Blt (GraphicsOutput, Image,
+                             EfiBltVideoToBltBuffer, 0, 0, 0, 0,
+                             ScreenWidth, ScreenHeight, 0);
+  if (EFI_ERROR (Status)) {
+    ShowStatus (GraphicsOutput, STATUS_RED);
+    goto Done;
   }
 
   for (Index = 0; Index < ImageSize; Index++) {
@@ -219,33 +217,34 @@ TakeScreenshot(
   }
 
   if (Index == ImageSize) {
-    ShowStatus(GraphicsOutput, STATUS_BLUE);
-    goto done;
+    ShowStatus (GraphicsOutput, STATUS_BLUE);
+    goto Done;
   }
 
-  Status = TranslateGopBltToBmp(Image, ScreenHeight, ScreenWidth,
-                                &BmpImage, (UINT32 *) &BmpSize);
-  if (EFI_ERROR(Status)) {
-    ShowStatus(GraphicsOutput, STATUS_RED);
-    goto done;
-  }
-
-  Status = Fs->Open(Fs, &File, FileName, EFI_FILE_MODE_CREATE |
-                    EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
+  Status = TranslateGopBltToBmp (Image, ScreenHeight, ScreenWidth,
+             &BmpImage, (UINT32*)&BmpSize);
   if (EFI_ERROR (Status)) {
-    ShowStatus(GraphicsOutput, STATUS_RED);
-    goto done;
+    ShowStatus (GraphicsOutput, STATUS_RED);
+    goto Done;
   }
 
-  Status = File->Write(File, &BmpSize, BmpImage);
-  File->Close(File);
+  Status = Fs->Open (Fs, &File, FileName, EFI_FILE_MODE_CREATE |
+                 EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE, 0);
   if (EFI_ERROR (Status)) {
-    ShowStatus(GraphicsOutput, STATUS_RED);
-    goto done;
+    ShowStatus (GraphicsOutput, STATUS_RED);
+    goto Done;
   }
 
-  ShowStatus(GraphicsOutput, STATUS_GREEN);
-done:
+  Status = File->Write (File, &BmpSize, BmpImage);
+  File->Close (File);
+  if (EFI_ERROR (Status)) {
+    ShowStatus (GraphicsOutput, STATUS_RED);
+    goto Done;
+  }
+
+  ShowStatus (GraphicsOutput, STATUS_GREEN);
+
+Done:
   if (BmpImage != NULL) {
     FreePool (BmpImage);
   }
@@ -262,13 +261,13 @@ ScreenshotKeyHandler (
   IN EFI_KEY_DATA *KeyData
   )
 {
-  TakeScreenshot();
+  TakeScreenshot ();
   return EFI_SUCCESS;
 }
 
 STATIC
 EFI_STATUS
-ProcessScreenshotHandler(
+ProcessScreenshotHandler (
   IN EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx
   )
 {
@@ -286,14 +285,13 @@ ProcessScreenshotHandler(
   ScreenshotKey.KeyState.KeyToggleState = 0;
 
   Status = SimpleTextInEx->RegisterKeyNotify (
-                                              SimpleTextInEx,
-                                              &ScreenshotKey,
-                                              ScreenshotKeyHandler,
-                                              &Handle
-                                              );
+                             SimpleTextInEx,
+                             &ScreenshotKey,
+                             ScreenshotKeyHandler,
+                             &Handle
+                           );
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: couldn't register key notification: %r\n",
-            __FUNCTION__, Status));
+    DEBUG ((DEBUG_ERROR, "%a: couldn't register key notification: %r\n", __FUNCTION__, Status));
     return Status;
   }
 
@@ -302,7 +300,7 @@ ProcessScreenshotHandler(
 
 STATIC
 VOID
-ProcessScreenshotHandlers(
+ProcessScreenshotHandlers (
   VOID
   )
 {
@@ -313,15 +311,15 @@ ProcessScreenshotHandlers(
   EFI_SIMPLE_TEXT_INPUT_EX_PROTOCOL *SimpleTextInEx;
 
   Status = gBS->LocateHandleBuffer (ByProtocol, &gEfiSimpleTextInputExProtocolGuid,
-                                    NULL, &HandleCount, &HandleBuffer);
+                  NULL, &HandleCount, &HandleBuffer);
   if (EFI_ERROR (Status)) {
     return;
   }
 
   for (Index = 0; Index < HandleCount; Index++) {
     Status = gBS->HandleProtocol (HandleBuffer[Index],
-                                  &gEfiSimpleTextInputExProtocolGuid,
-                                  (VOID **) &SimpleTextInEx);
+                    &gEfiSimpleTextInputExProtocolGuid,
+                    (VOID**)&SimpleTextInEx);
     if (EFI_ERROR (Status)) {
       ASSERT_EFI_ERROR (Status);
       /*
@@ -330,7 +328,7 @@ ProcessScreenshotHandlers(
       continue;
     }
 
-    Status = ProcessScreenshotHandler(SimpleTextInEx);
+    Status = ProcessScreenshotHandler (SimpleTextInEx);
     if (EFI_ERROR (Status)) {
       continue;
     }
@@ -345,35 +343,33 @@ OnTextInExInstall (
   IN VOID *Context
   )
 {
-  ProcessScreenshotHandlers();
+  ProcessScreenshotHandlers ();
 }
 
 VOID
-RegisterScreenshotHandlers(
+RegisterScreenshotHandlers (
   VOID
-  )
+)
 {
   EFI_STATUS Status;
   EFI_EVENT TextInExInstallEvent;
   VOID *TextInExInstallRegistration;
 
-  ProcessScreenshotHandlers();
+  ProcessScreenshotHandlers ();
 
-  Status = gBS->CreateEvent(EVT_NOTIFY_SIGNAL, TPL_CALLBACK,
-                            OnTextInExInstall, NULL,
-                            &TextInExInstallEvent);
+  Status = gBS->CreateEvent (EVT_NOTIFY_SIGNAL, TPL_CALLBACK,
+                  OnTextInExInstall, NULL,
+                  &TextInExInstallEvent);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: couldn't create protocol install event: %r\n",
-            __FUNCTION__, Status));
+    DEBUG ((DEBUG_ERROR, "%a: couldn't create protocol install event: %r\n", __FUNCTION__, Status));
     return;
   }
 
-  Status = gBS->RegisterProtocolNotify(&gEfiSimpleTextInputExProtocolGuid,
-                                       TextInExInstallEvent,
-                                       &TextInExInstallRegistration);
+  Status = gBS->RegisterProtocolNotify (&gEfiSimpleTextInputExProtocolGuid,
+                  TextInExInstallEvent,
+                  &TextInExInstallRegistration);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: couldn't register protocol install notify: %r\n",
-            __FUNCTION__, Status));
+    DEBUG ((DEBUG_ERROR, "%a: couldn't register protocol install notify: %r\n", __FUNCTION__, Status));
     return;
   }
 }

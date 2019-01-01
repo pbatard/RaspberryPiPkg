@@ -46,7 +46,7 @@ InstallProtocolInterfaces (
                     &gEfiDevicePathProtocolGuid,
                     FvbDevice->DevicePath,
                     NULL
-                    );
+                  );
     ASSERT_EFI_ERROR (Status);
   } else if (IsDevicePathEnd (FvbDevice->DevicePath)) {
     //
@@ -56,7 +56,7 @@ InstallProtocolInterfaces (
                     FwbHandle,
                     &gEfiFirmwareVolumeBlockProtocolGuid,
                     (VOID**)&OldFwbInterface
-                    );
+                  );
     ASSERT_EFI_ERROR (Status);
 
     Status = gBS->ReinstallProtocolInterface (
@@ -64,7 +64,7 @@ InstallProtocolInterfaces (
                     &gEfiFirmwareVolumeBlockProtocolGuid,
                     OldFwbInterface,
                     &FvbDevice->FwVolBlockInstance
-                    );
+                  );
     ASSERT_EFI_ERROR (Status);
   } else {
     //
@@ -98,9 +98,9 @@ FvbVirtualAddressChangeEvent (
 
 --*/
 {
-  EfiConvertPointer (0x0, (VOID **) &mFvInstance->FvBase);
-  EfiConvertPointer (0x0, (VOID **) &mFvInstance->VolumeHeader);
-  EfiConvertPointer (0x0, (VOID **) &mFvInstance);
+  EfiConvertPointer (0x0, (VOID**)&mFvInstance->FvBase);
+  EfiConvertPointer (0x0, (VOID**)&mFvInstance->VolumeHeader);
+  EfiConvertPointer (0x0, (VOID**)&mFvInstance);
 }
 
 
@@ -119,14 +119,14 @@ InstallVirtualAddressChangeHandler (
                   NULL,
                   &gEfiEventVirtualAddressChangeGuid,
                   &VirtualAddressChangeEvent
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 }
 
 
 STATIC
 EFI_STATUS
-DoDump(
+DoDump (
   IN EFI_DEVICE_PATH_PROTOCOL *Device
   )
 {
@@ -134,18 +134,18 @@ DoDump(
   EFI_FILE_PROTOCOL *File;
 
   Status = FileOpen (Device,
-                     mFvInstance->MappedFile,
-                     &File,
-                     EFI_FILE_MODE_WRITE |
-                     EFI_FILE_MODE_READ);
+             mFvInstance->MappedFile,
+             &File,
+             EFI_FILE_MODE_WRITE |
+             EFI_FILE_MODE_READ);
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
   Status = FileWrite (File,
-                      mFvInstance->Offset,
-                      mFvInstance->FvBase,
-                      mFvInstance->FvLength);
+             mFvInstance->Offset,
+             mFvInstance->FvBase,
+             mFvInstance->FvLength);
   FileClose (File);
   return Status;
 }
@@ -154,7 +154,7 @@ DoDump(
 STATIC
 VOID
 EFIAPI
-DumpVars(
+DumpVars (
   IN EFI_EVENT Event,
   IN VOID *Context
   )
@@ -162,24 +162,23 @@ DumpVars(
   EFI_STATUS Status;
 
   if (mFvInstance->Device == NULL) {
-    DEBUG((DEBUG_INFO, "Variable store not found?\n"));
+    DEBUG ((DEBUG_INFO, "Variable store not found?\n"));
     return;
   }
 
   if (!mFvInstance->Dirty) {
-    DEBUG((DEBUG_INFO, "Variables not dirty, not dumping!\n"));
+    DEBUG ((DEBUG_INFO, "Variables not dirty, not dumping!\n"));
     return;
   }
 
   Status = DoDump (mFvInstance->Device);
   if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "Couldn't dump '%s'\n",
-           mFvInstance->MappedFile));
-    ASSERT_EFI_ERROR(Status);
+    DEBUG ((DEBUG_ERROR, "Couldn't dump '%s'\n", mFvInstance->MappedFile));
+    ASSERT_EFI_ERROR (Status);
     return;
   }
 
-  DEBUG((DEBUG_INFO, "Variables dumped!\n"));
+  DEBUG ((DEBUG_INFO, "Variables dumped!\n"));
   mFvInstance->Dirty = FALSE;
 }
 
@@ -200,18 +199,18 @@ ReadyToBootHandler (
                   DumpVars,
                   NULL,
                   &ImageInstallEvent
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 
   Status = gBS->RegisterProtocolNotify (
                   &gEfiLoadedImageProtocolGuid,
                   ImageInstallEvent,
                   &ImageRegistration
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 
-  DumpVars(NULL, NULL);
-  Status = gBS->CloseEvent(Event);
+  DumpVars (NULL, NULL);
+  Status = gBS->CloseEvent (Event);
   ASSERT_EFI_ERROR (Status);
 }
 
@@ -232,7 +231,7 @@ InstallDumpVarEventHandlers (
                   NULL,
                   &gRaspberryPiEventResetGuid,
                   &ResetEvent
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 
   Status = gBS->CreateEventEx (
@@ -242,7 +241,7 @@ InstallDumpVarEventHandlers (
                   NULL,
                   &gEfiEventReadyToBootGuid,
                   &ReadyToBootEvent
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 }
 
@@ -260,8 +259,7 @@ OnSimpleFileSystemInstall (
   EFI_DEVICE_PATH_PROTOCOL *Device;
 
   if ((mFvInstance->Device != NULL) &&
-      !EFI_ERROR (CheckStoreExists (mFvInstance->Device))
-      ) {
+      !EFI_ERROR (CheckStoreExists (mFvInstance->Device))) {
     //
     // We've already found the variable store before,
     // and that device is not removed from the ssystem.
@@ -277,7 +275,7 @@ OnSimpleFileSystemInstall (
                     mSFSRegistration,
                     &HandleSize,
                     &Handle
-                    );
+                  );
     if (Status == EFI_NOT_FOUND) {
       break;
     }
@@ -291,9 +289,8 @@ OnSimpleFileSystemInstall (
 
     Status = DoDump (Device);
     if (EFI_ERROR (Status)) {
-      DEBUG((DEBUG_ERROR, "Couldn't update '%s'\n",
-             mFvInstance->MappedFile));
-      ASSERT_EFI_ERROR(Status);
+      DEBUG ((DEBUG_ERROR, "Couldn't update '%s'\n", mFvInstance->MappedFile));
+      ASSERT_EFI_ERROR (Status);
       continue;
     }
 
@@ -301,7 +298,7 @@ OnSimpleFileSystemInstall (
       gBS->FreePool (mFvInstance->Device);
     }
 
-    DEBUG((DEBUG_INFO, "Found variable store!\n"));
+    DEBUG ((DEBUG_INFO, "Found variable store!\n"));
     mFvInstance->Device = Device;
     break;
   }
@@ -322,13 +319,13 @@ InstallFSNotifyHandler (
                   OnSimpleFileSystemInstall,
                   NULL,
                   &Event
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 
   Status = gBS->RegisterProtocolNotify (
                   &gEfiSimpleFileSystemProtocolGuid,
                   Event,
                   &mSFSRegistration
-                  );
+                );
   ASSERT_EFI_ERROR (Status);
 }

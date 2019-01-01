@@ -29,8 +29,8 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME_PROTOCOL  gMmcComponentName = {
 // EFI Component Name 2 Protocol
 //
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_COMPONENT_NAME2_PROTOCOL gMmcComponentName2 = {
-  (EFI_COMPONENT_NAME2_GET_DRIVER_NAME) MmcGetDriverName,
-  (EFI_COMPONENT_NAME2_GET_CONTROLLER_NAME) MmcGetControllerName,
+  (EFI_COMPONENT_NAME2_GET_DRIVER_NAME)MmcGetDriverName,
+  (EFI_COMPONENT_NAME2_GET_CONTROLLER_NAME)MmcGetControllerName,
   "en"
 };
 
@@ -88,7 +88,7 @@ MmcGetDriverName (
            mMmcDriverNameTable,
            DriverName,
            (BOOLEAN)(This == &gMmcComponentName)
-           );
+         );
 }
 
 /**

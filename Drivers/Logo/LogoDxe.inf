@@ -16,7 +16,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010005
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = LogoDxe
   MODULE_UNI_FILE                = LogoDxe.uni
   FILE_GUID                      = F74D20EE-37E7-48FC-97F7-9B1047749C69

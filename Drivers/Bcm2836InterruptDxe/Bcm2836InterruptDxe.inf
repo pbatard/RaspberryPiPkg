@@ -14,7 +14,7 @@
 #**/
 
 [Defines]
-  INF_VERSION                    = 0x00010019
+  INF_VERSION                    = 0x0001001A
   BASE_NAME                      = Bcm2836InterruptDxe
   FILE_GUID                      = 3944f2d7-2e09-4fc0-9e98-008375641453
   MODULE_TYPE                    = DXE_DRIVER
