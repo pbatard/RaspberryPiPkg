@@ -20,7 +20,6 @@
 #include <Library/IoLib.h>
 #include <Library/GpioLib.h>
 #include <IndustryStandard/Bcm2836.h>
-#include <Utils.h>
 
 STATIC VOID
 GpioFSELModify (

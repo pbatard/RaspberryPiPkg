@@ -29,7 +29,6 @@
 #include <Protocol/RaspberryPiFirmware.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Protocol/Cpu.h>
-#include <Utils.h>
 
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL gDisplayProto;
 extern EFI_COMPONENT_NAME_PROTOCOL  gComponentName;

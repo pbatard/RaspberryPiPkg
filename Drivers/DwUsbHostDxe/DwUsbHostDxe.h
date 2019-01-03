@@ -36,7 +36,6 @@
 #include <Library/TimerLib.h>
 #include <Library/DmaLib.h>
 #include <Library/ArmLib.h>
-#include <Utils.h>
 
 #define MAX_DEVICE                      16
 #define MAX_ENDPOINT                    16

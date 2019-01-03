@@ -13,6 +13,7 @@
  *
  **/
 
+#include <Base.h>
 #include "DisplayDxe.h"
 
 #define POS_TO_FB(posX, posY) ((UINT8*)                                 \
@@ -480,7 +481,7 @@ DriverStart (
 
 
   if (PcdGet32 (PcdDisplayEnableVModes)) {
-    mLastMode = ELES (mGopModeData) - 1;
+    mLastMode = ARRAY_SIZE (mGopModeData) - 1;
   } else {
     mLastMode = 0;
     /*

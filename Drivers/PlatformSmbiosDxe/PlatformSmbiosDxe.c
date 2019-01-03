@@ -45,7 +45,6 @@
 #include <Library/MemoryAllocationLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/PrintLib.h>
-#include <Utils.h>
 
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
 
@@ -678,7 +677,7 @@ SysInfoUpdateSmbiosType1 (
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Failed to get board model: %r\n", Status));
   } else {
-    Prod = X (BoardRevision, 4, 11);
+    Prod = (BoardRevision >> 4) & 0xFF;
   }
 
   if (Prod > PROD_KNOWN) {
@@ -688,7 +687,7 @@ SysInfoUpdateSmbiosType1 (
   AsciiSPrint (mSysInfoProductName, sizeof (mSysInfoProductName),
     "64-bit Raspberry Pi %a (rev. %x)", ProductNames[Prod], BoardRevision);
 
-  Manu = X (BoardRevision, 16, 19);
+  Manu = (BoardRevision >> 16) & 0xF;
   if (Manu > MANU_KNOWN) {
     Manu = MANU_UNKNOWN;
   } else {
