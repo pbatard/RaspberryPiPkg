@@ -35,13 +35,11 @@ InitMmu (
   IN ARM_MEMORY_REGION_DESCRIPTOR  *MemoryTable
   )
 {
-  VOID                          *TranslationTableBase;
-  UINTN                         TranslationTableSize;
-  RETURN_STATUS                 Status;
+  RETURN_STATUS Status;
 
-  //Note: Because we called PeiServicesInstallPeiMemory() before to call InitMmu() the MMU Page Table resides in
-  //      DRAM (even at the top of DRAM as it is the first permanent memory allocation)
-  Status = ArmConfigureMmu (MemoryTable, &TranslationTableBase, &TranslationTableSize);
+  //Note: Because we called PeiServicesInstallPeiMemory() before to call InitMmu() the MMU Page Table
+  //      resides in DRAM (even at the top of DRAM as it is the first permanent memory allocation)
+  Status = ArmConfigureMmu (MemoryTable, NULL, NULL);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Error: Failed to enable MMU\n"));
   }
@@ -49,7 +47,7 @@ InitMmu (
 
 STATIC
 VOID
-AddAndRTSData (
+AddRuntimeServicesRegion (
   IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
 )
 {
@@ -74,7 +72,7 @@ AddAndRTSData (
 
 STATIC
 VOID
-AddAndReserved (
+AddReservedMemoryRegion (
   IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
   )
 {
@@ -94,29 +92,6 @@ AddAndReserved (
     Desc->PhysicalBase,
     Desc->Length,
     EfiReservedMemoryType
-  );
-}
-
-STATIC
-VOID
-AddAndMmio (
-  IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
-  )
-{
-  BuildResourceDescriptorHob (
-    EFI_RESOURCE_SYSTEM_MEMORY,
-    (EFI_RESOURCE_ATTRIBUTE_PRESENT |
-      EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-      EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE |
-      EFI_RESOURCE_ATTRIBUTE_TESTED),
-    Desc->PhysicalBase,
-    Desc->Length
-  );
-
-  BuildMemoryAllocationHob (
-    Desc->PhysicalBase,
-    Desc->Length,
-    EfiMemoryMappedIO
   );
 }
 
@@ -152,13 +127,13 @@ MemoryPeim (
   ASSERT (PcdGet64 (PcdSystemMemorySize) != 0);
 
   // FD without variable store
-  AddAndReserved (&MemoryTable[0]);
+  AddReservedMemoryRegion (&MemoryTable[0]);
 
   // Variable store.
-  AddAndRTSData (&MemoryTable[1]);
+  AddRuntimeServicesRegion (&MemoryTable[1]);
 
   // Trusted Firmware region
-  AddAndReserved (&MemoryTable[2]);
+  AddReservedMemoryRegion (&MemoryTable[2]);
 
   // Usable memory.
   BuildResourceDescriptorHob (
@@ -173,8 +148,7 @@ MemoryPeim (
     MemoryTable[3].Length
   );
 
-  AddAndReserved (&MemoryTable[4]);
-  AddAndMmio (&MemoryTable[5]);
+  AddReservedMemoryRegion (&MemoryTable[4]);
 
   // Build Memory Allocation Hob
   InitMmu (MemoryTable);

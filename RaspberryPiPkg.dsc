@@ -323,6 +323,8 @@
 
   gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset|0xc0000000
 
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"edk2-1.0"
+
 !if $(SECURE_BOOT_ENABLE) == TRUE
   # override the default values from SecurityPkg to ensure images from all sources are verified in secure boot
   gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x04
