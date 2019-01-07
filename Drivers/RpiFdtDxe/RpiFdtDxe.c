@@ -335,9 +335,8 @@ RpiFdtDxeInitialize (
    * Probably overkill.
    */
   FdtSize += EFI_PAGE_SIZE * 2;
-  Status = gBS->AllocatePages (AllocateAnyPages, EfiRuntimeServicesData,
-                  EFI_SIZE_TO_PAGES (FdtSize),
-                  (EFI_PHYSICAL_ADDRESS*)&mFdtImage);
+  Status = gBS->AllocatePages (AllocateAnyPages, EfiBootServicesData,
+                  EFI_SIZE_TO_PAGES (FdtSize), (EFI_PHYSICAL_ADDRESS*)&mFdtImage);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Failed to allocate new device tree: %r\n", Status));
     return Status;
