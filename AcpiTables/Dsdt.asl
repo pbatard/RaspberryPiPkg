@@ -75,6 +75,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2848")
       Name (_CID, Package() { "DWC_OTG", "DWC2_OTG"})
       Name (_UID, 0x0)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return (0xf)
@@ -96,6 +97,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2850")
       Name (_CID, "VC4")
       Name (_UID, 0x0)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return(0xf)
@@ -194,6 +196,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2849")
       Name (_CID, "RPIQ")
       Name (_UID, 0)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return (0xf)
@@ -215,6 +218,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2835")
       Name (_CID, "VCIQ")
       Name (_UID, 0)
+      Name (_CCA, 0x0)
       Name (_DEP, Package() { \_SB.RPIQ })
       Method (_STA)
       {
@@ -237,6 +241,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2856")
       Name (_CID, "VCSM")
       Name (_UID, 0)
+      Name (_CCA, 0x0)
       Name (_DEP, Package() { \_SB.VCIQ })
       Method (_STA)
       {
@@ -245,11 +250,12 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
     }
 
     // Description: GPIO
-    Device (GPI0)
+    Device (GPIO)
     {
       Name (_HID, "BCM2845")
       Name (_CID, "BCMGPIO")
       Name (_UID, 0x0)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return(0xf)
@@ -272,6 +278,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2841")
       Name (_CID, "BCMI2C")
       Name (_UID, 0x1)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return(0xf)
@@ -309,6 +316,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2841")
       Name (_CID, "BCMI2C")
       Name (_UID, 0x2)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return (0xf)
@@ -330,6 +338,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2838")
       Name (_CID, "BCMSPI0")
       Name (_UID, 0x0)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return (0xf)
@@ -393,6 +402,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2839")
       Name (_CID, "BCMAUXSPI")
       Name (_UID, 0x1)
+      Name (_CCA, 0x0)
       Name (_DEP, Package() { \_SB.RPIQ })
       Method (_STA)
       {
@@ -414,7 +424,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
             /* 0000 */  0x00, 0x60, 0x44, 0xD5, 0xF3, 0x1F, 0x11, 0x60,  // .`D....`
             /* 0008 */  0x4A, 0xB8, 0xB0, 0x9C, 0x2D, 0x23, 0x30, 0xDD,  // J...-#0.
             /* 0010 */  0x2F, 0x8D, 0x1F, 0x00, 0x01, 0x10, 0x00, 0x02,  // /.......
-            /* 0018 */  0x03, 0x00, 0x12, 0x00, 0x00, 0x18, 0x00, 0x22,  // ......."
+            /* 0018 */  0x03, 0x00, 0x12, 0x00, 0x00, 0x18, 0x00, 0x22,  // .......\"
             /* 0020 */  0x00, 0x00, 0x00, 0x13, 0x00, 0x14, 0x00, 0x15,  // ........
             /* 0028 */  0x00, 0x5C, 0x5F, 0x53, 0x42, 0x2E, 0x47, 0x50,  // .\_SB.GP
             /* 0030 */  0x49, 0x30, 0x00                                 // I0.
@@ -444,6 +454,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
     //   Name (_HID, "BCM2839")
     //   Name (_CID, "BCMAUXSPI")
     //   Name (_UID, 0x2)
+    //   Name (_CCA, 0x0)
     //   Name (_DEP, Package() { \_SB.RPIQ })
     //   Method (_STA)
     //   {
@@ -466,6 +477,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (_HID, "BCM2844")
       Name (_CID, "BCM2844")
       Name (_UID, 0)
+      Name (_CCA, 0x0)
       Method (_STA)
       {
         Return (0xf)
