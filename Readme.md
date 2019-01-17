@@ -33,7 +33,7 @@ If there no bootable media media is found, the UEFI Shell is launched.
 # Building
 
 (These instructions were validated against the latest edk2 / edk2-platforms /
-edk2-non-osi as of 2019.01.01, on a Debian 9.6 x64 system).
+edk2-non-osi as of 2019.01.16, on a Debian 9.6 x64 system).
 
 You may need to install the relevant compilation tools. Especially you should have the
 ACPI Source Language (ASL) compiler, `nasm` as well as a native compiler installed.
@@ -49,16 +49,15 @@ instructions below.
 
 You can then build the firmware as follows:
 
+* Standalone instructions
+
 ```
 mkdir ~/workspace
 cd ~/workspace
 git clone https://github.com/tianocore/edk2.git
 # The following is only needed once, after you cloned edk2
 make -C edk2/BaseTools
-# You may also have to issue git submodule init/update in edk2 if you want to enable Secure Boot
-git clone https://github.com/tianocore/edk2-platforms.git
-git clone https://github.com/tianocore/edk2-non-osi.git
-git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms/Platform/Broadcom/Bcm283x
+git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms
 # You *MUST* use a GCC5 toolchain (*NOT* GCC6 or later), such as the one from
 # https://releases.linaro.org/components/toolchain/binaries/5.5-2017.10/aarch64-linux-gnu/
 # GCC6 and later toolchains may result in Synchronous Exceptions. You have been warned!
@@ -68,9 +67,9 @@ tar -xJvf gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu.tar.xz
 export PATH=$PWD/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/bin:$PATH
 export GCC5_AARCH64_PREFIX=aarch64-linux-gnu-
 export WORKSPACE=$PWD
-export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms:$WORKSPACE/edk2-non-osi
+export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms
 . edk2/edksetup.sh
-build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Broadcom/Bcm283x/RaspberryPiPkg.dsc -b RELEASE -DBUILD_EPOCH=`date +%s`
+build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Raspberry/Pi3/RPi3.dsc -b RELEASE -DBUILD_EPOCH=`date +%s`
 ```
 
 # Booting the firmware
