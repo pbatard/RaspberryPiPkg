@@ -219,7 +219,7 @@ READ_LOCK_STATUS   = TRUE
   INF Platform/Raspberry/Pi3/Drivers/DisplayDxe/DisplayDxe.inf
 
   INF UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  INF Platform/Raspberry/Pi3/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
+  INF Silicon/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
   INF Platform/Raspberry/Pi3/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
   INF Platform/Raspberry/Pi3/Drivers/RpiFdtDxe/RpiFdtDxe.inf
   INF Platform/Raspberry/Pi3/Drivers/ConfigDxe/ConfigDxe.inf

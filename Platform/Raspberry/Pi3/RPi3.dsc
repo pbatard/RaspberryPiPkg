@@ -163,7 +163,7 @@
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
 !endif
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
-  GpioLib|Platform/Raspberry/Pi3/Library/GpioLib/GpioLib.inf
+  GpioLib|Silicon/Broadcom/Bcm283x/Library/GpioLib/GpioLib.inf
 
 [LibraryClasses.common.SEC]
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
@@ -530,7 +530,7 @@
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
   UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  Platform/Raspberry/Pi3/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
+  Silicon/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
   Platform/Raspberry/Pi3/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
   Platform/Raspberry/Pi3/Drivers/RpiFdtDxe/RpiFdtDxe.inf
   Platform/Raspberry/Pi3/Drivers/ConfigDxe/ConfigDxe.inf

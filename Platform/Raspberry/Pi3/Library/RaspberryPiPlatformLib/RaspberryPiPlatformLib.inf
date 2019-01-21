@@ -28,7 +28,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
- Platform/Raspberry/Pi3/RPi3.dec
+  Platform/Raspberry/Pi3/RPi3.dec
 
 [LibraryClasses]
   ArmLib

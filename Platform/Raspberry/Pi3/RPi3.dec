@@ -1,7 +1,7 @@
 ## @file
 #
 #  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
-#  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+#  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #
 #  This program and the accompanying materials are licensed and made available
 #  under the terms and conditions of the BSD License which accompanies this
@@ -22,6 +22,7 @@
 
 [Includes]
   Include
+  Silicon/Broadcom/Include
 
 [Protocols]
   gRaspberryPiFirmwareProtocolGuid = { 0x0ACA9535, 0x7AD0, 0x4286, { 0xB0, 0x2E, 0x87, 0xFA, 0x7E, 0x2A, 0x57, 0x11 } }
