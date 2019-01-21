@@ -16,7 +16,7 @@
 
 [Defines]
   INF_VERSION                    = 0x0001001A
-  BASE_NAME                      = RaspberryPiPlatformLib
+  BASE_NAME                      = PlatformLib
   FILE_GUID                      = 050182ef-f708-4148-b4bc-256cabf74fea
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0

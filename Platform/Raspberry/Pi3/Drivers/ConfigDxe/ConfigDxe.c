@@ -18,9 +18,9 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/DevicePathLib.h>
-#include <Library/GpioLib.h>
 #include <Protocol/RaspberryPiFirmware.h>
 #include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/Bcm2837Gpio.h>
 #include "ConfigDxeFormSetGuid.h"
 
 extern UINT8 ConfigDxeHiiBin[];

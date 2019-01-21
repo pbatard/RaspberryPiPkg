@@ -18,8 +18,8 @@
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
-#include <Library/GpioLib.h>
 #include <IndustryStandard/Bcm2836.h>
+#include <IndustryStandard/Bcm2837Gpio.h>
 
 STATIC
 VOID
