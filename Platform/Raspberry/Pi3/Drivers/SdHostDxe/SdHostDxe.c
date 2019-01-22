@@ -28,8 +28,8 @@
 #include <Protocol/EmbeddedExternalDevice.h>
 #include <Protocol/BlockIo.h>
 #include <Protocol/DevicePath.h>
-#include <Protocol/PiMmcHost.h>
-#include <Protocol/RaspberryPiFirmware.h>
+#include <Protocol/RpiMmcHost.h>
+#include <Protocol/RpiFirmware.h>
 
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/RpiFirmware.h>

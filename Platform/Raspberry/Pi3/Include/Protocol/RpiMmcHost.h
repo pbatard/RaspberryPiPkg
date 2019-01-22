@@ -13,8 +13,8 @@
  *
  **/
 
-#ifndef __PI_MMC_HOST_H__
-#define __PI_MMC_HOST_H__
+#ifndef __RASPBERRY_PI_MMC_HOST_PROTOCOL_H__
+#define __RASPBERRY_PI_MMC_HOST_PROTOCOL_H__
 
 /*
  * Global ID for the MMC Host Protocol
@@ -203,5 +203,4 @@ struct _EFI_MMC_HOST_PROTOCOL {
 #define MMC_HOST_HAS_ISMULTIBLOCK(Host) (Host->Revision >= MMC_HOST_PROTOCOL_REVISION && \
                                          Host->IsMultiBlock != NULL)
 
-#endif
-
+#endif /* __RASPBERRY_PI_MMC_HOST_PROTOCOL_H__ */

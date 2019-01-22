@@ -14,10 +14,10 @@
 
 #include <Uefi.h>
 
-#include <Protocol/RaspberryPiFirmware.h>
-#include <Protocol/Usb2HostController.h>
-#include <IndustryStandard/RpiFirmware.h>
 #include <IndustryStandard/Bcm2836.h>
+#include <IndustryStandard/RpiFirmware.h>
+#include <Protocol/Usb2HostController.h>
+#include <Protocol/RpiFirmware.h>
 
 #include <Guid/EventGroup.h>
 

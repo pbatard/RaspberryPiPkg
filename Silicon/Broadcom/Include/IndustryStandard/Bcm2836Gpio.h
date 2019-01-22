@@ -13,8 +13,8 @@
  *
  **/
 
-#ifndef __BCM2837GPIO_H__
-#define __BCM2837GPIO_H__
+#ifndef __BCM2836_GPIO_H__
+#define __BCM2836_GPIO_H__
 
 #define GPIO_BASE_ADDRESS  (BCM2836_SOC_REGISTERS + 0x00200000)
 
@@ -57,5 +57,4 @@ GpioPinFuncGet (
   IN  UINTN Pin
   );
 
-#endif // __BCM2837GPIO_H__
-
+#endif /* __BCM2836_GPIO_H__ */

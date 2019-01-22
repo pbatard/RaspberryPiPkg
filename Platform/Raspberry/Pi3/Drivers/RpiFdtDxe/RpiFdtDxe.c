@@ -21,7 +21,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <libfdt.h>
 
-#include <Protocol/RaspberryPiFirmware.h>
+#include <Protocol/RpiFirmware.h>
 
 #include <Guid/Fdt.h>
 

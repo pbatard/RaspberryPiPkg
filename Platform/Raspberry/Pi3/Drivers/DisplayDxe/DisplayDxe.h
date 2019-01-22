@@ -26,7 +26,7 @@
 #include <Library/TimerLib.h>
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/DevicePath.h>
-#include <Protocol/RaspberryPiFirmware.h>
+#include <Protocol/RpiFirmware.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Protocol/Cpu.h>
 

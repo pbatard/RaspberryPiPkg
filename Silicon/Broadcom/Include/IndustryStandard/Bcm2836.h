@@ -72,4 +72,4 @@
 #define BCM2836_INTC_TIMER_CONTROL_OFFSET                   0x00000040
 #define BCM2836_INTC_TIMER_PENDING_OFFSET                   0x00000060
 
-#endif //__BCM2836_H__
+#endif /*__BCM2836_H__ */

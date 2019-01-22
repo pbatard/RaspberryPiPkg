@@ -13,8 +13,8 @@
  *
  **/
 
-#ifndef __DW_USB_H__
-#define __DW_USB_H__
+#ifndef __DW_USB_PROTOCOL_H__
+#define __DW_USB_PROTOCOL_H__
 
 //
 // Protocol GUID
@@ -50,4 +50,4 @@ struct _DW_USB_PROTOCOL {
 
 extern EFI_GUID gDwUsbProtocolGuid;
 
-#endif
+#endif /* __DW_USB_PROTOCOL_H__ */

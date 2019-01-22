@@ -13,8 +13,8 @@
  *
  **/
 
-#ifndef __BCM2836SDHOST_H__
-#define __BCM2836SDHOST_H__
+#ifndef __BCM2836_SDHOST_H__
+#define __BCM2836_SDHOST_H__
 
 #define SDHOST_BASE_ADDRESS         (BCM2836_SOC_REGISTERS + 0x00202000)
 #define SDHOST_REG(X)               (SDHOST_BASE_ADDRESS + (X))
@@ -89,4 +89,4 @@
 #define CMD8_SD_ARG       (0x0UL << 12 | BIT8 | 0xCEUL << 0)
 #define CMD8_MMC_ARG      (0)
 
-#endif //__BCM2836SDHOST_H__
+#endif /*__BCM2836_SDHOST_H__ */

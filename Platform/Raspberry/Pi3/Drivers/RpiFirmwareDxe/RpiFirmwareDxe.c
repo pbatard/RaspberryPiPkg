@@ -28,7 +28,7 @@
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/RpiFirmware.h>
 
-#include <Protocol/RaspberryPiFirmware.h>
+#include <Protocol/RpiFirmware.h>
 
 //
 // The number of statically allocated buffer pages

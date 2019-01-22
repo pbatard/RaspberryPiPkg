@@ -12,8 +12,8 @@
  *
  **/
 
-#ifndef __BCM2836SDIO_H__
-#define __BCM2836SDIO_H__
+#ifndef __BCM2836_SDIO_H__
+#define __BCM2836_SDIO_H__
 
 //MMC/SD/SDIO1 register definitions.
 #define MMCHS1BASE        0x3F300000
@@ -196,4 +196,4 @@
 #define CMD_WRITE_SINGLE_BLOCK   CMD24
 #define CMD_WRITE_MULTIPLE_BLOCK CMD25
 
-#endif //__BCM2836SDIO_H__
+#endif /* __BCM2836_SDIO_H__ */

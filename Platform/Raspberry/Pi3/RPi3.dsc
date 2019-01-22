@@ -597,7 +597,7 @@
   #
   Platform/Raspberry/Pi3/Drivers/SdHostDxe/SdHostDxe.inf
   Platform/Raspberry/Pi3/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
-  Platform/Raspberry/Pi3/Drivers/PiMmcDxe/MmcDxe.inf
+  Platform/Raspberry/Pi3/Drivers/MmcDxe/MmcDxe.inf
 
   #
   # Networking stack

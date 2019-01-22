@@ -30,6 +30,9 @@
  *
  **/
 
+#ifndef __RASPBERRY_PI_FIRMWARE_H__
+#define __RASPBERRY_PI_FIRMWARE_H__
+
 #define RPI_FW_MBOX_CHANNEL                                 0x00000008
 
 #define RPI_FW_RESP_SUCCESS                                 0x80000000
@@ -91,3 +94,5 @@
 #define RPI_FW_CLOCK_RATE_PWM                               0x00000000a
 
 #define RPI_FB_MBOX_CHANNEL                                 0x1
+
+#endif /* __RASPBERRY_PI_FIRMWARE_H__ */

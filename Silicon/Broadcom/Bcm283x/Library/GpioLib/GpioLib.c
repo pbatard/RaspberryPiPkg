@@ -19,7 +19,7 @@
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <IndustryStandard/Bcm2836.h>
-#include <IndustryStandard/Bcm2837Gpio.h>
+#include <IndustryStandard/Bcm2836Gpio.h>
 
 STATIC
 VOID

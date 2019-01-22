@@ -12,8 +12,8 @@
  *
  **/
 
-#ifndef __EXTENDED_TEXT_OUT_H__
-#define __EXTENDED_TEXT_OUT_H__
+#ifndef __EXTENDED_TEXT_OUT_PROTOCOL_H__
+#define __EXTENDED_TEXT_OUT_PROTOCOL_H__
 
 #include <Protocol/SimpleTextOut.h>
 #include <Protocol/GraphicsOutput.h>
@@ -33,4 +33,4 @@ struct _EXTENDED_TEXT_OUTPUT_PROTOCOL {
 
 extern EFI_GUID gExtendedTextOutputProtocolGuid;
 
-#endif /* __EXTENDED_TEXT_OUT__ */
+#endif /* __EXTENDED_TEXT_OUT_PROTOCOL_H__ */

@@ -32,10 +32,10 @@
  **/
 
 #include <Base.h>
-#include <Protocol/Smbios.h>
-#include <Protocol/RaspberryPiFirmware.h>
 #include <IndustryStandard/SmBios.h>
 #include <IndustryStandard/RpiFirmware.h>
+#include <Protocol/Smbios.h>
+#include <Protocol/RpiFirmware.h>
 #include <Guid/SmBios.h>
 #include <Library/DebugLib.h>
 #include <Library/UefiDriverEntryPoint.h>

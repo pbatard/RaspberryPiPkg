@@ -41,7 +41,7 @@
 [Guids]
 
 [Protocols]
-  gRaspberryPiMmcHostProtocolGuid ## PRODUCES
+  gRaspberryPiMmcHostProtocolGuid  ## PRODUCES
   gRaspberryPiFirmwareProtocolGuid ## CONSUMES
 
 [Pcd]
