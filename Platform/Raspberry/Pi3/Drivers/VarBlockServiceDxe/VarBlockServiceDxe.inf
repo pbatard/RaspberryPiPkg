@@ -58,7 +58,6 @@
 
 [Guids]
   gEfiEventVirtualAddressChangeGuid
-  gRaspberryPiEventResetGuid
   gEfiEventReadyToBootGuid
 
 [Protocols]
@@ -67,6 +66,7 @@
   gEfiBlockIoProtocolGuid
   gEfiFirmwareVolumeBlockProtocolGuid           # PROTOCOL SOMETIMES_PRODUCED
   gEfiDevicePathProtocolGuid                    # PROTOCOL SOMETIMES_PRODUCED
+  gEfiResetNotificationProtocolGuid             # CONSUMES
 
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
