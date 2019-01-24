@@ -27,7 +27,6 @@
 #include <Protocol/SimpleFileSystem.h>
 #include <Protocol/BlockIo.h>
 #include <Protocol/LoadedImage.h>
-#include <Protocol/ResetNotification.h>
 
 typedef struct {
   union {

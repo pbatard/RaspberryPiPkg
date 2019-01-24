@@ -6,6 +6,7 @@ the [latest ATF](https://github.com/ARM-software/arm-trusted-firmware)
 (commit c3859557) using Linaro's GCC 5.5 compiler with:
 
 ```
+export CROSS_COMPILE=/usr/src/gcc-linaro-5.5.0-2017.10-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
 make PLAT=rpi3 PRELOADED_BL33_BASE=0x30000 RPI3_PRELOADED_DTB_BASE=0x10000 SUPPORT_VFP=1 RPI3_USE_UEFI_MAP=1 fip all
 ```
 

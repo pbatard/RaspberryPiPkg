@@ -1,8 +1,7 @@
 /** @file
  *
- *  Copyright (c) 2019, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2015, Red Hat, Inc.
+ *  Copyright (C) 2015, Red Hat, Inc.
  *  Copyright (c) 2006-2014, Intel Corporation. All rights reserved.
  *
  *  This program and the accompanying materials
@@ -184,20 +183,6 @@ DumpVars (
 }
 
 
-STATIC
-VOID
-EFIAPI
-DumpVarsResetEvent (
-  IN EFI_RESET_TYPE  ResetType,
-  IN EFI_STATUS      ResetStatus,
-  IN UINTN           DataSize,
-  IN VOID            *ResetData OPTIONAL
-  )
-{
-  DumpVars (NULL, NULL);
-}
-
-
 VOID
 ReadyToBootHandler (
   IN EFI_EVENT Event,
@@ -236,23 +221,18 @@ InstallDumpVarEventHandlers (
   )
 {
   EFI_STATUS Status;
+  EFI_EVENT ResetEvent;
   EFI_EVENT ReadyToBootEvent;
-  EFI_RESET_NOTIFICATION_PROTOCOL *ResetNotify;
 
-  Status = gBS->LocateProtocol (
-                  &gEfiResetNotificationProtocolGuid,
+  Status = gBS->CreateEventEx (
+                  EVT_NOTIFY_SIGNAL,
+                  TPL_CALLBACK,
+                  DumpVars,
                   NULL,
-                  (VOID**) &ResetNotify
+                  &gRaspberryPiEventResetGuid,
+                  &ResetEvent
                 );
-  if (!EFI_ERROR (Status)) {
-    Status = ResetNotify->RegisterResetNotify (
-               ResetNotify,
-               DumpVarsResetEvent
-             );
-    ASSERT_EFI_ERROR (Status);
-  } else {
-    DEBUG ((DEBUG_WARN, "Reset notification protocol not found - Configuration will not be saved!\n"));
-  }
+  ASSERT_EFI_ERROR (Status);
 
   Status = gBS->CreateEventEx (
                   EVT_NOTIFY_SIGNAL,
