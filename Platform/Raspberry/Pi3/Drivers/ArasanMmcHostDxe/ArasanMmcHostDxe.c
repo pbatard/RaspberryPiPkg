@@ -202,9 +202,9 @@ CalculateClockFrequencyDivisor (
   UINT32 Divisor;
   UINT32 BaseFrequency = 0;
 
-  Status = mFwProtocol->GetClockRate (RPI_FW_CLOCK_RATE_EMMC, &BaseFrequency);
+  Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_EMMC, &BaseFrequency);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "Couldn't get RPI_FW_CLOCK_RATE_EMMC\n"));
+    DEBUG ((DEBUG_ERROR, "Couldn't get RPI_MBOX_CLOCK_RATE_EMMC\n"));
     return Status;
   }
 

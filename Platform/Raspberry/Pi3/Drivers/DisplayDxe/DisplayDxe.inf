@@ -56,10 +56,10 @@
   gEfiLoadedImageProtocolGuid
   gEfiDevicePathProtocolGuid
   gEfiGraphicsOutputProtocolGuid
-  gRaspberryPiFirmwareProtocolGuid
   gEfiCpuArchProtocolGuid
   gEfiSimpleFileSystemProtocolGuid
   gEfiSimpleTextInputExProtocolGuid
+  gRaspberryPiFirmwareProtocolGuid
 
 [Pcd]
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableVModes

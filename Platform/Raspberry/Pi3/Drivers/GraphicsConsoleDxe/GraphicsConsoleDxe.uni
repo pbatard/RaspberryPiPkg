@@ -16,4 +16,3 @@
 #string STR_MODULE_ABSTRACT             #language en-US "Console support on graphic devices"
 
 #string STR_MODULE_DESCRIPTION          #language en-US "Install SimpleTextOutputProtocol on GraphicsOutputProtocol devices\n"
-

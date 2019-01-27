@@ -47,10 +47,6 @@
   gRaspberryPiTokenSpaceGuid.PcdBootEpochSeconds|0x0|UINT64|0x00000008
 
 [PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
-  gRaspberryPiTokenSpaceGuid.PcdHypEnable|0|UINT32|0x00000009
-  gRaspberryPiTokenSpaceGuid.PcdHypLogMask|0|UINT32|0x0000000a
-  gRaspberryPiTokenSpaceGuid.PcdHypWindowsDebugHook|0|UINT32|0x0000000b
-  gRaspberryPiTokenSpaceGuid.PcdHypWin2000Mask|0|UINT32|0x0000000c
   gRaspberryPiTokenSpaceGuid.PcdCpuClock|0|UINT32|0x0000000d
   gRaspberryPiTokenSpaceGuid.PcdSdIsArasan|0|UINT32|0x0000000e
   gRaspberryPiTokenSpaceGuid.PcdMmcForce1Bit|0|UINT32|0x0000000f

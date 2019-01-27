@@ -26,7 +26,7 @@
 #include <Library/UefiLib.h>
 
 #include <IndustryStandard/Bcm2836.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 
 #include <Protocol/RpiFirmware.h>
 
@@ -203,20 +203,20 @@ RpiFirmwareSetPowerState (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_SET_POWER_STATE;
+  Cmd->TagHead.TagId          = RPI_MBOX_SET_POWER_STATE;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->TagBody.DeviceId       = DeviceId;
-  Cmd->TagBody.PowerState     = (PowerState ? RPI_FW_POWER_STATE_ENABLE : 0) |
-                                (Wait ? RPI_FW_POWER_STATE_WAIT : 0);
+  Cmd->TagBody.PowerState     = (PowerState ? RPI_MBOX_POWER_STATE_ENABLE : 0) |
+                                (Wait ? RPI_MBOX_POWER_STATE_WAIT : 0);
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -224,7 +224,7 @@ RpiFirmwareSetPowerState (
   }
 
   if (!EFI_ERROR (Status) &&
-      PowerState ^ (Cmd->TagBody.PowerState & RPI_FW_POWER_STATE_ENABLE)) {
+      PowerState ^ (Cmd->TagBody.PowerState & RPI_MBOX_POWER_STATE_ENABLE)) {
     DEBUG ((DEBUG_ERROR, "%a: failed to %sable power for device %d\n",
       __FUNCTION__, PowerState ? "en" : "dis", DeviceId));
     Status = EFI_DEVICE_ERROR;
@@ -269,17 +269,17 @@ RpiFirmwareGetArmMemory (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_ARM_MEMSIZE;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_ARM_MEMSIZE;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -326,17 +326,17 @@ RpiFirmwareGetMacAddress (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_MAC_ADDRESS;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_MAC_ADDRESS;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -381,17 +381,17 @@ RpiFirmwareGetSerial (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_BOARD_SERIAL;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_BOARD_SERIAL;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -436,17 +436,17 @@ RpiFirmwareGetModel (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_BOARD_MODEL;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_BOARD_MODEL;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -491,17 +491,17 @@ RpiFirmwareGetModelRevision (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_BOARD_REVISION;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_BOARD_REVISION;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -582,17 +582,17 @@ RpiFirmwareGetFbSize (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_FB_GEOMETRY;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_FB_GEOMETRY;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox  transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -624,16 +624,16 @@ RpiFirmwareFreeFb (VOID)
   Cmd->BufferHead.BufferSize   = sizeof (*Cmd);
   Cmd->BufferHead.Response     = 0;
 
-  Cmd->FreeFbTag.TagId         = RPI_FW_FREE_FB;
+  Cmd->FreeFbTag.TagId         = RPI_MBOX_FREE_FB;
   Cmd->FreeFbTag.TagSize       = 0;
   Cmd->FreeFbTag.TagValueSize  = 0;
   Cmd->EndTag                  = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -673,30 +673,30 @@ RpiFirmwareAllocFb (
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
 
-  Cmd->PhysSizeTag.TagId      = RPI_FW_SET_FB_PGEOM;
+  Cmd->PhysSizeTag.TagId      = RPI_MBOX_SET_FB_PGEOM;
   Cmd->PhysSizeTag.TagSize    = sizeof (Cmd->PhysSize);
   Cmd->PhysSize.Width         = Width;
   Cmd->PhysSize.Height        = Height;
-  Cmd->VirtSizeTag.TagId      = RPI_FW_SET_FB_VGEOM;
+  Cmd->VirtSizeTag.TagId      = RPI_MBOX_SET_FB_VGEOM;
   Cmd->VirtSizeTag.TagSize    = sizeof (Cmd->VirtSize);
   Cmd->VirtSize.Width         = Width;
   Cmd->VirtSize.Height        = Height;
-  Cmd->DepthTag.TagId         = RPI_FW_SET_FB_DEPTH;
+  Cmd->DepthTag.TagId         = RPI_MBOX_SET_FB_DEPTH;
   Cmd->DepthTag.TagSize       = sizeof (Cmd->Depth);
   Cmd->Depth.Depth            = Depth;
-  Cmd->AllocFbTag.TagId       = RPI_FW_ALLOC_FB;
+  Cmd->AllocFbTag.TagId       = RPI_MBOX_ALLOC_FB;
   Cmd->AllocFbTag.TagSize     = sizeof (Cmd->AllocFb);
   Cmd->AllocFb.AlignmentBase  = 32;
-  Cmd->PitchTag.TagId         = RPI_FW_GET_FB_LINELENGTH;
+  Cmd->PitchTag.TagId         = RPI_MBOX_GET_FB_LINELENGTH;
   Cmd->PitchTag.TagSize       = sizeof (Cmd->Pitch);
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -751,23 +751,23 @@ RpiFirmwareGetCommmandLine (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd) + BufferSize + sizeof (UINT32);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_GET_COMMAND_LINE;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_COMMAND_LINE;
   Cmd->TagHead.TagSize        = BufferSize;
   Cmd->TagHead.TagValueSize   = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
     return EFI_DEVICE_ERROR;
   }
 
-  Cmd->TagHead.TagValueSize &= ~RPI_FW_VALUE_SIZE_RESPONSE_MASK;
+  Cmd->TagHead.TagValueSize &= ~RPI_MBOX_VALUE_SIZE_RESPONSE_MASK;
   if (Cmd->TagHead.TagValueSize >= BufferSize &&
       Cmd->CommandLine[Cmd->TagHead.TagValueSize - 1] != '\0') {
     DEBUG ((DEBUG_ERROR, "%a: insufficient buffer size\n", __FUNCTION__));
@@ -823,19 +823,19 @@ RpiFirmwareSetClockRate (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_SET_CLOCK_RATE;
+  Cmd->TagHead.TagId          = RPI_MBOX_SET_CLOCK_RATE;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->TagBody.ClockId        = ClockId;
   Cmd->TagBody.ClockRate      = ClockRate;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -889,12 +889,12 @@ RpiFirmwareGetClockRate (
   Cmd->TagBody.ClockId        = ClockId;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -913,7 +913,7 @@ RpiFirmwareGetCurrentClockRate (
   OUT UINT32    *ClockRate
   )
 {
-  return RpiFirmwareGetClockRate (ClockId, RPI_FW_GET_CLOCK_RATE, ClockRate);
+  return RpiFirmwareGetClockRate (ClockId, RPI_MBOX_GET_CLOCK_RATE, ClockRate);
 }
 
 STATIC
@@ -924,7 +924,7 @@ RpiFirmwareGetMaxClockRate (
   OUT UINT32    *ClockRate
   )
 {
-  return RpiFirmwareGetClockRate (ClockId, RPI_FW_GET_MAX_CLOCK_RATE, ClockRate);
+  return RpiFirmwareGetClockRate (ClockId, RPI_MBOX_GET_MAX_CLOCK_RATE, ClockRate);
 }
 
 STATIC
@@ -935,7 +935,7 @@ RpiFirmwareGetMinClockRate (
   OUT UINT32    *ClockRate
   )
 {
-  return RpiFirmwareGetClockRate (ClockId, RPI_FW_GET_MIN_CLOCK_RATE, ClockRate);
+  return RpiFirmwareGetClockRate (ClockId, RPI_MBOX_GET_MIN_CLOCK_RATE, ClockRate);
 }
 
 #pragma pack()
@@ -954,7 +954,7 @@ typedef struct {
 
 STATIC
 VOID
-RpiFirmwareLedSet (
+RpiFirmwareSetLed (
   IN  BOOLEAN On
   )
 {
@@ -972,7 +972,7 @@ RpiFirmwareLedSet (
 
   Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
   Cmd->BufferHead.Response    = 0;
-  Cmd->TagHead.TagId          = RPI_FW_SET_GPIO;
+  Cmd->TagHead.TagId          = RPI_MBOX_SET_GPIO;
   Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
   /*
    * GPIO_PIN_2 = Activity LED
@@ -986,12 +986,12 @@ RpiFirmwareLedSet (
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->EndTag                 = 0;
 
-  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_FW_MBOX_CHANNEL, &Result);
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
 
   ReleaseSpinLock (&mMailboxLock);
 
   if (EFI_ERROR (Status) ||
-      Cmd->BufferHead.Response != RPI_FW_RESP_SUCCESS) {
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
     DEBUG ((DEBUG_ERROR,
       "%a: mailbox  transaction error: Status == %r, Response == 0x%x\n",
       __FUNCTION__, Status, Cmd->BufferHead.Response));
@@ -1009,7 +1009,7 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL mRpiFirmwareProtocol = {
   RpiFirmwareAllocFb,
   RpiFirmwareFreeFb,
   RpiFirmwareGetFbSize,
-  RpiFirmwareLedSet,
+  RpiFirmwareSetLed,
   RpiFirmwareGetSerial,
   RpiFirmwareGetModel,
   RpiFirmwareGetModelRevision,

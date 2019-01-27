@@ -288,7 +288,7 @@ UpdateBootArgs (
 **/
 EFI_STATUS
 EFIAPI
-RpiFdtDxeInitialize (
+FdtDxeInitialize (
   IN EFI_HANDLE         ImageHandle,
   IN EFI_SYSTEM_TABLE   *SystemTable
   )

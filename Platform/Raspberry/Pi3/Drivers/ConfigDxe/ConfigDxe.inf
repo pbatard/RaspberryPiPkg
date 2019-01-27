@@ -59,10 +59,6 @@
   gRaspberryPiConfigAppliedProtocolGuid ## PRODUCES
 
 [Pcd]
-  gRaspberryPiTokenSpaceGuid.PcdHypEnable
-  gRaspberryPiTokenSpaceGuid.PcdHypLogMask
-  gRaspberryPiTokenSpaceGuid.PcdHypWindowsDebugHook
-  gRaspberryPiTokenSpaceGuid.PcdHypWin2000Mask
   gRaspberryPiTokenSpaceGuid.PcdCpuClock
   gRaspberryPiTokenSpaceGuid.PcdSdIsArasan
   gRaspberryPiTokenSpaceGuid.PcdMmcForce1Bit

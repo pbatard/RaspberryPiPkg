@@ -2,7 +2,14 @@
  *
  *  Copyright (c) 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *
- *  SPDX-License-Identifier: GPL-2.0+
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
  *
  **/
 
@@ -125,7 +132,7 @@ DriverStart (
     return Status;
   }
 
-  Status = mFwProtocol->SetPowerState (RPI_FW_POWER_STATE_USB_HCD, TRUE, TRUE);
+  Status = mFwProtocol->SetPowerState (RPI_MBOX_POWER_STATE_USB_HCD, TRUE, TRUE);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Couldn't power on USB: %r\n", Status));
     return Status;
@@ -155,7 +162,7 @@ Exit:
 
     DestroyDwUsbHc (DwHc);
 
-    mFwProtocol->SetPowerState (RPI_FW_POWER_STATE_USB_HCD, FALSE, FALSE);
+    mFwProtocol->SetPowerState (RPI_MBOX_POWER_STATE_USB_HCD, FALSE, FALSE);
 
     gBS->CloseProtocol (
            Controller,

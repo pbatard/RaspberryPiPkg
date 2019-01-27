@@ -33,7 +33,7 @@
 
 #include <Base.h>
 #include <IndustryStandard/SmBios.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 #include <Protocol/Smbios.h>
 #include <Protocol/RpiFirmware.h>
 #include <Guid/SmBios.h>
@@ -753,7 +753,7 @@ ProcessorInfoUpdateSmbiosType4 (
   mProcessorInfoType4.EnabledCoreCount = (UINT8)MaxCpus;
   mProcessorInfoType4.ThreadCount = (UINT8)MaxCpus;
 
-  Status = mFwProtocol->GetMaxClockRate (RPI_FW_CLOCK_RATE_ARM, &Rate);
+  Status = mFwProtocol->GetMaxClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_ERROR, "Couldn't get the max CPU speed: %r\n", Status));
   } else {
@@ -761,7 +761,7 @@ ProcessorInfoUpdateSmbiosType4 (
     DEBUG ((DEBUG_INFO, "Max CPU speed: %uHz\n", Rate));
   }
 
-  Status = mFwProtocol->GetClockRate (RPI_FW_CLOCK_RATE_ARM, &Rate);
+  Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_ERROR, "Couldn't get the current CPU speed: %r\n", Status));
   } else {

@@ -1,7 +1,7 @@
 #/** @file
 #
 #  Copyright (c) 2017, Andrei Warkentin <andrey.warkentin@gmail.com>
-#  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
+#  Copyright (c) 2016 Linaro, Ltd. All rights reserved.
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -15,39 +15,34 @@
 
 [Defines]
   INF_VERSION                    = 0x0001001A
-  BASE_NAME                      = RpiFdtDxe
-  FILE_GUID                      = 8505280f-109e-437e-9fe4-1aa09c7074d9
+  BASE_NAME                      = InterruptDxe
+  FILE_GUID                      = 3944f2d7-2e09-4fc0-9e98-008375641453
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
-  ENTRY_POINT                    = RpiFdtDxeInitialize
+  ENTRY_POINT                    = InterruptDxeInitialize
 
 [Sources]
-  RpiFdtDxe.c
+  InterruptDxe.c
 
 [Packages]
-  EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
-  MdeModulePkg/MdeModulePkg.dec
-  Platform/Raspberry/Pi3/RPi3.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/Broadcom/Bcm283x/Bcm283x.dec
 
 [LibraryClasses]
   BaseLib
   DebugLib
-  DxeServicesLib
-  FdtLib
-  MemoryAllocationLib
+  IoLib
   UefiBootServicesTableLib
+  UefiLib
   UefiDriverEntryPoint
 
-[Guids]
-  gFdtTableGuid
-  gRaspberryPiFdtFileGuid
-
 [Protocols]
-  gRaspberryPiFirmwareProtocolGuid              ## CONSUMES
-
-[Depex]
-  gRaspberryPiFirmwareProtocolGuid
+  gHardwareInterruptProtocolGuid  ## PRODUCES
+  gEfiCpuArchProtocolGuid         ## CONSUMES ## NOTIFY
 
 [FixedPcd]
-  gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress
+  gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
+
+[Depex]
+  TRUE

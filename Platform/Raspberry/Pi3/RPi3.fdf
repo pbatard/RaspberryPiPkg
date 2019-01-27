@@ -219,9 +219,9 @@ READ_LOCK_STATUS   = TRUE
   INF Platform/Raspberry/Pi3/Drivers/DisplayDxe/DisplayDxe.inf
 
   INF UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  INF Silicon/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
+  INF Silicon/Broadcom/Bcm283x/Drivers/InterruptDxe/InterruptDxe.inf
   INF Platform/Raspberry/Pi3/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
-  INF Platform/Raspberry/Pi3/Drivers/RpiFdtDxe/RpiFdtDxe.inf
+  INF Platform/Raspberry/Pi3/Drivers/FdtDxe/FdtDxe.inf
   INF Platform/Raspberry/Pi3/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
@@ -277,7 +277,6 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
   INF NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
   INF NetworkPkg/TcpDxe/TcpDxe.inf
-# INF NetworkPkg/IScsiDxe/IScsiDxe.inf
 
   #
   # SCSI Bus and Disk Driver

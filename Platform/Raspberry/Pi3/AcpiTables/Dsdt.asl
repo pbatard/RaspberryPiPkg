@@ -250,7 +250,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
     }
 
     // Description: GPIO
-    Device (GPIO)
+    Device (GPI0)
     {
       Name (_HID, "BCM2845")
       Name (_CID, "BCMGPIO")

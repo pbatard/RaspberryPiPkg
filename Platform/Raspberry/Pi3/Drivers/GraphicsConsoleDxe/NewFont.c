@@ -285,4 +285,3 @@ EFI_NARROW_GLYPH  gUsStdNarrowGlyphData[] = {
 
 // Get available Unicode glyphs narrow fonts(8*19 pixels) size.
 UINT32 mNarrowFontSize = sizeof (gUsStdNarrowGlyphData);
-

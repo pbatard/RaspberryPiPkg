@@ -5,17 +5,24 @@
  *  Copyright (c) 2014 Marek Vasut <marex@denx.de>
  *  Copyright (c) 2012 Oleksandr Tymoshenko <gonzo@freebsd.org>
  *
- *  SPDX-License-Identifier: GPL-2.0+
+ *
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
  *
  **/
 
-#ifndef _DWUSBHOSTDXE_H_
-#define _DWUSBHOSTDXE_H_
+#ifndef __DWUSBHOSTDXE_H__
+#define __DWUSBHOSTDXE_H__
 
 #include <Uefi.h>
 
 #include <IndustryStandard/Bcm2836.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 #include <Protocol/Usb2HostController.h>
 #include <Protocol/RpiFirmware.h>
 
@@ -155,4 +162,4 @@ DwHcQuiesce (
   IN  DWUSB_OTGHC_DEV *DwHc
   );
 
-#endif //_DWUSBHOSTDXE_H_
+#endif /* __DWUSBHOSTDXE_H__ */

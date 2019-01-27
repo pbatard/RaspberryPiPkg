@@ -24,11 +24,11 @@
 #include <Library/PcdLib.h>
 #include <Library/IoLib.h>
 #include <Library/TimerLib.h>
+#include <Library/MemoryAllocationLib.h>
+#include <Protocol/Cpu.h>
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/DevicePath.h>
 #include <Protocol/RpiFirmware.h>
-#include <Library/MemoryAllocationLib.h>
-#include <Protocol/Cpu.h>
 
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL gDisplayProto;
 extern EFI_COMPONENT_NAME_PROTOCOL  gComponentName;

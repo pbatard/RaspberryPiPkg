@@ -18,7 +18,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/DevicePathLib.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <Protocol/RpiFirmware.h>
 #include "ConfigDxeFormSetGuid.h"
@@ -214,7 +214,7 @@ ApplyVariables (
        * Maximum: 1.2GHz on RPi 3, 1.4GHz on RPi 3B+, unless
        * overridden with arm_freq=xxx in config.txt.
        */
-      Status = mFwProtocol->GetMaxClockRate (RPI_FW_CLOCK_RATE_ARM, &Rate);
+      Status = mFwProtocol->GetMaxClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
       if (Status != EFI_SUCCESS) {
         DEBUG ((DEBUG_ERROR, "Couldn't get the max CPU speed, leaving as is: %r\n", Status));
       }
@@ -225,13 +225,13 @@ ApplyVariables (
 
   if (Rate != 0) {
     DEBUG ((DEBUG_INFO, "Setting CPU speed to %uHz\n", Rate));
-    Status = mFwProtocol->SetClockRate (RPI_FW_CLOCK_RATE_ARM, Rate);
+    Status = mFwProtocol->SetClockRate (RPI_MBOX_CLOCK_RATE_ARM, Rate);
     if (Status != EFI_SUCCESS) {
       DEBUG ((DEBUG_ERROR, "Couldn't set the CPU speed: %r\n", Status));
     }
   }
 
-  Status = mFwProtocol->GetClockRate (RPI_FW_CLOCK_RATE_ARM, &Rate);
+  Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_ERROR, "Couldn't get the CPU speed: %r\n", Status));
   } else {

@@ -5,7 +5,13 @@
  *  Copyright (c) 2014 Marek Vasut <marex@denx.de>
  *  Copyright (c) 2012 Oleksandr Tymoshenko <gonzo@freebsd.org>
  *
- *  SPDX-License-Identifier: GPL-2.0+
+ *  This program and the accompanying materials
+ *  are licensed and made available under the terms and conditions of the BSD License
+ *  which accompanies this distribution.  The full text of the license may be found at
+ *  http://opensource.org/licenses/bsd-license.php
+ *
+ *  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
  *
  **/
 
@@ -1544,7 +1550,7 @@ CreateDwUsbHc (
   DwHc->DwUsbOtgHc.ClearRootHubPortFeature        = DwHcClearRootHubPortFeature;
   DwHc->DwUsbOtgHc.MajorRevision                  = 0x02;
   DwHc->DwUsbOtgHc.MinorRevision                  = 0x00;
-  DwHc->DwUsbBase                                 = BCM2836_USB_DW2_BASE_ADDRESS;
+  DwHc->DwUsbBase                                 = DW2_USB_BASE_ADDRESS;
 
   Pages = EFI_SIZE_TO_PAGES (DWC2_STATUS_BUF_SIZE);
   DwHc->StatusBuffer = AllocatePages (Pages);

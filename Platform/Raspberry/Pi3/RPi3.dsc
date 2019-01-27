@@ -40,7 +40,7 @@
   DEFINE DEBUG_PRINT_ERROR_LEVEL = 0x8000004F
 
 !ifndef BUILD_EPOCH
-  DEFINE BUILD_EPOCH             = 1546300800
+  DEFINE BUILD_EPOCH             = 1548979200
 !endif
 ################################################################################
 #
@@ -353,7 +353,6 @@
 [LibraryClasses.common.UEFI_DRIVER]
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
 
-
 ################################################################################
 #
 # Pcd Section - list of all EDK II PCD Entries defined by this Platform
@@ -530,9 +529,9 @@
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
   UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  Silicon/Broadcom/Bcm283x/Drivers/Bcm2836InterruptDxe/Bcm2836InterruptDxe.inf
+  Silicon/Broadcom/Bcm283x/Drivers/InterruptDxe/InterruptDxe.inf
   Platform/Raspberry/Pi3/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
-  Platform/Raspberry/Pi3/Drivers/RpiFdtDxe/RpiFdtDxe.inf
+  Platform/Raspberry/Pi3/Drivers/FdtDxe/FdtDxe.inf
   Platform/Raspberry/Pi3/Drivers/ConfigDxe/ConfigDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
@@ -612,7 +611,6 @@
   MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
   NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
   NetworkPkg/TcpDxe/TcpDxe.inf
-# NetworkPkg/IScsiDxe/IScsiDxe.inf 
 
   #
   # UEFI application (Shell Embedded Boot Loader)

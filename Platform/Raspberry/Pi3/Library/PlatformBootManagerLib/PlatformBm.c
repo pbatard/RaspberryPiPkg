@@ -515,25 +515,17 @@ ExitBootServicesHandler (
   )
 {
   EFI_STATUS Status;
-  CHAR16 *OsBootStr;
-  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Green;
-  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Black;
-  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Yellow;
   //
   // Long enough to occlude the string printed
   // in PlatformBootManagerWaitCallback.
   //
-  STATIC CHAR16 *OsBootStrEL1 = L"Exiting UEFI and booting EL1 OS kernel!\r\n";
-  STATIC CHAR16 *OsBootStrEL2 = L"Exiting UEFI and booting EL2 OS kernel!\r\n";
+  STATIC CHAR16 *OsBootStr = L"Exiting UEFI and booting EL2 OS kernel!\r\n";
+  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Green;
+  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Black;
+  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Yellow;
 
   if (!PcdGet32 (PcdDebugShowUEFIExit)) {
     return;
-  }
-
-  if (PcdGet32 (PcdHypEnable)) {
-    OsBootStr = OsBootStrEL1;
-  } else {
-    OsBootStr = OsBootStrEL2;
   }
 
   Green.Raw = 0x00007F00;

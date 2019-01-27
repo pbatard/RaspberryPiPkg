@@ -35,7 +35,7 @@
 
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/Bcm2836Sdio.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 
 #define MAX_RETRY_COUNT (1000 * 20)
 

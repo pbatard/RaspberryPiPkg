@@ -128,4 +128,4 @@ typedef struct {
 
 extern EFI_GUID gRaspberryPiFirmwareProtocolGuid;
 
-#endif
+#endif /* __RASPBERRY_PI_FIRMWARE_PROTOCOL_H__ */

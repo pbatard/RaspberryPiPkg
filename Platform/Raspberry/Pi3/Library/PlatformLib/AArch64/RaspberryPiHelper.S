@@ -16,7 +16,7 @@
 #include <AsmMacroIoLibV8.h>
 #include <Library/ArmLib.h>
 #include <IndustryStandard/Bcm2836.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 
 #define MAX_TRIES     0x100000
 
@@ -44,7 +44,7 @@
 ASM_FUNC (ArmPlatformPeiBootAction)
     adr     x0, .Lmeminfo_buffer
     mov     x1, #FixedPcdGet64 (PcdDmaDeviceOffset)
-    orr     x0, x0, #RPI_FW_MBOX_CHANNEL
+    orr     x0, x0, #RPI_MBOX_VC_CHANNEL
     add     x0, x0, x1
 
     MOV32   (x4, BCM2836_MBOX_BASE_ADDRESS)
@@ -68,7 +68,7 @@ ASM_FUNC (ArmPlatformPeiBootAction)
 .Lmeminfo_buffer:
     .long   .Lbuffer_size
     .long   0x0
-    .long   RPI_FW_GET_ARM_MEMSIZE
+    .long   RPI_MBOX_GET_ARM_MEMSIZE
     .long   8                           // buf size
     .long   0                           // input len
     .long   0                           // mem base

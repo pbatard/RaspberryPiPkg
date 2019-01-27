@@ -336,11 +336,12 @@ MmcDriverBindingStop (
     // Close gRaspberryPiMmcHostProtocolGuid
     Status = gBS->CloseProtocol (
                     Controller,
-                    &gRaspberryPiMmcHostProtocolGuid, (VOID**)&MmcHostInstance->MmcHost,
+                    &gRaspberryPiMmcHostProtocolGuid,
+                    (VOID**)&MmcHostInstance->MmcHost,
                     This->DriverBindingHandle
                   );
 
-// Remove MMC Host Instance from the pool
+    // Remove MMC Host Instance from the pool
     RemoveMmcHost (MmcHostInstance);
 
     // Destroy MmcHostInstance
@@ -434,7 +435,8 @@ MmcDxeInitialize (
   // Install driver diagnostics
   Status = gBS->InstallMultipleProtocolInterfaces (
                   &ImageHandle,
-                  &gEfiDriverDiagnostics2ProtocolGuid, &gMmcDriverDiagnostics2,
+                  &gEfiDriverDiagnostics2ProtocolGuid,
+                  &gMmcDriverDiagnostics2,
                   NULL
                 );
   ASSERT_EFI_ERROR (Status);

@@ -32,7 +32,7 @@
 #include <Protocol/RpiFirmware.h>
 
 #include <IndustryStandard/Bcm2836.h>
-#include <IndustryStandard/RpiFirmware.h>
+#include <IndustryStandard/RpiMbox.h>
 #include <IndustryStandard/Bcm2836SdHost.h>
 
 #define SDHOST_BLOCK_BYTE_LENGTH            512
@@ -246,7 +246,7 @@ SdHostSetClockFrequency (
   UINT32 CoreClockFreqHz = 0;
 
   // First figure out the core clock
-  Status = mFwProtocol->GetClockRate (RPI_FW_CLOCK_RATE_CORE, &CoreClockFreqHz);
+  Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_CORE, &CoreClockFreqHz);
   if (EFI_ERROR (Status)) {
     return Status;
   }
@@ -778,7 +778,8 @@ SdHostInitialize (
 
   Status = gBS->InstallMultipleProtocolInterfaces (
     &Handle,
-    &gRaspberryPiMmcHostProtocolGuid, &gMmcHost,
+    &gRaspberryPiMmcHostProtocolGuid,
+    &gMmcHost,
     NULL
   );
   ASSERT_EFI_ERROR (Status);
