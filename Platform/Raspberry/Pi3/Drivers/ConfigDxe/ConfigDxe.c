@@ -20,6 +20,7 @@
 #include <Library/DevicePathLib.h>
 #include <IndustryStandard/RpiMbox.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
+#include <Library/GpioLib.h>
 #include <Protocol/RpiFirmware.h>
 #include "ConfigDxeFormSetGuid.h"
 

@@ -46,15 +46,4 @@
 
 #define GPIO_PINS          54
 
-VOID
-GpioPinFuncSet (
-  IN  UINTN Pin,
-  IN  UINTN Function
-  );
-
-UINTN
-GpioPinFuncGet (
-  IN  UINTN Pin
-  );
-
 #endif /* __BCM2836_GPIO_H__ */

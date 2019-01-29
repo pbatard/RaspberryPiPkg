@@ -44,8 +44,3 @@
 
 [FixedPcd]
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
-
-[BuildOptions]
-  # The default '-mcmodel=small' used with DEBUG produces a GenFw error when compiling CSRT.acpi:
-  # "AARCH64 small code model requires identical ELF and PE/COFF section offsets modulo 4 KB."
-  GCC:DEBUG_*_AARCH64_CC_FLAGS = -mcmodel=tiny

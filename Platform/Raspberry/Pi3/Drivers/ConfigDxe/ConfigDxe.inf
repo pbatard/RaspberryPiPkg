@@ -38,6 +38,7 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  Silicon/Broadcom/Bcm283x/Bcm283x.dec
   Platform/Raspberry/Pi3/RPi3.dec
 
 [LibraryClasses]
