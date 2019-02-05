@@ -33,17 +33,14 @@ If there no bootable media media is found, the UEFI Shell is launched.
 # Building
 
 (These instructions were validated against the latest edk2 / edk2-platforms /
-edk2-non-osi as of 2019.01.27, on a Debian 9.6 x64 system).
+edk2-non-osi as of 2019.02.04, on a Debian 9.6 x64 system).
 
-You may need to install the relevant compilation tools. Especially you should have the
-ACPI Source Language (ASL) compiler, `nasm` as well as a native compiler installed.
+You may need to install the relevant compilation tools. Especially you should have
+the ACPI Source Language (ASL) compiler as well as a native compiler installed.
 On a Debian system, you can get these prerequisites installed with:
 ```
 sudo apt-get install build-essential acpica-tools nasm uuid-dev
 ```
-
-**IMPORTANT:** We recommend the use of the Linaro GCC for compilation instead of
-your system's native ARM64 GCC cross compiler.
 
 You can then build the firmware as follows:
 
@@ -56,15 +53,17 @@ git clone https://github.com/tianocore/edk2.git
 # The following is only needed once, after you cloned edk2
 make -C edk2/BaseTools
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms
-wget https://releases.linaro.org/components/toolchain/binaries/7.4-2019.02/aarch64-linux-gnu/gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu.tar.xz
-tar -xJvf gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu.tar.xz
-# If you have multiple AARCH64 toolchains, make sure the above one comes first in your path
-export PATH=$PWD/gcc-linaro-7.4.1-2019.02-x86_64_aarch64-linux-gnu/bin:$PATH
+# The following 3 lines are needed if
+# https://lists.01.org/pipermail/edk2-devel/2019-February/036301.html
+# hasn't yet been integrated into EDK2
+cd edk2
+git am ../edk2-platforms/Patch/EmbeddedPkg-Library-Add-VirtualRealTimeClockLib.patch
+cd ..
 export GCC5_AARCH64_PREFIX=aarch64-linux-gnu-
 export WORKSPACE=$PWD
 export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms
 . edk2/edksetup.sh
-build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/Raspberry/Pi3/RPi3.dsc -DBUILD_EPOCH=`date +%s` -b RELEASE
+build -a AARCH64 -t GCC5 -p edk2-platforms/Platform/RaspberryPi/RPi3/RPi3.dsc -b RELEASE
 ```
 
 # Booting the firmware
