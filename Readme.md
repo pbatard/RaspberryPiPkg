@@ -39,7 +39,7 @@ You may need to install the relevant compilation tools. Especially you should ha
 the ACPI Source Language (ASL) compiler as well as a native compiler installed.
 On a Debian system, you can get these prerequisites installed with:
 ```
-sudo apt-get install build-essential acpica-tools nasm uuid-dev
+sudo apt-get install build-essential acpica-tools uuid-dev
 ```
 
 You can then build the firmware as follows:
@@ -53,12 +53,6 @@ git clone https://github.com/tianocore/edk2.git
 # The following is only needed once, after you cloned edk2
 make -C edk2/BaseTools
 git clone https://github.com/pbatard/RaspberryPiPkg edk2-platforms
-# The following 3 lines are needed if
-# https://lists.01.org/pipermail/edk2-devel/2019-February/036301.html
-# hasn't yet been integrated into EDK2
-cd edk2
-git am ../edk2-platforms/Patch/EmbeddedPkg-Library-Add-VirtualRealTimeClockLib.patch
-cd ..
 export GCC5_AARCH64_PREFIX=aarch64-linux-gnu-
 export WORKSPACE=$PWD
 export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms
